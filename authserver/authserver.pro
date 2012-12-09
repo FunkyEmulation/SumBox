@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core
+QT       += core network xml
 
 QT       -= gui
 
@@ -15,4 +15,9 @@ CONFIG   -= app_bundle
 TEMPLATE = app
 
 
-SOURCES += main.cpp
+SOURCES += main.cpp \
+    authserver.cpp
+
+HEADERS += \
+    ../shared/define.h \
+    authserver.h
