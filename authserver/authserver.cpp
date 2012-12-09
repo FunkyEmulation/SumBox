@@ -10,7 +10,7 @@ AuthServer::~AuthServer()
     for(SocketList::ConstIterator itr = m_sockets.begin(); itr != m_sockets.end(); ++itr)
     {
         if((*itr))
-            (*itr)->Disconnect();
+            (*itr)->OnClose();
     }
 
     m_sockets.clear();

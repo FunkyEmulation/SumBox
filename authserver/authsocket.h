@@ -10,10 +10,10 @@ class AuthSocket : QObject
     Q_OBJECT
 public:
     AuthSocket(QTcpSocket* socket);
-    void Disconnect() { m_socket->disconnect(); }
     
-private slots:
+public slots:
     void OnRead();
+    void OnClose() { m_socket->disconnect(); }
 
 private:
     QTcpSocket* m_socket;
