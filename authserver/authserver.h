@@ -2,12 +2,15 @@
 #define AUTHSERVER_H
 
 #include <QtCore>
+#include <QObject>
 #include <QtNetwork>
+#include "authsocket.h"
+
+typedef QList<AuthSocket*> SocketList;
 
 class AuthServer : QObject
 {
     Q_OBJECT
-
 public:
     AuthServer();
     ~AuthServer();
@@ -18,11 +21,10 @@ public:
 
 private slots:
     void OnConnect();
-    void OnRead();
-    void OnClose();
 
 private:
     QTcpServer* m_server;
+    SocketList m_sockets;
 };
 
 #endif // AUTHSERVER_H

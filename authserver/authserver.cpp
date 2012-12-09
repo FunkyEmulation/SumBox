@@ -7,6 +7,13 @@ AuthServer::AuthServer()
 
 AuthServer::~AuthServer()
 {
+    for(SocketList::ConstIterator itr = m_sockets.begin(); itr != m_sockets.end(); ++itr)
+    {
+        if((*itr))
+            (*itr)->Disconnect();
+    }
+
+    m_sockets.clear();
     delete m_server;
 }
 
@@ -26,15 +33,6 @@ void AuthServer::Stop()
 
 void AuthServer::OnConnect()
 {
-
-}
-
-void AuthServer::OnRead()
-{
-
-}
-
-void AuthServer::OnClose()
-{
-
+    QTcpSocket* socket = m_server->nextPendingConnection();
+    m_sockets.push_back(new AuthSocket(socket));
 }
