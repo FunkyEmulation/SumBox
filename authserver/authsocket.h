@@ -13,7 +13,7 @@ public:
     
 public slots:
     void OnRead();
-    void OnClose() { m_socket->disconnect(); }
+    void OnClose() { m_socket->deleteLater(); }
 
 private:
     QTcpSocket* m_socket;
