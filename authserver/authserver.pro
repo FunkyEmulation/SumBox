@@ -17,9 +17,12 @@ TEMPLATE = app
 
 SOURCES += main.cpp \
     authserver.cpp \
-    authsocket.cpp
+    authsocket.cpp \
+    ../shared/opcodes/opcodes.cpp
 
 HEADERS += \
     ../shared/define.h \
     authserver.h \
-    authsocket.h
+    authsocket.h \
+    ../shared/utils/util.h \
+    ../shared/opcodes/opcodes.h

@@ -10,6 +10,8 @@ class AuthSocket : QObject
     Q_OBJECT
 public:
     AuthSocket(QTcpSocket* socket);
+    void SendInitPacket();
+    void SendPacket(QByteArray packet);
     
 public slots:
     void OnRead();
