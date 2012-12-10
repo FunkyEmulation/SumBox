@@ -10,10 +10,28 @@ enum Opcodes
     NUM_MSG_TYPES = 3
 };
 
-struct OpcodeHandler
+struct OpcodeStruct
 {
     QString name;
     QString header;
 };
+
+extern OpcodeStruct opcodeTable[NUM_MSG_TYPES];
+
+inline QString GetOpcodeName(quint8 opcode)
+{
+    if(opcode >= 3)
+        return "Unknown opcode";
+
+    return opcodeTable[opcode].name;
+}
+
+inline QString GetOpcodeHeader(quint8 opcode)
+{
+    if(opcode >= 3)
+        return "Unknown opcode";
+
+    return opcodeTable[opcode].header;
+}
 
 #endif

@@ -36,10 +36,10 @@ void AuthSocket::SendInitPacket()
     pkt << SMSG_HELLO_CONNECTION_SERVER;
     pkt << GenerateRandomString(32);
     SendPacket(packet);
+    cout << "Send packet " << GetOpcodeName(SMSG_HELLO_CONNECTION_SERVER).toAscii().data() << endl;
 }
 
 void AuthSocket::SendPacket(QByteArray packet)
 {
     m_socket->write(packet);
-    cout << "Send packet SMSG_HELLO_CONNECTION_SERVER" << endl;
 }
