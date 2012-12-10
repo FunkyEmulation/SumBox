@@ -11,6 +11,7 @@ public:
     WorldPacket(quint8 opcode) : WorldBuffer(&m_packet, QIODevice::WriteOnly)
     {
         m_opcode = opcode;
+        *this << (quint16)0;
         *this << GetOpcodeHeader(m_opcode);
     }
 

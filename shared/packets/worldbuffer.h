@@ -14,6 +14,11 @@ public:
         m_buffer->open(QIODevice::OpenMode(mode));
     }
 
+    void seek(qint64 off)
+    {
+        m_buffer->seek(off);
+    }
+
     WorldBuffer &operator<<(quint8 value)
     {
         m_buffer->write((char*)&value, sizeof(quint8));

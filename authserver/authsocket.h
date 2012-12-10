@@ -20,6 +20,7 @@ public slots:
 
 private:
     QTcpSocket* m_socket;
+    quint16 m_blockSize;
 };
 
 #endif // AUTHSOCKET_H
