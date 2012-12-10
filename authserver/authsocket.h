@@ -4,6 +4,7 @@
 #include <QtCore>
 #include <QObject>
 #include <QtNetwork>
+#include "../shared/packets/worldpacket.h"
 
 class AuthSocket : QObject
 {
@@ -11,7 +12,7 @@ class AuthSocket : QObject
 public:
     AuthSocket(QTcpSocket* socket);
     void SendInitPacket();
-    void SendPacket(QByteArray packet);
+    void SendPacket(WorldPacket packet);
     
 public slots:
     void OnRead();

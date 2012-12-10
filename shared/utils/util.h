@@ -16,7 +16,7 @@ QString GenerateRandomString(quint8 length)
     }
 
     QString result;
-    for(quint8 i = 1; i < length; ++i)
+    for(quint8 i = 0; i < length - 1; ++i)
         result[i] = charset[rand() % charset.length()];
 
     return result;

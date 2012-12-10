@@ -30,16 +30,13 @@ void AuthSocket::OnClose()
 // Faire une classe WorldPacket
 void AuthSocket::SendInitPacket()
 {
-    QByteArray packet;
-    QDataStream pkt(&packet, QIODevice::WriteOnly);
-
-    pkt << SMSG_HELLO_CONNECTION_SERVER;
-    pkt << GenerateRandomString(32);
-    SendPacket(packet);
-    cout << "Send packet " << GetOpcodeName(SMSG_HELLO_CONNECTION_SERVER).toAscii().data() << endl;
+    WorldPacket data(SMSG_HELLO_CONNECTION_SERVER);
+    data << GenerateRandomString(32);
+    SendPacket(data);
 }
 
-void AuthSocket::SendPacket(QByteArray packet)
+void AuthSocket::SendPacket(WorldPacket data)
 {
-    m_socket->write(packet);
+    m_socket->write(data.GetPacket());
+    cout << "Send packet " << GetOpcodeName(data.GetOpcode()).toAscii().data() << " ( Header : " << GetOpcodeHeader(data.GetOpcode()).toAscii().data() << " )" << endl;
 }

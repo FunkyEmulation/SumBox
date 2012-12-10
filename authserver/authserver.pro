@@ -25,4 +25,7 @@ HEADERS += \
     authserver.h \
     authsocket.h \
     ../shared/utils/util.h \
-    ../shared/opcodes/opcodes.h
+    ../shared/opcodes/opcodes.h \
+    ../shared/packets/worldpacket.h \
+    ../shared/packets/worldpacket.h \
+    ../shared/packets/worldbuffer.h
