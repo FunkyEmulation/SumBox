@@ -1,6 +1,7 @@
 #include <QCoreApplication>
 #include <QTime>
 #include <QFile>
+#include <QtXml>
 #include <iostream>
 #include <csignal>
 #include "../shared/define.h"
