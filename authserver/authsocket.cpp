@@ -20,7 +20,31 @@ AuthSocket::AuthSocket(QTcpSocket* socket)
 void AuthSocket::OnRead()
 {
     QDataStream in(m_socket);
-    qDebug() << in;
+
+    QString packet = "";
+    char *curPacket = new char;
+
+    while(in.readRawData(curPacket,1) != -1)
+    {
+       if(*curPacket != 0x00) // Ce n'est pas le dernier caractère
+          packet += *curPacket;
+       else
+          break;
+    }
+
+    if(!packet.isEmpty())
+    {
+        cout << "Received packet from <" << m_socket->peerAddress().toString().toAscii().data() << "> : "
+             << packet.toAscii().data() << endl;
+    }
+
+    parsePacket(packet);
+    //qDebug() << in;
+}
+
+void AuthSocket::parsePacket(QString packet)
+{
+
 }
 
 void AuthSocket::OnClose()
@@ -39,7 +63,7 @@ void AuthSocket::SendInitPacket()
 
 void AuthSocket::SendPacket(WorldPacket data)
 {
-    m_socket->write(data.GetPacket());
+    m_socket->write(data.GetPacket() + (char)0x00);
     cout << "Send packet " << GetOpcodeName(data.GetOpcode()).toAscii().data() << " ( Header : " << GetOpcodeHeader(data.GetOpcode()).toAscii().data() << " )" << endl;
     qDebug() << "Packet data : " << data.GetPacket();
 }
