@@ -39,16 +39,7 @@ public:
 
     WorldBuffer &operator<<(QString value)
     {
-        qDebug() << value;
-        const char* s = value.toLocal8Bit().data();
-        qDebug() << s;
-        if (!s) {
-            *this << (quint32)0;
-            return *this;
-        }
-        uint len = qstrlen(s) + 1;                        // also write null terminator
-        *this << (quint32)len;                        // write length specifier
-        m_buffer->write(s, len);
+        m_buffer->buffer().append(value.toUtf8());
         return *this;
     }
 

@@ -21,19 +21,6 @@ void AuthSocket::OnRead()
 {
     QDataStream in(m_socket);
     qDebug() << in;
-    if(m_blockSize == 0)
-    {
-        if(m_socket->bytesAvailable() < (int)sizeof(quint16))
-            return;
-
-        in >> m_blockSize;
-    }
-
-    if(m_socket->bytesAvailable() < m_blockSize)
-        return;
-
-    m_blockSize = 0;
-    cout << "Received a complete packet" << endl;
 }
 
 void AuthSocket::OnClose()
@@ -52,8 +39,6 @@ void AuthSocket::SendInitPacket()
 
 void AuthSocket::SendPacket(WorldPacket data)
 {
-    data.seek(0);
-    data << (quint16) (data.GetPacket().size() - sizeof(quint16));
     m_socket->write(data.GetPacket());
     cout << "Send packet " << GetOpcodeName(data.GetOpcode()).toAscii().data() << " ( Header : " << GetOpcodeHeader(data.GetOpcode()).toAscii().data() << " )" << endl;
 }
