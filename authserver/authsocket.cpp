@@ -41,4 +41,5 @@ void AuthSocket::SendPacket(WorldPacket data)
 {
     m_socket->write(data.GetPacket());
     cout << "Send packet " << GetOpcodeName(data.GetOpcode()).toAscii().data() << " ( Header : " << GetOpcodeHeader(data.GetOpcode()).toAscii().data() << " )" << endl;
+    qDebug() << "Packet data : " << data.GetPacket();
 }

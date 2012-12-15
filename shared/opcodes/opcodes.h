@@ -5,9 +5,9 @@
 
 enum Opcodes
 {
-    SMSG_HELLO_CONNECTION_SERVER = 1,
-    SMSG_HELLO_GAME_SERVER = 2,
-    NUM_MSG_TYPES = 3
+    SMSG_HELLO_CONNECTION_SERVER = 0,
+    SMSG_HELLO_GAME_SERVER = 1,
+    NUM_MSG_TYPES = 2
 };
 
 struct OpcodeStruct
@@ -20,7 +20,7 @@ extern OpcodeStruct opcodeTable[NUM_MSG_TYPES];
 
 inline QString GetOpcodeName(quint8 opcode)
 {
-    if(opcode >= 3)
+    if(opcode >= NUM_MSG_TYPES)
         return "Unknown opcode";
 
     return opcodeTable[opcode].name;
@@ -28,7 +28,7 @@ inline QString GetOpcodeName(quint8 opcode)
 
 inline QString GetOpcodeHeader(quint8 opcode)
 {
-    if(opcode >= 3)
+    if(opcode >= NUM_MSG_TYPES)
         return "Unknown opcode";
 
     return opcodeTable[opcode].header;
