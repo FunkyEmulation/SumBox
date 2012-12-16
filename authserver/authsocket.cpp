@@ -7,7 +7,7 @@ using namespace std;
 
 AuthSocket::AuthSocket(QTcpSocket* socket)
 {
-    state = 0;
+    m_state = 0;
     m_socket = socket;
     m_blockSize = 0;
     connect(m_socket, SIGNAL(readyRead()), this, SLOT(OnRead()));
@@ -25,9 +25,9 @@ void AuthSocket::OnRead()
     QString packet = "";
     char *curPacket = new char;
 
-    while(in.readRawData(curPacket,1) != -1)
+    while(in.readRawData(curPacket, 1) != -1)
     {
-       if(*curPacket != 0x00) // Ce n'est pas le dernier caractère
+       if(*curPacket != 0x00) // Ce n'est pas le dernier caractÃ¨re
           packet += *curPacket;
        else
           break;
@@ -39,22 +39,21 @@ void AuthSocket::OnRead()
              << packet.toAscii().data() << endl;
     }
 
-    parsePacket(packet);
-    //qDebug() << in;
+    ParsePacket(packet);
 }
 
-void AuthSocket::parsePacket(QString packet)
+void AuthSocket::ParsePacket(QString packet)
 {
-    if(state < 2) // Phase d'authentification
+    if(m_state < 2) // Phase d'authentification
     {
-        switch(state)
+        switch(m_state)
         {
             case 0:
-                infos["version"] = packet;
-                state = 1;
+                m_infos["version"] = packet;
+                m_state = 1;
                 break;
             case 1:
-                checkAccount(packet);
+                CheckAccount(packet);
                 break;
         }
 
@@ -62,7 +61,7 @@ void AuthSocket::parsePacket(QString packet)
     }
 }
 
-void AuthSocket::checkAccount(QString ids)
+void AuthSocket::CheckAccount(QString ids)
 {
 
 }

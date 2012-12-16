@@ -14,11 +14,11 @@ CONFIG   -= app_bundle
 
 TEMPLATE = app
 
-
 SOURCES += main.cpp \
     authserver.cpp \
     authsocket.cpp \
-    ../shared/opcodes/opcodes.cpp
+    ../shared/opcodes/opcodes.cpp \
+    ../worldserver/game/server/worldsession.cpp
 
 HEADERS += \
     ../shared/define.h \
@@ -27,5 +27,5 @@ HEADERS += \
     ../shared/utils/util.h \
     ../shared/opcodes/opcodes.h \
     ../shared/packets/worldpacket.h \
-    ../shared/packets/worldpacket.h \
-    ../shared/packets/worldbuffer.h
+    ../shared/packets/worldbuffer.h \
+    ../worldserver/game/server/worldsession.h
