@@ -7,6 +7,7 @@ using namespace std;
 
 AuthSocket::AuthSocket(QTcpSocket* socket)
 {
+    state = 0;
     m_socket = socket;
     m_blockSize = 0;
     connect(m_socket, SIGNAL(readyRead()), this, SLOT(OnRead()));
@@ -43,6 +44,25 @@ void AuthSocket::OnRead()
 }
 
 void AuthSocket::parsePacket(QString packet)
+{
+    if(state < 2) // Phase d'authentification
+    {
+        switch(state)
+        {
+            case 0:
+                infos["version"] = packet;
+                state = 1;
+                break;
+            case 1:
+                checkAccount(packet);
+                break;
+        }
+
+        return;
+    }
+}
+
+void AuthSocket::checkAccount(QString ids)
 {
 
 }

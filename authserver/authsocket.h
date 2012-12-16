@@ -14,6 +14,7 @@ public:
     void SendInitPacket();
     void SendPacket(WorldPacket packet);
     void parsePacket(QString packet);
+    void checkAccount(QString ids);
 
 public slots:
     void OnRead();
@@ -22,8 +23,8 @@ public slots:
 private:
     QTcpSocket* m_socket;
     quint16 m_blockSize;
-    QMap<QString,QString> infos; // pseudo - account - serveurs - gmlevel - question
-    bool status = 0; // 0=non authentifié / 1=version reçue / 2 = authentifié
+    QMap<QString,QString> infos; // pseudo - account - serveurs - gmlevel - question - version
+    int state; // 0=non authentifié / 1=version reçue / 2 = authentifié
 };
 
 #endif // AUTHSOCKET_H
