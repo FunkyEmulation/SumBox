@@ -1,11 +1,20 @@
 #include <AuthConfig.h>
 
 using namespace std;
+AuthConfig* AuthConfig::m_instance = NULL;
 
 AuthConfig::AuthConfig(QString confName)
 {
  m_error = false;
  LoadConfig(confName);
+}
+
+AuthConfig* AuthConfig::getInstance(QString name)
+{
+ if (m_instance == NULL)
+    m_instance = new AuthConfig(name.toAscii().data());
+
+ return m_instance;
 }
 
 QMap<QString,QString> AuthConfig::getConfig()
@@ -16,14 +25,6 @@ QMap<QString,QString> AuthConfig::getConfig()
 bool AuthConfig::Error()
 {
   return m_error;
-}
-
-AuthConfig* AuthConfig::getInstance(QString name)
-{
- if (m_instance == NULL)
-    m_instance = new AuthConfig(name);
-
- return m_instance;
 }
 
 void AuthConfig::LoadConfig(QString confName)

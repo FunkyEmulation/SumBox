@@ -1,11 +1,13 @@
 #include <QCoreApplication>
 #include <QTime>
+
 #include <QFile>
 #include <QtXml>
 #include <iostream>
 #include <csignal>
 #include "../shared/define.h"
 #include "authserver.h"
+#include "AuthConfig.h"
 
 using namespace std;
 
@@ -19,61 +21,27 @@ void exit(int /*s*/)
     QCoreApplication::exit();
 }
 
-QMap<string,QString> loadAuthConfiguration(QString confName)
-{
- QMap<string,QString> AuthConfiguration;
-
-    QDomDocument configDocument("AuthConfiguration");
-       QFile file(confName);
-       if(!file.open(QIODevice::ReadOnly))
-       {
-           cout << "Error: Non-existent auth configuration file '" << confName.toAscii().data() << "' ..." << endl
-                << "Exiting ..." << endl;
-           file.close();
-           return AuthConfiguration;
-       }
-       if(!configDocument.setContent(&file))
-       {
-           cout << "Invalid xml configuration ..." << endl;
-           file.close();
-           return AuthConfiguration;
-       }
-       file.close();
-       QDomElement configElement = configDocument.documentElement();
-
-       QDomNode node = configElement.firstChild(); // Premier noeud
-
-       while(!node.isNull()) // parcourt ...
-       {
-           QDomElement curEl = node.toElement();
-           if(!curEl.isNull())
-               AuthConfiguration[curEl.tagName().toAscii().data()] = curEl.text().toAscii().data();
-           node = node.nextSibling(); // On va  l'lment suivant
-       }
-
-    return AuthConfiguration;
-}
-
 int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
 
-    QMap<string,QString> AuthConfiguration;
     QTime t;
     t.start();
     cout << "Starting SumBox::Authserver..." << endl;
 
-   AuthConfiguration = loadAuthConfiguration("auth_config.xml");
-   if(AuthConfiguration.empty())
+    AuthConfig* Config = AuthConfig::getInstance("authconfig.xml");
+   if(Config->Error())
         return 0;
+   QMap<QString,QString> AuthConfiguration = Config->getConfig();
 
-    if(!authserver.Start(QHostAddress("127.0.0.1"), 443))
+   if(!authserver.Start(QHostAddress(AuthConfiguration["authIp"].toAscii().data()),
+                        AuthConfiguration["authPort"].toInt()))
     {
         cout << authserver.GetErrorString().toAscii().data() << endl;
         return 0;
     }
     else
-        cout << "AuthServer started : waiting for connections" << endl;
+       cout << "AuthServer started on port " << AuthConfiguration["authPort"].toAscii().data() << " : waiting for connections" << endl;
 
     cout << "Press ctrl + c to quit." << endl;
     cout << "SumBox::Authserver started in " << QString::number(t.elapsed() / IN_MILLISECONDS).toAscii().data() << " sec." << endl;
