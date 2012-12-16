@@ -7,6 +7,7 @@ using namespace std;
 
 AuthSocket::AuthSocket(QTcpSocket* socket)
 {
+    m_packet = "";
     m_state = 0;
     m_socket = socket;
     m_blockSize = 0;
@@ -22,24 +23,24 @@ void AuthSocket::OnRead()
 {
     QDataStream in(m_socket);
 
-    QString packet = "";
     char *curPacket = new char;
 
     while(in.readRawData(curPacket, 1) != -1)
     {
        if(*curPacket != 0x00) // Ce n'est pas le dernier caractère
-          packet += *curPacket;
+          m_packet += *curPacket;
        else
           break;
     }
 
-    if(!packet.isEmpty())
+    if(!m_packet.isEmpty() && *curPacket == 0x00) // Reçu en entier ?
     {
         cout << "Received packet from <" << m_socket->peerAddress().toString().toAscii().data() << "> : "
-             << packet.toAscii().data() << endl;
-    }
+             << m_packet.toAscii().data() << endl;
 
-    ParsePacket(packet);
+        ParsePacket(m_packet);
+        m_packet = "";
+    }
 }
 
 void AuthSocket::ParsePacket(QString packet)

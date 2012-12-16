@@ -22,6 +22,7 @@ public slots:
 
 private:
     QTcpSocket* m_socket;
+    QString m_packet;
     quint16 m_blockSize;
     QMap<QString,QString> m_infos; // pseudo - account - serveurs - gmlevel - question - version
     quint8 m_state; // 0=non authentifié / 1=version reçue / 2 = authentifié
