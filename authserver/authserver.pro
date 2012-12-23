@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core network xml
+QT       += core network xml sql
 
 QT       -= gui
 
@@ -18,7 +18,9 @@ SOURCES += main.cpp \
     authserver.cpp \
     authsocket.cpp \
     ../shared/opcodes/opcodes.cpp \
-    ../worldserver/game/server/worldsession.cpp
+    ../worldserver/game/server/worldsession.cpp \
+    AuthConfig.cpp \
+    AuthModel.cpp
 
 HEADERS += \
     ../shared/define.h \
@@ -28,4 +30,6 @@ HEADERS += \
     ../shared/opcodes/opcodes.h \
     ../shared/packets/worldpacket.h \
     ../shared/packets/worldbuffer.h \
-    ../worldserver/game/server/worldsession.h
+    ../worldserver/game/server/worldsession.h \
+    AuthModel.h \
+    AuthConfig.h
