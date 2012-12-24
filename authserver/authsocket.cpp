@@ -11,14 +11,13 @@ AuthSocket::AuthSocket(QTcpSocket* socket)
     m_packet = "";
     m_state = 0;
     m_socket = socket;
-    //m_blockSize = 0; ? Utilité ?
     m_DbCon = AuthModel::getInstance(NULL,NULL,NULL,NULL);
+
     connect(m_socket, SIGNAL(readyRead()), this, SLOT(OnRead()));
     connect(m_socket, SIGNAL(disconnected()), this, SLOT(OnClose()));
     connect(this,SIGNAL(CloseConnection()),this,SLOT(OnClose()));
 
     cout << "New incoming connection from " << m_socket->peerAddress().toString().toAscii().data() << endl;
-
     SendInitPacket();
 }
 
@@ -66,7 +65,8 @@ void AuthSocket::ParsePacket(QString packet)
         return;
     }
 
-    if(packet == "AP") {
+    if(packet == "AP")
+    {
         SendRandomName();
         return;
     }
@@ -97,8 +97,10 @@ void AuthSocket::CheckVersion(QString version)
 
 void AuthSocket::CheckAccount(QString ids)
 {
-    if(!ids.contains("#1")) { // Mauvais paquet
-        m_state = 0; // Retour à l'étape 0 de l'authentification
+    // Mauvais paquet : retour à l'étape 0 de l'authentification
+    if(!ids.contains("#1"))
+    {
+        m_state = 0;
         WorldPacket data(SMSG_LOGIN_ERROR);
         SendPacket(data);
         return;
@@ -109,7 +111,9 @@ void AuthSocket::CheckAccount(QString ids)
     QString hashPass = identifiants.takeFirst();
 
     m_infos = m_DbCon->getAccount(account);
-    if(m_infos.isEmpty()) // Compte inexistant
+
+    // Compte inexistant
+    if(m_infos.isEmpty())
     {
        m_state = 0;
        WorldPacket data(SMSG_LOGIN_ERROR);
@@ -117,32 +121,37 @@ void AuthSocket::CheckAccount(QString ids)
        return;
     }
 
-     if(cryptPassword(m_infos["password"],m_hashKey) == hashPass) // Mot de passe correct
-     {
-         if(m_infos["banned"] == "1") {
-              m_state = 0;
-              WorldPacket data(SMSG_ACCOUNT_BANNED);
-              SendPacket(data);
-              return;
-          }
+    // Mot de passe correct
+    if(cryptPassword(m_infos["password"],m_hashKey) == hashPass)
+    {
+        if(m_infos["banned"] == "1")
+        {
+            m_state = 0;
+            WorldPacket data(SMSG_ACCOUNT_BANNED);
+            SendPacket(data);
+            return;
+        }
 
-         if(m_infos["logged"] == "1") {
-               m_state = 0;
-               WorldPacket data(SMSG_ALREADY_LOGGED);
-               SendPacket(data);
-               return;
-          }
+        if(m_infos["logged"] == "1")
+        {
+            m_state = 0;
+            WorldPacket data(SMSG_ALREADY_LOGGED);
+            SendPacket(data);
+            return;
+        }
 
-         // Ids OK, non banni, non logged
-          m_state = 2;
-          SendInformations(); // On envoi les infos du compte
+        // Ids OK, non banni, non logged
+        m_state = 2;
+        SendInformations(); // On envoi les infos du compte
 
-    } else {
-         m_state = 0;
-         WorldPacket data(SMSG_LOGIN_ERROR);
-         SendPacket(data);
-         return;
-     }
+    }
+    else
+    {
+        m_state = 0;
+        WorldPacket data(SMSG_LOGIN_ERROR);
+        SendPacket(data);
+        return;
+    }
 
     m_state = 2; // Authentification terminée
 }
