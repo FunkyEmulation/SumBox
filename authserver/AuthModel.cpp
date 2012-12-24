@@ -54,6 +54,7 @@ QMap<QString,QString> AuthModel::getAccount(QString account)
           accountInfos["secret_answer"]   = req.value(req.record().indexOf("secret_answer")).toString().toAscii().data();
           accountInfos["logged"]          = req.value(req.record().indexOf("logged")).toString().toAscii().data();
           accountInfos["banned"]          = req.value(req.record().indexOf("banned")).toString().toAscii().data();
+          accountInfos["subscription_time"] = req.value(req.record().indexOf("subscription_time")).toString().toAscii().data();
 
           return accountInfos;
         }

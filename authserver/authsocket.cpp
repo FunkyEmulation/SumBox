@@ -60,8 +60,18 @@ void AuthSocket::ParsePacket(QString packet)
                 CheckAccount(packet);
                 break;
         }
-
         return;
+    }
+
+    if(packet == "Af")
+    {
+        QueueManager();
+        return;
+    }
+
+    if(packet == "Ax")
+    {
+        SendPersos();
     }
 
     if(packet == "AP")
@@ -69,6 +79,18 @@ void AuthSocket::ParsePacket(QString packet)
         SendRandomName();
         return;
     }
+}
+
+void AuthSocket::SendPersos()
+{
+        WorldPacket persos(SMSG_GIVE_PERSOS);
+        persos << m_infos["subscription_time"];
+        SendPacket(persos);
+}
+
+void AuthSocket::QueueManager()
+{
+        return;
 }
 
 void AuthSocket::SendRandomName()

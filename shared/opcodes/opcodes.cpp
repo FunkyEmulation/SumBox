@@ -12,8 +12,9 @@ OpcodeStruct opcodeTable[NUM_MSG_TYPES] =
     { "SMSG_GIVE_PSEUDO", "Ad", &WorldSession::HandleServerSide },
     { "SMSG_GIVE_COMMUNAUTY", "Ac", &WorldSession::HandleServerSide },
     { "SMSG_GIVE_SERVERS", "AH", &WorldSession::HandleServerSide },
-    { "SMSG_GIVE_GMLEVEL", "ALK", &WorldSession::HandleServerSide },
+    { "SMSG_GIVE_GMLEVEL", "AlK", &WorldSession::HandleServerSide },
     { "SMSG_GIVE_QUESTION", "AQ", &WorldSession::HandleServerSide },
+    { "SMSG_GIVE_PERSOS", "AxK", &WorldSession::HandleServerSide },
     { "SMSG_RANDOM_PSEUDO", "AP", &WorldSession::HandleServerSide },
 
     // Packets received before client authentication

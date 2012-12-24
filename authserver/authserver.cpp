@@ -24,12 +24,6 @@ void AuthServer::Stop()
     m_server->close();
 }
 
-void AuthServer::DelSockObject()
-{
-    AuthSocket* target = qobject_cast<AuthSocket *>(sender());
-    m_sockets.removeAt(m_sockets.indexOf(target));
-}
-
 void AuthServer::OnConnect()
 {
     QTcpSocket* socket = m_server->nextPendingConnection();
