@@ -65,7 +65,21 @@ void AuthSocket::ParsePacket(QString packet)
 
         return;
     }
+
+    if(packet == "AP") {
+        SendRandomName();
+        return;
+    }
 }
+
+void AuthSocket::SendRandomName()
+{
+    QString randomName = GenerateRandomPseudo(4,8);
+    WorldPacket randomPseudo(SMSG_RANDOM_PSEUDO);
+    randomPseudo << randomName;
+    SendPacket(randomPseudo);
+}
+
 
 void AuthSocket::CheckVersion(QString version)
 {
@@ -140,12 +154,10 @@ void AuthSocket::SendInformations()
     SendPacket(dataPseudo);
 
     WorldPacket dataCommunauty(SMSG_GIVE_COMMUNAUTY);
-    dataCommunauty << (quint8)0;
+    dataCommunauty << "0";
     SendPacket(dataCommunauty);
 
-    WorldPacket dataServers(SMSG_GIVE_SERVERS);
-    dataServers << m_infos["servers"];
-    SendPacket(dataServers);
+    SendServers();
 
     WorldPacket dataGmLevel(SMSG_GIVE_GMLEVEL);
     dataGmLevel << m_infos["gmlevel"];
@@ -154,6 +166,26 @@ void AuthSocket::SendInformations()
     WorldPacket dataQuestion(SMSG_GIVE_QUESTION);
     dataQuestion << m_infos["secret_question"];
     SendPacket(dataQuestion);
+}
+
+void AuthSocket::SendServers()
+{
+    QString packetServers = "";
+    QList< QMap<QString, QString> > servers = m_DbCon->getServers();
+
+    for(int i = 0; i < servers.length(); ++i)
+    {
+        packetServers += servers[i]["id"] + ";";
+        packetServers += servers[i]["state"] + ";";
+        packetServers += servers[i]["population"] + ";";
+        packetServers += servers[i]["subscription"];
+        if(i < servers.length() - 1)
+            packetServers += "|";
+    }
+
+    WorldPacket dataServers(SMSG_GIVE_SERVERS);
+    dataServers << packetServers;
+    SendPacket(dataServers);
 }
 
 void AuthSocket::OnClose()
@@ -175,5 +207,6 @@ void AuthSocket::SendPacket(WorldPacket data)
 {
     m_socket->write(data.GetPacket() + (char)0x00);
     cout << "Send packet " << GetOpcodeName(data.GetOpcode()).toAscii().data() << " ( Header : " << GetOpcodeHeader(data.GetOpcode()).toAscii().data() << " )" << endl;
-    qDebug() << "Packet data : " << data.GetPacket();
+    if(data.GetPacket().length() > 0)
+        qDebug() << "Packet data : " << data.GetPacket();
 }

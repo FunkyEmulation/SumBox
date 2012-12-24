@@ -55,9 +55,34 @@ QMap<QString,QString> AuthModel::getAccount(QString account)
           accountInfos["logged"]          = req.value(req.record().indexOf("logged")).toString().toAscii().data();
           accountInfos["banned"]          = req.value(req.record().indexOf("banned")).toString().toAscii().data();
 
-          cout << "Account = " << account.toAscii().data() << " >> " << accountInfos["account"].toAscii().data() << endl;
-
           return accountInfos;
         }
         return accountInfos;
+}
+
+QList< QMap<QString, QString> > AuthModel::getServers()
+{
+    QList< QMap<QString, QString> > servers;
+    QSqlQuery req;
+
+        if (!req.exec("SELECT * FROM servers")) {
+            cout << "SQL Query failed : " << req.lastError().text().toAscii().data() << endl;
+            return servers;
+        }
+
+        unsigned int i = 0;
+        while(req.next())
+        {
+
+            QMap<QString, QString> curInfos;
+            curInfos["id"] = req.value(req.record().indexOf("id")).toString().toAscii().data();
+            curInfos["state"] = req.value(req.record().indexOf("state")).toString().toAscii().data();
+            curInfos["population"] = req.value(req.record().indexOf("population")).toString().toAscii().data();
+            curInfos["subscription"] = req.value(req.record().indexOf("subscription")).toString().toAscii().data();
+            curInfos["ip"] = req.value(req.record().indexOf("ip")).toString().toAscii().data();
+            curInfos["port"] = req.value(req.record().indexOf("port")).toString().toAscii().data();
+
+            servers.append(curInfos);
+        }
+        return servers;
 }

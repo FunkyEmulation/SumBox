@@ -13,6 +13,7 @@ public:
   static AuthModel* getInstance(QString host = NULL,QString user = NULL,QString pass = NULL,QString dbname = NULL);
   QSqlDatabase getDb();
   QMap<QString,QString> getAccount(QString account);
+  QList< QMap<QString, QString> > getServers();
   bool Error();
 
 private:

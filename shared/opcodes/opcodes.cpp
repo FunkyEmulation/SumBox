@@ -14,6 +14,7 @@ OpcodeStruct opcodeTable[NUM_MSG_TYPES] =
     { "SMSG_GIVE_SERVERS", "AH", &WorldSession::HandleServerSide },
     { "SMSG_GIVE_GMLEVEL", "ALK", &WorldSession::HandleServerSide },
     { "SMSG_GIVE_QUESTION", "AQ", &WorldSession::HandleServerSide },
+    { "SMSG_RANDOM_PSEUDO", "AP", &WorldSession::HandleServerSide },
 
     // Packets received before client authentication
     { "CMSG_QUEUE_POSITION", "Af", &WorldSession::HandleBeforeAuth },

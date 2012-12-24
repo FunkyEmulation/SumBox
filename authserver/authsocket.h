@@ -18,6 +18,8 @@ public:
     void CheckVersion(QString version);
     void CheckAccount(QString ids);
     void SendInformations();
+    void SendServers();
+    void SendRandomName();
 
 public slots:
     void OnRead();
