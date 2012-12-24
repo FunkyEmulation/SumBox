@@ -25,9 +25,6 @@ public slots:
     void OnRead();
     void OnClose();
 
-signals:
-    void CloseConnection();
-
 private:
     QTcpSocket* m_socket;
     AuthModel* m_DbCon;

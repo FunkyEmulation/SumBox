@@ -35,5 +35,4 @@ void AuthServer::OnConnect()
     QTcpSocket* socket = m_server->nextPendingConnection();
     AuthSocket* newSockObject = new AuthSocket(socket);
     m_sockets.push_back(newSockObject);
-    QObject::connect(newSockObject,SIGNAL(DelSockObject()),this,SLOT(DelSockObject()));
 }

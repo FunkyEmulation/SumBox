@@ -15,7 +15,6 @@ AuthSocket::AuthSocket(QTcpSocket* socket)
 
     connect(m_socket, SIGNAL(readyRead()), this, SLOT(OnRead()));
     connect(m_socket, SIGNAL(disconnected()), this, SLOT(OnClose()));
-    connect(this,SIGNAL(CloseConnection()),this,SLOT(OnClose()));
 
     cout << "New incoming connection from " << m_socket->peerAddress().toString().toAscii().data() << endl;
     SendInitPacket();

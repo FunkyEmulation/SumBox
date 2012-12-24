@@ -21,7 +21,6 @@ public:
 
 private slots:
     void OnConnect();
-    void DelSockObject();
 
 private:
     QTcpServer* m_server;
