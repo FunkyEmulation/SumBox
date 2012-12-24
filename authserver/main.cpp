@@ -31,20 +31,20 @@ int main(int argc, char *argv[])
     cout << "Starting SumBox::Authserver..." << endl;
 
     AuthConfig* Config = AuthConfig::getInstance("authconfig.xml");
-   if(Config->Error())
+    if(Config->Error())
         return 0;
-   QMap<QString,QString> AuthConfiguration = Config->getConfig();
 
-   AuthModel* DbCon = AuthModel::getInstance(AuthConfiguration["authDbHost"],
+    QMap<QString,QString> AuthConfiguration = Config->getConfig();
+
+    AuthModel* DbCon = AuthModel::getInstance(AuthConfiguration["authDbHost"],
                                              AuthConfiguration["authDbUser"],
                                              AuthConfiguration["authDbPswd"],
-                                             AuthConfiguration["authDbName"] );
+                                             AuthConfiguration["authDbName"]);
 
-   if(DbCon->Error())
-       return 0;
+    if(DbCon->Error())
+        return 0;
 
-   if(!authserver.Start(QHostAddress(AuthConfiguration["authIp"].toAscii().data()),
-                        AuthConfiguration["authPort"].toInt()))
+    if(!authserver.Start(QHostAddress(AuthConfiguration["authIp"].toAscii().data()), AuthConfiguration["authPort"].toInt()))
     {
         cout << authserver.GetErrorString().toAscii().data() << endl;
         return 0;

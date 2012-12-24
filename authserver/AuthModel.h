@@ -10,17 +10,17 @@ using namespace std;
 class AuthModel
 {
 public:
-  static AuthModel* getInstance(QString host = NULL,QString user = NULL,QString pass = NULL,QString dbname = NULL);
-  QSqlDatabase getDb();
-  QMap<QString,QString> getAccount(QString account);
-  bool Error();
+    static AuthModel* getInstance(QString host = NULL, QString user = NULL, QString pass = NULL, QString dbname = NULL);
+    QSqlDatabase getDb();
+    QMap<QString,QString> getAccount(QString account);
+    bool Error();
 
 private:
-  bool m_error;
-  static AuthModel* m_instance;
-  QSqlDatabase m_db;
+    AuthModel(QString host, QString user, QString pass, QString dbname);
 
-  AuthModel (QString host,QString user,QString pass,QString dbname);
+    bool m_error;
+    static AuthModel* m_instance;
+    QSqlDatabase m_db;
 };
 
 #endif // AUTHMODEL_H
