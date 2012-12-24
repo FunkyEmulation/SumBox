@@ -54,24 +54,23 @@ QString GenerateRandomPseudo(int minLength,int maxLength)
 
 QString cryptPassword(QString password, QString hashKey)
 {
-           QString crypted = "";
+    QString crypted = "";
 
-           for (int i = 0; i < password.length(); i++)
-           {
-               char PPass = password[i].toAscii();
-               char PKey = hashKey[i].toAscii();
+    for (int i = 0; i < password.length(); i++)
+    {
+        char PPass = password[i].toAscii();
+        char PKey = hashKey[i].toAscii();
 
-               int APass = (int)PPass / 16;
+        int APass = (int)PPass / 16;
+        int AKey = (int)PPass % 16;
 
-               int AKey = (int)PPass % 16;
+        int ANB = (APass + (int)PKey) % charset.length();
+        int ANB2 = (AKey + (int)PKey) % charset.length();
 
-               int ANB = (APass + (int)PKey) % charset.length();
-               int ANB2 = (AKey + (int)PKey) % charset.length();
-
-               crypted += charset[ANB];
-               crypted += charset[ANB2];
-           }
-           return crypted;
+        crypted += charset[ANB];
+        crypted += charset[ANB2];
+    }
+    return crypted;
 }
 
 #endif

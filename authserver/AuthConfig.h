@@ -8,18 +8,17 @@
 class AuthConfig
 {
 public:
-  static AuthConfig* getInstance(QString name = "authconfig.xml");
-  QMap<QString,QString> getConfig();
-  bool Error();
+    static AuthConfig* getInstance(QString name = "authconfig.xml");
+    void LoadConfig(QString confName);
+    QMap<QString,QString> getConfig();
+    bool Error();
 
 private:
-  bool m_error;
-  static AuthConfig* m_instance;
+    AuthConfig (QString confName);
 
-  QMap<QString,QString> m_AuthConfiguration;
-  AuthConfig (QString confName);
-  void LoadConfig(QString confName);
+    static AuthConfig* m_instance;
+    bool m_error;
+    QMap<QString,QString> m_AuthConfiguration;
 };
-
 
 #endif // AUTHCONFIG_H

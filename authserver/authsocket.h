@@ -27,7 +27,6 @@ public slots:
 
 signals:
     void CloseConnection();
-    void DelSockObject();
 
 private:
     QTcpSocket* m_socket;
