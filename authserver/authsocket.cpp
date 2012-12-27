@@ -8,10 +8,17 @@ using namespace std;
 
 AuthSocket::AuthSocket(QTcpSocket* socket)
 {
+    m_DbCon = AuthModel::getInstance(NULL,NULL,NULL,NULL);
+    m_banips = m_DbCon->getBanips();
+    m_socket = socket;
     m_packet = "";
     m_state = 0;
-    m_socket = socket;
-    m_DbCon = AuthModel::getInstance(NULL,NULL,NULL,NULL);
+
+    if(m_banips.contains(socket->peerAddress().toString()))
+    {
+        WorldPacket ban(SMSG_ACCOUNT_BANNED);
+        SendPacket(ban);
+    }
 
     connect(m_socket, SIGNAL(readyRead()), this, SLOT(OnRead()));
     connect(m_socket, SIGNAL(disconnected()), this, SLOT(OnClose()));
@@ -72,6 +79,13 @@ void AuthSocket::ParsePacket(QString packet)
     if(packet == "Ax")
     {
         SendPersos();
+        return;
+    }
+
+    if(packet.left(2) == "AX")
+    {
+        SelectServer(packet.mid(2).toInt());
+        return;
     }
 
     if(packet == "AP")
@@ -84,7 +98,7 @@ void AuthSocket::ParsePacket(QString packet)
 void AuthSocket::SendPersos()
 {
         WorldPacket persos(SMSG_GIVE_PERSOS);
-        persos << m_infos["subscription_time"];
+        persos << m_infos["subscription_time"].toAscii().data();
         SendPacket(persos);
 }
 
@@ -216,6 +230,18 @@ void AuthSocket::SendServers()
     WorldPacket dataServers(SMSG_GIVE_SERVERS);
     dataServers << packetServers;
     SendPacket(dataServers);
+}
+
+void AuthSocket::SelectServer(int id)
+{
+    QList< QMap<QString, QString> > server = m_DbCon->getServers(id);
+    QString infos = "";
+    infos += server[0]["ip"] + ":" + server[0]["port"] + ";";
+    infos += GenerateRandomString(16);
+
+    WorldPacket packet(SMSG_SERVER_INFOS);
+    packet << infos;
+    SendPacket(packet);
 }
 
 void AuthSocket::OnClose()

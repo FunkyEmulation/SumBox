@@ -20,6 +20,11 @@ SOURCES += main.cpp \
     ../shared/opcodes/opcodes.cpp \
     ../worldserver/game/server/worldsession.cpp \
     AuthConfig.cpp \
+    Database/Models/AccountModel.cpp \
+    Database/DatabaseHandler.cpp \
+    Database/Models/ServerModel.cpp \
+    Com/ComServer.cpp \
+    Com/GameSocket.cpp \
     AuthModel.cpp
 
 HEADERS += \
@@ -31,5 +36,10 @@ HEADERS += \
     ../shared/packets/worldpacket.h \
     ../shared/packets/worldbuffer.h \
     ../worldserver/game/server/worldsession.h \
-    AuthModel.h \
-    AuthConfig.h
+    AuthConfig.h \
+    Database/Models/AccountModel.h \
+    Database/DatabaseHandler.h \
+    Database/Models/ServerModel.h \
+    Com/ComServer.h \
+    Com/GameSocket.h \
+    AuthModel.h

@@ -22,6 +22,7 @@ public:
     void QueueManager();
     void SendPersos();
     void SendRandomName();
+    void SelectServer(int id);
 
 public slots:
     void OnRead();
@@ -32,8 +33,8 @@ private:
     AuthModel* m_DbCon;
     QString m_packet;
     QString m_hashKey;
-    quint16 m_blockSize;
     QMap<QString,QString> m_infos; // account - pseudo - password - gmlevel - servers - secret_question - secret_answer - logged - banned
+    QList<QString> m_banips;
     quint8 m_state; // 0=non authentifié : attente de la version / 1=version reçue : attente des ids / 2 = ids reçus
 };
 

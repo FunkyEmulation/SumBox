@@ -29,6 +29,12 @@ AuthModel::AuthModel(QString host,QString user,QString pass,QString dbname)
     }
 
     cout << "Database connection accomplished on " << dbname.toAscii().data() << endl;
+
+    getServers();
+    cout << QString::number(m_serversList.size()).toAscii().data() << " serveur(s) chargé(s)" << endl;
+
+    getBanips();
+    cout << QString::number(m_banips.size()).toAscii().data() << " banip(s) chargé(s)" << endl;
 }
 
 QMap<QString,QString> AuthModel::getAccount(QString account)
@@ -38,8 +44,8 @@ QMap<QString,QString> AuthModel::getAccount(QString account)
     req.prepare("SELECT * FROM accounts WHERE account=?");
     req.addBindValue(account.toAscii().data());
 
-        if (!req.exec()) {
-            cout << "SQL Query failed : " << req.lastError().text().toAscii().data() << endl;
+        if (!req.exec())
+        {
             return accountInfos;
         }
 
@@ -61,29 +67,81 @@ QMap<QString,QString> AuthModel::getAccount(QString account)
         return accountInfos;
 }
 
-QList< QMap<QString, QString> > AuthModel::getServers()
+QList< QMap<QString, QString> > AuthModel::getServers(int id,bool force)
 {
-    QList< QMap<QString, QString> > servers;
-    QSqlQuery req;
+    if(m_serversList.isEmpty() || force) // On force à récupérer les données via sql
+    {
+        m_serversList.clear();
+        QSqlQuery req;
+        QString query = "";
 
-        if (!req.exec("SELECT * FROM servers")) {
-            cout << "SQL Query failed : " << req.lastError().text().toAscii().data() << endl;
-            return servers;
+        if (!req.exec("SELECT * FROM servers"))
+        {
+            cout << "echec : " << req.lastError().text().toAscii().data() << endl;
+            return m_serversList;
         }
 
-        unsigned int i = 0;
         while(req.next())
         {
-
             QMap<QString, QString> curInfos;
             curInfos["id"] = req.value(req.record().indexOf("id")).toString().toAscii().data();
-            curInfos["state"] = req.value(req.record().indexOf("state")).toString().toAscii().data();
+            curInfos["state"] = req.value(req.record().indexOf("state")).toString().toAscii().data();;
             curInfos["population"] = req.value(req.record().indexOf("population")).toString().toAscii().data();
             curInfos["subscription"] = req.value(req.record().indexOf("subscription")).toString().toAscii().data();
             curInfos["ip"] = req.value(req.record().indexOf("ip")).toString().toAscii().data();
             curInfos["port"] = req.value(req.record().indexOf("port")).toString().toAscii().data();
 
-            servers.append(curInfos);
+            m_serversList.append(curInfos);
         }
-        return servers;
+       return m_serversList;
+    } else // On retourne les données en mémoire ; pas de MàJ
+    {
+        if(id == -1)
+        {
+            return m_serversList;
+        } else // Renvoi les infos d'un serveur demandé
+        {
+            QList< QMap<QString, QString> > server;
+
+            for(int i = 0; i < m_serversList.length(); ++i)
+            {
+                if(m_serversList[i]["id"].toInt() == id)
+                {
+                    QMap<QString,QString> infos;
+                    infos["id"] = m_serversList[i]["id"];
+                    infos["state"] = m_serversList[i]["state"];
+                    infos["population"] = m_serversList[i]["population"];
+                    infos["subscription"] = m_serversList[i]["subscription"];
+                    infos["ip"] = m_serversList[i]["ip"];
+                    infos["port"] = m_serversList[i]["port"];
+
+                    server.append(infos);
+                    return server;
+                }
+            }
+            // Serveur demandé introuvable :
+            return server;
+        }
+    }
 }
+
+QList< QString > AuthModel::getBanips(bool force)
+{
+    if(m_banips.isEmpty() || force)
+    {
+        m_banips.clear();
+        QSqlQuery req;
+            if (!req.exec("SELECT * FROM banips"))
+            {
+                return m_banips;
+            }
+
+            while(req.next())
+            {
+                m_banips.append(req.value(0).toString());
+            }
+    }
+
+    return m_banips;
+}
+
