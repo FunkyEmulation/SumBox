@@ -5,7 +5,6 @@
 #include <QObject>
 #include <QtNetwork>
 #include "authsocket.h"
-#include "Database/DatabaseHandler.h"
 
 typedef QList<AuthSocket*> SocketList;
 
