@@ -77,7 +77,6 @@ QList< QMap<QString, QString> > AuthModel::getServers(int id,bool force)
 
         if (!req.exec("SELECT * FROM servers"))
         {
-            cout << "echec : " << req.lastError().text().toAscii().data() << endl;
             return m_serversList;
         }
 
@@ -85,7 +84,7 @@ QList< QMap<QString, QString> > AuthModel::getServers(int id,bool force)
         {
             QMap<QString, QString> curInfos;
             curInfos["id"] = req.value(req.record().indexOf("id")).toString().toAscii().data();
-            curInfos["state"] = req.value(req.record().indexOf("state")).toString().toAscii().data();;
+            curInfos["state"] = req.value(req.record().indexOf("state")).toString().toAscii().data();
             curInfos["population"] = req.value(req.record().indexOf("population")).toString().toAscii().data();
             curInfos["subscription"] = req.value(req.record().indexOf("subscription")).toString().toAscii().data();
             curInfos["ip"] = req.value(req.record().indexOf("ip")).toString().toAscii().data();
