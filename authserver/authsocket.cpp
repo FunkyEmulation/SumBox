@@ -123,6 +123,7 @@ void AuthSocket::CheckVersion(QString version)
     {
         m_state = 0;
         WorldPacket data(SMSG_BAD_VERSION);
+        data << config["clientVersion"];
         SendPacket(data);
         return;
     }
