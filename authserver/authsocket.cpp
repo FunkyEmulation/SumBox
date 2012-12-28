@@ -178,6 +178,7 @@ void AuthSocket::CheckAccount(QString ids)
 
         // Ids OK, non banni, non logged
         m_state = 2;
+        m_DbCon->setAccountState(1,m_infos["id"].toInt());
         SendInformations(); // On envoi les infos du compte
 
     }
@@ -236,9 +237,12 @@ void AuthSocket::SendServers()
 void AuthSocket::SelectServer(int id)
 {
     QList< QMap<QString, QString> > server = m_DbCon->getServers(id);
+    QString key = GenerateRandomString(16);
     QString infos = "";
     infos += server[0]["ip"] + ":" + server[0]["port"] + ";";
-    infos += GenerateRandomString(16);
+    infos += key;
+
+    m_DbCon->addConnection(m_infos["id"].toInt(),key);
 
     WorldPacket packet(SMSG_SERVER_INFOS);
     packet << infos;
@@ -247,6 +251,11 @@ void AuthSocket::SelectServer(int id)
 
 void AuthSocket::OnClose()
 {
+    if(!m_infos.isEmpty())
+    {
+        m_DbCon->setAccountState(0,m_infos["id"].toInt());
+    }
+
     cout << "Closing connection with " << m_socket->peerAddress().toString().toAscii().data() << endl;
     m_socket->deleteLater();
 }

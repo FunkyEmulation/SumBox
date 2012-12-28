@@ -16,6 +16,8 @@ public:
     QList< QMap<QString, QString> > getServers(int id = -1);
     QList<QString> getBanips();
     bool Error();
+    void setAccountState(int state,int account);
+    void addConnection(int accountId,QString key);
 
 private:
     AuthModel(QString host, QString user, QString pass, QString dbname);

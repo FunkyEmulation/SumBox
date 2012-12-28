@@ -45,6 +45,7 @@ QMap<QString,QString> AuthModel::getAccount(QString account)
 
         if (req.first())
         {
+          accountInfos["id"]              = req.value(req.record().indexOf("id")).toString().toAscii().data();
           accountInfos["account"]         = req.value(req.record().indexOf("account")).toString().toAscii().data();
           accountInfos["pseudo"]          = req.value(req.record().indexOf("pseudo")).toString().toAscii().data();
           accountInfos["password"]        = req.value(req.record().indexOf("password")).toString().toAscii().data();
@@ -132,3 +133,22 @@ QList< QString > AuthModel::getBanips()
     return m_banips;
 }
 
+void AuthModel::setAccountState(int state, int account)
+{
+    QSqlQuery req;
+    req.prepare("UPDATE accounts SET logged = ? WHERE id = ?");
+    req.addBindValue(state);
+    req.addBindValue(account);
+    req.exec();
+}
+
+void AuthModel::addConnection(int accountId, QString key)
+{
+    QSqlQuery req;
+    req.prepare("INSERT INTO lives_connections (`id`,`account_id`, `key`) VALUES (?, ?, ?)");
+    req.addBindValue(0);
+    req.addBindValue(accountId);
+    req.addBindValue(key);
+    if(!req.exec())
+        cout << "last = " << req.lastQuery().toAscii().data() << endl << " ==>  " << req.lastError().text().toAscii().data() << endl;
+}
