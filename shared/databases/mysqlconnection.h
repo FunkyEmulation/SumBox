@@ -34,11 +34,8 @@ public:
     bool Open();
     void Close();
 
-    bool Query(QString sqlQuery); // Select data
-    bool Execute(QString sqlQuery); // Modify data
-
-    bool PQuery(QString sqlQuery, ...); // Select data with args
-    bool PExecute(QString sqlQuery, ...); // Modify data with args
+    bool Query(QString sqlQuery);
+    bool PQuery(QString sqlQuery, ...);
 
 private:
     ConnectionInfo m_connectionInfo;
