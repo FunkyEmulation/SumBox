@@ -21,7 +21,8 @@ SOURCES += main.cpp \
     ../worldserver/game/server/worldsession.cpp \
     AuthConfig.cpp \
     AuthModel.cpp \
-    ../shared/databases/mysqlconnection.cpp
+    ../shared/databases/mysqlconnection.cpp \
+    ../shared/databases/authdatabase.cpp
 
 HEADERS += \
     ../shared/define.h \
@@ -34,4 +35,5 @@ HEADERS += \
     ../worldserver/game/server/worldsession.h \
     AuthConfig.h \
     AuthModel.h \
-    ../shared/databases/mysqlconnection.h
+    ../shared/databases/mysqlconnection.h \
+    ../shared/databases/authdatabase.h

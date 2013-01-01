@@ -10,6 +10,8 @@ MysqlConnection::MysqlConnection(ConnectionInfo& connectionInfo)
     m_db.setDatabaseName(m_connectionInfo.database);
     m_db.setUserName(m_connectionInfo.username);
     m_db.setPassword(m_connectionInfo.password);
+
+    m_queries.clear();
 }
 
 MysqlConnection::~MysqlConnection()
@@ -22,6 +24,7 @@ bool MysqlConnection::Open()
     if(!m_db.open())
         return false;
 
+    LoadQueries();
     qDebug() << "Database connection accomplished on " << m_connectionInfo.database;
     return true;
 }
@@ -37,12 +40,8 @@ bool MysqlConnection::Query(QString sqlQuery)
     if(sqlQuery.isEmpty() || !m_db.isOpen())
         return false;
 
-    m_lock.lock();
-
     QSqlQuery req;
     bool res = req.exec(sqlQuery);
-
-    m_lock.unlock();
 
     if(res)
         return true;

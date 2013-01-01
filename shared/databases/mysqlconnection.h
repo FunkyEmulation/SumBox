@@ -25,11 +25,16 @@ struct ConnectionInfo
     QString password;
 };
 
+typedef QMap<quint16, QString> QueriesMap;
+#define LOAD_QUERY(a, b) m_queries[a] = b;
+
 class MysqlConnection
 {
 public:
     MysqlConnection(ConnectionInfo& connectionInfo);
     ~MysqlConnection();
+
+    virtual void LoadQueries() = 0;
 
     bool Open();
     void Close();
@@ -37,10 +42,12 @@ public:
     bool Query(QString sqlQuery);
     bool PQuery(QString sqlQuery, ...);
 
+protected:
+    QueriesMap m_queries;
+
 private:
     ConnectionInfo m_connectionInfo;
     QSqlDatabase m_db;
-    QMutex m_lock;
 };
 
 #endif
