@@ -10,6 +10,9 @@
 #include "AuthConfig.h"
 #include "AuthModel.h"
 
+#include <QtSql>
+#include "../shared/databases/database.h"
+
 using namespace std;
 
 AuthServer authserver;
@@ -54,6 +57,11 @@ int main(int argc, char *argv[])
 
     cout << "Press ctrl + c to quit." << endl;
     cout << "SumBox::Authserver started in " << QString::number(t.elapsed() / IN_MILLISECONDS).toAscii().data() << " sec." << endl;
+
+    cout << "TEMP MYSQL TESTING" << endl << endl;
+    Database::Instance();
+    QSqlQuery req = Database::Auth()->PQuery(AUTH_SELECT_ACCOUNT, 0);
+    qDebug() << req.record();
 
     signal(SIGINT, &exit);
     return a.exec();

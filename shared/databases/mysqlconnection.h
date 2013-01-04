@@ -13,20 +13,19 @@ struct ConnectionInfo
 
         host = infos.at(0);
         port = QString(infos.at(1)).toInt();
-        database = infos.at(2);
-        username = infos.at(3);
-        password = infos.at(4);
+        username = infos.at(2);
+        password = infos.at(3);
+        database = infos.at(4);
     }
 
     QString host;
     int port;
-    QString database;
     QString username;
     QString password;
+    QString database;
 };
 
 typedef QMap<quint16, QString> QueriesMap;
-#define LOAD_QUERY(a, b) m_queries[a] = b;
 
 class MysqlConnection
 {
@@ -35,12 +34,28 @@ public:
     ~MysqlConnection();
 
     virtual void LoadQueries() = 0;
+    void LoadQuery(quint16 id, QString sql)
+    {
+        m_queries[id] = sql;
+    }
 
     bool Open();
     void Close();
 
-    bool Query(QString sqlQuery);
-    bool PQuery(QString sqlQuery, ...);
+    QString GetSqlQuery(quint16 sqlQueryId)
+    {
+        QueriesMap::ConstIterator itr = m_queries.find(sqlQueryId);
+
+        if(itr != m_queries.end())
+            return m_queries[sqlQueryId];
+        return QString();
+    }
+
+    QSqlQuery Query(QString sqlQuery);
+    QSqlQuery PQuery(QString sqlQuery, ...);
+
+    QSqlQuery Query(quint16 sqlQueryId);
+    QSqlQuery PQuery(quint16 sqlQueryId, ...);
 
 protected:
     QueriesMap m_queries;

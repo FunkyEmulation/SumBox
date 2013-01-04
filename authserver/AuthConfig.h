@@ -13,6 +13,12 @@ public:
     QMap<QString,QString> getConfig();
     bool Error();
 
+    // Tmp vit'fait
+    QString GetStringConfig(QString index)
+    {
+        return m_AuthConfiguration[index];
+    }
+
 private:
     AuthConfig (QString confName);
 

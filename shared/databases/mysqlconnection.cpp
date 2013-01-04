@@ -4,7 +4,7 @@ MysqlConnection::MysqlConnection(ConnectionInfo& connectionInfo)
 {
     m_connectionInfo = connectionInfo;
 
-    m_db = QSqlDatabase::addDatabase("QMYSQL");
+    m_db = QSqlDatabase::addDatabase("QMYSQL", "auth");
     m_db.setHostName(m_connectionInfo.host);
     m_db.setPort(m_connectionInfo.port);
     m_db.setDatabaseName(m_connectionInfo.database);
@@ -22,7 +22,10 @@ MysqlConnection::~MysqlConnection()
 bool MysqlConnection::Open()
 {
     if(!m_db.open())
+    {
+        qDebug() << m_db.lastError();
         return false;
+    }
 
     LoadQueries();
     qDebug() << "Database connection accomplished on " << m_connectionInfo.database;
@@ -35,27 +38,43 @@ void MysqlConnection::Close()
     qDebug() << "Closing database connection on " << m_connectionInfo.database;
 }
 
-bool MysqlConnection::Query(QString sqlQuery)
+QSqlQuery MysqlConnection::Query(QString sqlQuery)
 {
     if(sqlQuery.isEmpty() || !m_db.isOpen())
-        return false;
+        return QSqlQuery();
 
-    QSqlQuery req;
-    bool res = req.exec(sqlQuery);
+    QSqlQuery req = QSqlQuery(m_db);
 
-    if(res)
-        return true;
+    if(!req.exec(sqlQuery))
+    {
+        qDebug() << "SQL error with " << sqlQuery << " : ";
+        qDebug() << req.lastError();
+    }
 
-    qDebug() << "SQL error with " << sqlQuery << " : ";
-    qDebug() << req.lastError();
-    return false;
+    return req;
 }
 
-bool MysqlConnection::PQuery(QString sqlQuery, ...)
+QSqlQuery MysqlConnection::PQuery(QString sqlQuery, ...)
 {
     if(sqlQuery.isEmpty() || !m_db.isOpen())
-        return false;
+        return QSqlQuery();
 
+    va_list ap;
+    va_start(ap, sqlQuery);
+    QString query;
+    query.vsprintf(sqlQuery.toAscii().data(), ap);
+
+    return Query(query);
+}
+
+QSqlQuery MysqlConnection::Query(quint16 sqlQueryId)
+{
+    return Query(GetSqlQuery(sqlQueryId));
+}
+
+QSqlQuery MysqlConnection::PQuery(quint16 sqlQueryId, ...)
+{
+    QString sqlQuery = GetSqlQuery(sqlQueryId);
     va_list ap;
     va_start(ap, sqlQuery);
     QString query;
