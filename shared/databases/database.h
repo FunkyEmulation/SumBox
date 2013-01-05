@@ -32,6 +32,11 @@ public:
         return Database::Instance()->GetAuthDatabase();
     }
 
+    bool Error()
+    {
+        return m_error;
+    }
+
 private:
     Database();
     ~Database();
@@ -43,6 +48,8 @@ private:
 
     static Database* m_instance;
     AuthDatabase* m_authDatabase;
+
+    bool m_error;
 };
 
 #endif

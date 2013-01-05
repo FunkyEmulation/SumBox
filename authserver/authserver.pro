@@ -20,7 +20,6 @@ SOURCES += main.cpp \
     ../shared/opcodes/opcodes.cpp \
     ../worldserver/game/server/worldsession.cpp \
     AuthConfig.cpp \
-    AuthModel.cpp \
     ../shared/databases/mysqlconnection.cpp \
     ../shared/databases/authdatabase.cpp \
     ../shared/databases/database.cpp
@@ -35,7 +34,6 @@ HEADERS += \
     ../shared/packets/worldbuffer.h \
     ../worldserver/game/server/worldsession.h \
     AuthConfig.h \
-    AuthModel.h \
     ../shared/databases/mysqlconnection.h \
     ../shared/databases/authdatabase.h \
     ../shared/databases/database.h

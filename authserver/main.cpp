@@ -8,7 +8,6 @@
 #include "../shared/define.h"
 #include "authserver.h"
 #include "AuthConfig.h"
-#include "AuthModel.h"
 
 #include <QtSql>
 #include "../shared/databases/database.h"
@@ -39,12 +38,8 @@ int main(int argc, char *argv[])
 
     QMap<QString,QString> AuthConfiguration = Config->getConfig();
 
-    AuthModel* DbCon = AuthModel::getInstance(AuthConfiguration["authDbHost"],
-                                             AuthConfiguration["authDbUser"],
-                                             AuthConfiguration["authDbPswd"],
-                                             AuthConfiguration["authDbName"]);
-
-    if(DbCon->Error())
+    Database* db = Database::Instance();
+    if(db->Error())
         return 0;
 
     if(!authserver.Start(QHostAddress(AuthConfiguration["authIp"].toAscii().data()), AuthConfiguration["authPort"].toInt()))
@@ -57,11 +52,6 @@ int main(int argc, char *argv[])
 
     cout << "Press ctrl + c to quit." << endl;
     cout << "SumBox::Authserver started in " << QString::number(t.elapsed() / IN_MILLISECONDS).toAscii().data() << " sec." << endl;
-
-    cout << "TEMP MYSQL TESTING" << endl << endl;
-    Database::Instance();
-    QSqlQuery req = Database::Auth()->PQuery(AUTH_SELECT_ACCOUNT, 0);
-    qDebug() << req.record();
 
     signal(SIGINT, &exit);
     return a.exec();

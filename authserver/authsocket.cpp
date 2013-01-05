@@ -8,17 +8,9 @@ using namespace std;
 
 AuthSocket::AuthSocket(QTcpSocket* socket)
 {
-    m_DbCon = AuthModel::getInstance(NULL,NULL,NULL,NULL);
-    m_banips = m_DbCon->getBanips();
     m_socket = socket;
     m_packet = "";
     m_state = 0;
-
-    if(m_banips.contains(socket->peerAddress().toString()))
-    {
-        WorldPacket ban(SMSG_ACCOUNT_BANNED);
-        SendPacket(ban);
-    }
 
     connect(m_socket, SIGNAL(readyRead()), this, SLOT(OnRead()));
     connect(m_socket, SIGNAL(disconnected()), this, SLOT(OnClose()));
@@ -54,19 +46,49 @@ void AuthSocket::OnRead()
     }
 }
 
+void AuthSocket::OnClose()
+{
+    if(!m_infos.isEmpty())
+        Database::Auth()->PQuery(AUTH_UPDATE_ACCOUNT_STATE, 0, m_infos["id"].toInt());
+
+    cout << "Closing connection with " << m_socket->peerAddress().toString().toAscii().data() << endl;
+    m_socket->deleteLater();
+}
+
+void AuthSocket::SendInitPacket()
+{
+    QSqlQuery req = Database::Auth()->PQuery(AUTH_SELECT_IP_BANNED, m_socket->peerAddress().toString().toAscii().data());
+    if(req.first())
+    {
+        WorldPacket ban(SMSG_ACCOUNT_BANNED);
+        SendPacket(ban);
+        return;
+    }
+
+    WorldPacket data(SMSG_HELLO_CONNECTION_SERVER);
+    m_hashKey = GenerateRandomString(32);
+    data << m_hashKey;
+    SendPacket(data);
+}
+
+void AuthSocket::SendPacket(WorldPacket data)
+{
+    m_socket->write(data.GetPacket() + (char)0x00);
+    cout << "Send packet " << GetOpcodeName(data.GetOpcode()).toAscii().data() << " ( Header : " << GetOpcodeHeader(data.GetOpcode()).toAscii().data() << " )" << endl;
+    if(data.GetPacket().length() > 0)
+        qDebug() << "Packet data : " << data.GetPacket();
+}
+
 void AuthSocket::ParsePacket(QString packet)
 {
-    if(m_state < 2) // Phase d'authentification
+    // Phase d'authentification
+    if(m_state < 2)
     {
-        switch(m_state)
-        {
-            case 0:
-                CheckVersion(packet);
-                break;
-            case 1:
-                CheckAccount(packet);
-                break;
-        }
+        if(m_state == 0)
+            CheckVersion(packet);
+        else
+            CheckAccount(packet);
+
         return;
     }
 
@@ -84,7 +106,7 @@ void AuthSocket::ParsePacket(QString packet)
 
     if(packet.left(2) == "AX")
     {
-        SelectServer(packet.mid(2).toInt());
+        SelectServer(packet.mid(2).toUInt());
         return;
     }
 
@@ -97,19 +119,19 @@ void AuthSocket::ParsePacket(QString packet)
 
 void AuthSocket::SendPersos()
 {
-        WorldPacket persos(SMSG_GIVE_PERSOS);
-        persos << m_infos["subscription_time"].toAscii().data();
-        SendPacket(persos);
+    WorldPacket persos(SMSG_GIVE_PERSOS);
+    persos << m_infos["subscription_time"].toString().toAscii().data();
+    SendPacket(persos);
 }
 
 void AuthSocket::QueueManager()
 {
-        return;
+    return;
 }
 
 void AuthSocket::SendRandomName()
 {
-    QString randomName = GenerateRandomPseudo(4,8);
+    QString randomName = GenerateRandomPseudo(4, 8);
     WorldPacket randomPseudo(SMSG_RANDOM_PSEUDO);
     randomPseudo << randomName;
     SendPacket(randomPseudo);
@@ -146,19 +168,21 @@ void AuthSocket::CheckAccount(QString ids)
     QString account = identifiants.takeFirst();
     QString hashPass = identifiants.takeFirst();
 
-    m_infos = m_DbCon->getAccount(account);
+    QSqlQuery req = Database::Auth()->PQuery(AUTH_SELECT_ACCOUNT, account.toAscii().data());
 
-    // Compte inexistant
-    if(m_infos.isEmpty())
+    if(!req.first())
     {
-       m_state = 0;
-       WorldPacket data(SMSG_LOGIN_ERROR);
-       SendPacket(data);
-       return;
+        m_state = 0;
+        WorldPacket data(SMSG_LOGIN_ERROR);
+        SendPacket(data);
+        return;
     }
 
+    for(quint8 i = 0; i < req.record().count(); ++i)
+        m_infos.insert(req.record().fieldName(i), req.value(i));
+
     // Mot de passe correct
-    if(cryptPassword(m_infos["password"],m_hashKey) == hashPass)
+    if(cryptPassword(m_infos["password"].toString(), m_hashKey) == hashPass)
     {
         if(m_infos["banned"] == "1")
         {
@@ -178,7 +202,7 @@ void AuthSocket::CheckAccount(QString ids)
 
         // Ids OK, non banni, non logged
         m_state = 2;
-        m_DbCon->setAccountState(1,m_infos["id"].toInt());
+        Database::Auth()->PQuery(AUTH_UPDATE_ACCOUNT_STATE, 1, m_infos["id"].toUInt());
         SendInformations(); // On envoi les infos du compte
 
     }
@@ -196,83 +220,60 @@ void AuthSocket::CheckAccount(QString ids)
 void AuthSocket::SendInformations()
 {
     WorldPacket dataPseudo(SMSG_GIVE_PSEUDO);
-    dataPseudo << m_infos["pseudo"];
+    dataPseudo << m_infos["pseudo"].toString();
     SendPacket(dataPseudo);
 
     WorldPacket dataCommunauty(SMSG_GIVE_COMMUNAUTY);
     dataCommunauty << "0";
     SendPacket(dataCommunauty);
 
-    SendServers();
+    QSqlQuery req = Database::Auth()->Query(AUTH_SELECT_ALL_SERVERS);
+    QString server = "";
+
+    while(req.next())
+    {
+        for(quint8 i = 0; i < req.record().count(); ++i)
+        {
+            server += req.value(i).toString();
+            if(i != req.record().count() - 1)
+                server += ";";
+        }
+
+        server += "|";
+    }
+    server = server.left(server.size() - 1);
+
+    WorldPacket dataServers(SMSG_GIVE_SERVERS);
+    dataServers << server;
+    SendPacket(dataServers);
 
     WorldPacket dataGmLevel(SMSG_GIVE_GMLEVEL);
-    dataGmLevel << m_infos["gmlevel"];
+    dataGmLevel << m_infos["gmlevel"].toString();
     SendPacket(dataGmLevel);
 
     WorldPacket dataQuestion(SMSG_GIVE_QUESTION);
-    dataQuestion << m_infos["secret_question"];
+    dataQuestion << m_infos["secret_question"].toString();
     SendPacket(dataQuestion);
 }
 
-void AuthSocket::SendServers()
+void AuthSocket::SelectServer(uint id)
 {
-    QString packetServers = "";
-    QList< QMap<QString, QString> > servers = m_DbCon->getServers();
-
-    for(int i = 0; i < servers.length(); ++i)
+    QSqlQuery req = Database::Auth()->PQuery(AUTH_SELECT_SERVER, id);
+    if(!req.first())
     {
-        packetServers += servers[i]["id"] + ";";
-        packetServers += servers[i]["state"] + ";";
-        packetServers += servers[i]["population"] + ";";
-        packetServers += servers[i]["subscription"];
-        if(i < servers.length() - 1)
-            packetServers += "|";
+        qDebug() << "Server not found";
+        return;
     }
 
-    WorldPacket dataServers(SMSG_GIVE_SERVERS);
-    dataServers << packetServers;
-    SendPacket(dataServers);
-}
-
-void AuthSocket::SelectServer(int id)
-{
-    QList< QMap<QString, QString> > server = m_DbCon->getServers(id);
     QString key = GenerateRandomString(16);
-    QString infos = "";
-    infos += server[0]["ip"] + ":" + server[0]["port"] + ";";
+    QString infos = req.value(req.record().indexOf("ip")).toString() + ":";
+    infos += req.value(req.record().indexOf("port")).toString() + ";";
     infos += key;
 
-    m_DbCon->addConnection(m_infos["id"].toInt(),key);
+    qDebug() << key;
+    Database::Auth()->PQuery(AUTH_INSERT_LIVE_CONNECTION, 0, m_infos["id"].toUInt(), key.toAscii().data());
 
     WorldPacket packet(SMSG_SERVER_INFOS);
     packet << infos;
     SendPacket(packet);
-}
-
-void AuthSocket::OnClose()
-{
-    if(!m_infos.isEmpty())
-    {
-        m_DbCon->setAccountState(0,m_infos["id"].toInt());
-    }
-
-    cout << "Closing connection with " << m_socket->peerAddress().toString().toAscii().data() << endl;
-    m_socket->deleteLater();
-}
-
-// Faire une classe WorldPacket
-void AuthSocket::SendInitPacket()
-{
-    WorldPacket data(SMSG_HELLO_CONNECTION_SERVER);
-    m_hashKey = GenerateRandomString(32);
-    data << m_hashKey;
-    SendPacket(data);
-}
-
-void AuthSocket::SendPacket(WorldPacket data)
-{
-    m_socket->write(data.GetPacket() + (char)0x00);
-    cout << "Send packet " << GetOpcodeName(data.GetOpcode()).toAscii().data() << " ( Header : " << GetOpcodeHeader(data.GetOpcode()).toAscii().data() << " )" << endl;
-    if(data.GetPacket().length() > 0)
-        qDebug() << "Packet data : " << data.GetPacket();
 }

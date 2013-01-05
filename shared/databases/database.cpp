@@ -5,11 +5,16 @@ Database* Database::m_instance = 0;
 
 Database::Database()
 {
+    m_error = false;
+
     ConnectionInfo auth = ConnectionInfo(AuthConfig::getInstance()->GetStringConfig("AuthDatabase"));
     m_authDatabase = new AuthDatabase(auth);
 
     if(!m_authDatabase->Open())
-        qApp->quit(); // don't work
+    {
+        m_error = true;
+        return;
+    }
 }
 
 Database::~Database()
