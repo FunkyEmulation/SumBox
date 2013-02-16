@@ -121,11 +121,15 @@ void AuthSocket::SendPersos()
 {
     WorldPacket persos(SMSG_GIVE_PERSOS);
     persos << m_infos["subscription_time"].toString().toAscii().data();
+    // Manque |NbrePersos,surServerId|nbrePersos,surServerid2...
+
     SendPacket(persos);
 }
 
 void AuthSocket::QueueManager()
 {
+    // On envoit les infos du compte :
+    SendInformations();
     return;
 }
 
@@ -203,7 +207,6 @@ void AuthSocket::CheckAccount(QString ids)
         // Ids OK, non banni, non logged
         m_state = 2;
         Database::Auth()->PQuery(AUTH_UPDATE_ACCOUNT_STATE, 1, m_infos["id"].toUInt());
-        SendInformations(); // On envoi les infos du compte
 
     }
     else
