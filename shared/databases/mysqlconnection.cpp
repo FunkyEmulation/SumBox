@@ -1,4 +1,5 @@
 #include "mysqlconnection.h"
+#include "../logs/log.h"
 
 MysqlConnection::MysqlConnection(ConnectionInfo& connectionInfo)
 {
@@ -28,14 +29,14 @@ bool MysqlConnection::Open()
     }
 
     LoadQueries();
-    qDebug() << "Database connection accomplished on " << m_connectionInfo.database;
+    Log::Write(LOG_TYPE_NORMAL, "Database connection accomplished on %s", m_connectionInfo.database.toAscii().data());
     return true;
 }
 
 void MysqlConnection::Close()
 {
     m_db.close();
-    qDebug() << "Closing database connection on " << m_connectionInfo.database;
+    Log::Write(LOG_TYPE_NORMAL, "Closing database connection on %s", m_connectionInfo.database.toAscii().data());
 }
 
 QSqlQuery MysqlConnection::Query(QString sqlQuery)
@@ -48,8 +49,8 @@ QSqlQuery MysqlConnection::Query(QString sqlQuery)
 
     if(!req.exec(sqlQuery))
     {
-        qDebug() << "SQL error with " << sqlQuery << " : ";
-        qDebug() << req.lastError();
+        Log::Write(LOG_TYPE_NORMAL, "SQL error with %s : %s", sqlQuery.toAscii().data());
+        Log::Write(LOG_TYPE_NORMAL, "%s", req.lastError().text().toAscii().data());
     }
 
     return req;

@@ -5,6 +5,7 @@
 #include <QObject>
 #include <QtNetwork>
 #include "authsocket.h"
+#include "../shared/logs/log.h"
 
 typedef QList<AuthSocket*> SocketList;
 

@@ -1,4 +1,5 @@
 #include <AuthConfig.h>
+#include "../shared/logs/log.h"
 
 using namespace std;
 AuthConfig* AuthConfig::m_instance = NULL;
@@ -33,15 +34,14 @@ void AuthConfig::LoadConfig(QString confName)
          QFile file(confName);
          if(!file.open(QIODevice::ReadOnly))
          {
-             cout << "Error: Non-existent auth configuration file '" << confName.toAscii().data() << "' ..." << endl
-                  << "Exiting ..." << endl;
+             Log::Write(LOG_TYPE_NORMAL, "Error: Non-existent auth configuration file '%s'...", confName.toAscii().data());
              file.close();
              m_error = true;
              return;
          }
          if(!configDocument.setContent(&file))
          {
-             cout << "Invalid xml configuration ..." << endl;
+             Log::Write(LOG_TYPE_NORMAL, "Invalid xml configuration ...");
              file.close();
              m_error = true;
              return;
@@ -59,6 +59,6 @@ void AuthConfig::LoadConfig(QString confName)
              node = node.nextSibling(); // On va  l'lment suivant
          }
 
-      cout << "Auth config loaded ..." << endl;
+         Log::Write(LOG_TYPE_NORMAL, "Auth config loaded ...");
   }
 

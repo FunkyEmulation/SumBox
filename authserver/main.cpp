@@ -11,6 +11,7 @@
 
 #include <QtSql>
 #include "../shared/databases/database.h"
+#include "../shared/logs/log.h"
 
 using namespace std;
 
@@ -18,9 +19,8 @@ AuthServer authserver;
 
 void exit(int /*s*/)
 {
-    cout << "Stopping SumBox::Authserver..." << endl;
+    Log::Write(LOG_TYPE_NORMAL, "Stopping SumBox::Authserver...");
     authserver.Stop();
-    cout << "SumBox::Authserver stopped. Exiting..." << endl;
     QCoreApplication::exit();
 }
 
@@ -30,7 +30,10 @@ int main(int argc, char *argv[])
 
     QTime t;
     t.start();
-    cout << "Starting SumBox::Authserver..." << endl;
+
+    // A mettre dans le fichier de conf'
+    Log::Instance()->OpenFile("authserver.log");
+    Log::Write(LOG_TYPE_NORMAL, "Starting SumBox::Authserver...");
 
     AuthConfig* Config = AuthConfig::getInstance("authconfig.xml");
     if(Config->Error())
@@ -44,14 +47,14 @@ int main(int argc, char *argv[])
 
     if(!authserver.Start(QHostAddress(AuthConfiguration["authIp"].toAscii().data()), AuthConfiguration["authPort"].toInt()))
     {
-        cout << authserver.GetErrorString().toAscii().data() << endl;
+        Log::Write(LOG_TYPE_NORMAL, authserver.GetErrorString().toAscii().data());
         return 0;
     }
     else
-       cout << "AuthServer started on port " << AuthConfiguration["authPort"].toAscii().data() << " : waiting for connections" << endl;
+       Log::Write(LOG_TYPE_NORMAL, "AuthServer started on port %s : waiting for connections", AuthConfiguration["authPort"].toAscii().data());
 
-    cout << "Press ctrl + c to quit." << endl;
-    cout << "SumBox::Authserver started in " << QString::number(t.elapsed() / IN_MILLISECONDS).toAscii().data() << " sec." << endl;
+    Log::Write(LOG_TYPE_NORMAL, "Press ctrl + c to quit.");
+    Log::Write(LOG_TYPE_NORMAL, "SumBox::Authserver started in %s sec.", QString::number(t.elapsed() / IN_MILLISECONDS).toAscii().data());
 
     signal(SIGINT, &exit);
     return a.exec();

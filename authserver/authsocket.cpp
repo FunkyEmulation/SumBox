@@ -3,6 +3,7 @@
 #include "AuthConfig.h"
 #include "../shared/utils/util.h"
 #include "../shared/opcodes/opcodes.h"
+#include "../shared/logs/log.h"
 
 using namespace std;
 
@@ -15,7 +16,7 @@ AuthSocket::AuthSocket(QTcpSocket* socket)
     connect(m_socket, SIGNAL(readyRead()), this, SLOT(OnRead()));
     connect(m_socket, SIGNAL(disconnected()), this, SLOT(OnClose()));
 
-    cout << "New incoming connection from " << m_socket->peerAddress().toString().toAscii().data() << endl;
+    Log::Write(LOG_TYPE_NORMAL, "New incoming connection from %s", m_socket->peerAddress().toString().toAscii().data());
     SendInitPacket();
 }
 
@@ -38,8 +39,7 @@ void AuthSocket::OnRead()
 
     if(!m_packet.isEmpty() && *curPacket == 0x00) // Reçu en entier ?
     {
-        cout << "Received packet from <" << m_socket->peerAddress().toString().toAscii().data() << "> : "
-             << m_packet.toAscii().data() << endl;
+        Log::Write(LOG_TYPE_NORMAL, "Received packet from <%s> : %s", m_socket->peerAddress().toString().toAscii().data(), m_packet.toAscii().data());
 
         ParsePacket(m_packet);
         m_packet = "";
@@ -51,7 +51,7 @@ void AuthSocket::OnClose()
     if(!m_infos.isEmpty())
         Database::Auth()->PQuery(AUTH_UPDATE_ACCOUNT_STATE, 0, m_infos["id"].toInt());
 
-    cout << "Closing connection with " << m_socket->peerAddress().toString().toAscii().data() << endl;
+    Log::Write(LOG_TYPE_NORMAL, "Closing connection with %s", m_socket->peerAddress().toString().toAscii().data());
     m_socket->deleteLater();
 }
 
@@ -74,9 +74,9 @@ void AuthSocket::SendInitPacket()
 void AuthSocket::SendPacket(WorldPacket data)
 {
     m_socket->write(data.GetPacket() + (char)0x00);
-    cout << "Send packet " << GetOpcodeName(data.GetOpcode()).toAscii().data() << " ( Header : " << GetOpcodeHeader(data.GetOpcode()).toAscii().data() << " )" << endl;
+    Log::Write(LOG_TYPE_DEBUG, "Send packet %s ( Header : %s )", GetOpcodeName(data.GetOpcode()).toAscii().data(), GetOpcodeHeader(data.GetOpcode()).toAscii().data());
     if(data.GetPacket().length() > 0)
-        qDebug() << "Packet data : " << data.GetPacket();
+        Log::Write(LOG_TYPE_DEBUG, "Packet data : %s", QString(data.GetPacket()).toAscii().data());
 }
 
 void AuthSocket::ParsePacket(QString packet)
