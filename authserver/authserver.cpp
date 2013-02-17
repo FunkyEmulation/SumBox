@@ -21,6 +21,7 @@ bool AuthServer::Start(QHostAddress address, quint16 port)
 
 void AuthServer::Stop()
 {
+    Log::Close();
     m_server->close();
 }
 

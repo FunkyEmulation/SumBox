@@ -22,7 +22,8 @@ SOURCES += main.cpp \
     AuthConfig.cpp \
     ../shared/databases/mysqlconnection.cpp \
     ../shared/databases/authdatabase.cpp \
-    ../shared/databases/database.cpp
+    ../shared/databases/database.cpp \
+    ../shared/logs/log.cpp
 
 HEADERS += \
     ../shared/define.h \
@@ -36,4 +37,5 @@ HEADERS += \
     AuthConfig.h \
     ../shared/databases/mysqlconnection.h \
     ../shared/databases/authdatabase.h \
-    ../shared/databases/database.h
+    ../shared/databases/database.h \
+    ../shared/logs/log.h
