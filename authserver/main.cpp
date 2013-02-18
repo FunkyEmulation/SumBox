@@ -12,6 +12,7 @@
 #include <QtSql>
 #include "../shared/databases/database.h"
 #include "../shared/logs/log.h"
+#include "../shared/configuration/configuration.h"
 
 using namespace std;
 
@@ -31,9 +32,11 @@ int main(int argc, char *argv[])
     QTime t;
     t.start();
 
-    // A mettre dans le fichier de conf'
+    cout << "Starting SumBox::Authserver..." << endl;
+    //if (!Configuration::Instance()->OpenFile("authserver.conf"))
+    //    return 0;
+
     Log::Instance()->OpenFile("authserver.log");
-    Log::Write(LOG_TYPE_NORMAL, "Starting SumBox::Authserver...");
 
     AuthConfig* Config = AuthConfig::getInstance("authconfig.xml");
     if(Config->Error())

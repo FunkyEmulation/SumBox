@@ -4,6 +4,7 @@ Log* Log::m_instance = 0;
 
 Log::Log()
 {
+    m_file = NULL;
 }
 
 Log::~Log()
@@ -19,7 +20,9 @@ void Log::OpenFile(QString fileName)
         return;
 
     QString error = m_file->errorString();
+    delete m_file;
     m_file = NULL;
+
     Log::Write(LOG_TYPE_NORMAL, "Cannot open log file %s : %s", fileName.toAscii().data(), error.toAscii().data());
 }
 
