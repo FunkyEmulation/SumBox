@@ -1,9 +1,9 @@
 #include <iostream>
 #include "authsocket.h"
-#include "AuthConfig.h"
 #include "../shared/utils/util.h"
 #include "../shared/opcodes/opcodes.h"
 #include "../shared/logs/log.h"
+#include "../shared/configuration/configmgr.h"
 
 using namespace std;
 
@@ -144,12 +144,12 @@ void AuthSocket::SendRandomName()
 
 void AuthSocket::CheckVersion(QString version)
 {
-    QMap<QString,QString> config = AuthConfig::getInstance()->getConfig();
-    if(version != config["clientVersion"]) // Mauvaise version
+    QString acceptedClientVersion = ConfigMgr::Auth()->GetQString("AcceptClientVersion");
+    if(version != acceptedClientVersion) // Mauvaise version
     {
         m_state = 0;
         WorldPacket data(SMSG_BAD_VERSION);
-        data << config["clientVersion"];
+        data << acceptedClientVersion;
         SendPacket(data);
         return;
     }

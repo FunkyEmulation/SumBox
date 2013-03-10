@@ -2,17 +2,13 @@
 #define WORLDPACKET_H
 
 #include <QtCore>
-#include "../shared/opcodes/opcodes.h"
 #include "../shared/packets/worldbuffer.h"
+#include "../shared/opcodes/opcodes.h"
 
 class WorldPacket : public WorldBuffer
 {
 public:
-    WorldPacket(quint8 opcode) : WorldBuffer(&m_packet, QIODevice::WriteOnly)
-    {
-        m_opcode = opcode;
-        *this << GetOpcodeHeader(m_opcode);
-    }
+    WorldPacket(quint8 opcode);
 
     qint8 GetOpcode()
     {

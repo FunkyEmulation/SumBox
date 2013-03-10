@@ -49,9 +49,9 @@ public:
         switch(logType)
         {
         case LOG_TYPE_DETAIL:
-            return "[ Detail ]";
+            return "[ Detail ] ";
         case LOG_TYPE_DEBUG:
-            return "[ Error ]";
+            return "[ Debug ] ";
         case LOG_TYPE_NORMAL:
         default:
             return "";
