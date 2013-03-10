@@ -19,12 +19,12 @@ SOURCES += main.cpp \
     authsocket.cpp \
     ../shared/opcodes/opcodes.cpp \
     ../worldserver/game/server/worldsession.cpp \
-    AuthConfig.cpp \
     ../shared/databases/mysqlconnection.cpp \
     ../shared/databases/authdatabase.cpp \
     ../shared/databases/database.cpp \
     ../shared/logs/log.cpp \
-    ../shared/configuration/configuration.cpp
+    ../shared/configuration/configuration.cpp \
+    ../shared/configuration/configmgr.cpp
 
 HEADERS += \
     ../shared/define.h \
@@ -35,9 +35,9 @@ HEADERS += \
     ../shared/packets/worldpacket.h \
     ../shared/packets/worldbuffer.h \
     ../worldserver/game/server/worldsession.h \
-    AuthConfig.h \
     ../shared/databases/mysqlconnection.h \
     ../shared/databases/authdatabase.h \
     ../shared/databases/database.h \
     ../shared/logs/log.h \
-    ../shared/configuration/configuration.h
+    ../shared/configuration/configuration.h \
+    ../shared/configuration/configmgr.h

@@ -9,7 +9,7 @@ struct ConnectionInfo
     ConnectionInfo() {}
     ConnectionInfo(QString connectionInfo)
     {
-        QStringList infos = connectionInfo.split(';');
+        QStringList infos = connectionInfo.split(':');
 
         host = infos.at(0);
         port = QString(infos.at(1)).toInt();

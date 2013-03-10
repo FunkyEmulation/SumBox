@@ -1,5 +1,5 @@
 #include "database.h"
-#include "AuthConfig.h"
+#include "../configuration/configmgr.h"
 
 Database* Database::m_instance = 0;
 
@@ -7,7 +7,7 @@ Database::Database()
 {
     m_error = false;
 
-    ConnectionInfo auth = ConnectionInfo(AuthConfig::getInstance()->GetStringConfig("AuthDatabase"));
+    ConnectionInfo auth = ConnectionInfo(ConfigMgr::Auth()->GetQString("AuthDatabase"));
     m_authDatabase = new AuthDatabase(auth);
 
     if(!m_authDatabase->Open())
