@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core network xml sql
+QT       += core network sql
 
 QT       -= gui
 
@@ -24,7 +24,8 @@ SOURCES += main.cpp \
     ../shared/databases/database.cpp \
     ../shared/logs/log.cpp \
     ../shared/configuration/configuration.cpp \
-    ../shared/configuration/configmgr.cpp
+    ../shared/configuration/configmgr.cpp \
+    ../shared/packets/worldpacket.cpp
 
 HEADERS += \
     ../shared/define.h \

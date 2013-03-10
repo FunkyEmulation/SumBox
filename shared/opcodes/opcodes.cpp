@@ -2,6 +2,8 @@
 
 OpcodeStruct opcodeTable[NUM_MSG_TYPES] =
 {
+    {"MSG_UNKNOWN_OPCODE", "", &WorldSession::HandleNULL },
+
     { "SMSG_HELLO_CONNECTION_SERVER", "HC", &WorldSession::HandleServerSide },
     { "SMSG_HELLO_GAME_SERVER", "HG", &WorldSession::HandleServerSide },
     { "SMSG_BAD_VERSION", "AlEv", &WorldSession::HandleServerSide },
@@ -20,4 +22,7 @@ OpcodeStruct opcodeTable[NUM_MSG_TYPES] =
 
     // Packets received before client authentication
     { "CMSG_QUEUE_POSITION", "Af", &WorldSession::HandleBeforeAuth },
+
+    // Packets received after client authentication
+    { "CMSG_TICKET_RESPONSE", "AT", &WorldSession::HandleTicketResponse }
 };

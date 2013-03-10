@@ -28,7 +28,7 @@ public:
     }
 
     Configuration* GetAuthConfig() { Q_ASSERT(m_auth); return m_auth; }
-    Configuration* GetWorldConfig() { return m_world; }
+    Configuration* GetWorldConfig() { Q_ASSERT(m_world); return m_world; }
 
     static Configuration* Auth() { return ConfigMgr::Instance()->GetAuthConfig(); }
     static Configuration* World() { return ConfigMgr::Instance()->GetWorldConfig(); }
