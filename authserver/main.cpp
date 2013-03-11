@@ -37,8 +37,7 @@ int main(int argc, char *argv[])
 
     Log::Instance()->OpenFile("authserver.log");
 
-    Database* db = Database::Instance();
-    if (db->Error())
+    if (!Database::Instance()->OpenAuthDatabase())
         return 0;
 
     if(!authserver.Start(QHostAddress::LocalHost, quint16(ConfigMgr::Auth()->GetInt("AuthServerPort"))))

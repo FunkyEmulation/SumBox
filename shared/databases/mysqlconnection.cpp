@@ -5,7 +5,7 @@ MysqlConnection::MysqlConnection(ConnectionInfo& connectionInfo)
 {
     m_connectionInfo = connectionInfo;
 
-    m_db = QSqlDatabase::addDatabase("QMYSQL", "auth");
+    m_db = QSqlDatabase::addDatabase("QMYSQL", m_connectionInfo.database);
     m_db.setHostName(m_connectionInfo.host);
     m_db.setPort(m_connectionInfo.port);
     m_db.setDatabaseName(m_connectionInfo.database);

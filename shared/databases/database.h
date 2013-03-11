@@ -3,6 +3,8 @@
 
 #include <QtCore>
 #include "authdatabase.h"
+#include "chardatabase.h"
+#include "worlddatabase.h"
 
 class Database
 {
@@ -32,10 +34,19 @@ public:
         return Database::Instance()->GetAuthDatabase();
     }
 
-    bool Error()
+    static CharDatabase* Char()
     {
-        return m_error;
+        return Database::Instance()->GetCharDatabase();
     }
+
+    static WorldDatabase* World()
+    {
+        return Database::Instance()->GetWorldDatabase();
+    }
+
+    bool OpenAuthDatabase();
+    bool OpenCharDatabase();
+    bool OpenWorldDatabase();
 
 private:
     Database();
@@ -46,10 +57,21 @@ private:
         return m_authDatabase;
     }
 
-    static Database* m_instance;
-    AuthDatabase* m_authDatabase;
+    CharDatabase* GetCharDatabase()
+    {
+        return m_charDatabase;
+    }
 
-    bool m_error;
+    WorldDatabase* GetWorldDatabase()
+    {
+        return m_worldDatabase;
+    }
+
+    static Database* m_instance;
+
+    AuthDatabase* m_authDatabase;
+    CharDatabase* m_charDatabase;
+    WorldDatabase* m_worldDatabase;
 };
 
 #endif

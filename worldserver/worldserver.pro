@@ -25,7 +25,9 @@ SOURCES += main.cpp \
     ../shared/databases/authdatabase.cpp \
     ../shared/logs/log.cpp \
     ../shared/opcodes/opcodes.cpp \
-    ../shared/packets/worldpacket.cpp
+    ../shared/packets/worldpacket.cpp \
+    ../shared/databases/worlddatabase.cpp \
+    ../shared/databases/chardatabase.cpp
 
 HEADERS += \
     worldserver.h \
@@ -40,4 +42,6 @@ HEADERS += \
     ../shared/opcodes/opcodes.h \
     ../shared/packets/worldpacket.h \
     ../shared/packets/worldbuffer.h \
-    ../shared/utils/util.h
+    ../shared/utils/util.h \
+    ../shared/databases/worlddatabase.h \
+    ../shared/databases/chardatabase.h
