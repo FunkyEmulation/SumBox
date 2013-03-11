@@ -25,7 +25,9 @@ SOURCES += main.cpp \
     ../shared/logs/log.cpp \
     ../shared/configuration/configuration.cpp \
     ../shared/configuration/configmgr.cpp \
-    ../shared/packets/worldpacket.cpp
+    ../shared/packets/worldpacket.cpp \
+    ../shared/databases/worlddatabase.cpp \
+    ../shared/databases/chardatabase.cpp
 
 HEADERS += \
     ../shared/define.h \
@@ -41,4 +43,6 @@ HEADERS += \
     ../shared/databases/database.h \
     ../shared/logs/log.h \
     ../shared/configuration/configuration.h \
-    ../shared/configuration/configmgr.h
+    ../shared/configuration/configmgr.h \
+    ../shared/databases/worlddatabase.h \
+    ../shared/databases/chardatabase.h

@@ -40,8 +40,13 @@ int main(int argc, char *argv[])
 
     Log::Instance()->OpenFile("worldserver.log");
 
-    Database* db = Database::Instance();
-    if (db->Error())
+    if (!Database::Instance()->OpenAuthDatabase())
+        return 0;
+
+    if (!Database::Instance()->OpenCharDatabase())
+        return 0;
+
+    if (!Database::Instance()->OpenWorldDatabase())
         return 0;
 
     if(!worldserver.Start(QHostAddress::LocalHost, quint16(ConfigMgr::World()->GetInt("WorldServerPort"))))
