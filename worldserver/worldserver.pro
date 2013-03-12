@@ -27,7 +27,8 @@ SOURCES += main.cpp \
     ../shared/opcodes/opcodes.cpp \
     ../shared/packets/worldpacket.cpp \
     ../shared/databases/worlddatabase.cpp \
-    ../shared/databases/chardatabase.cpp
+    ../shared/databases/chardatabase.cpp \
+    game/chat/chat.cpp
 
 HEADERS += \
     worldserver.h \
@@ -44,4 +45,6 @@ HEADERS += \
     ../shared/packets/worldbuffer.h \
     ../shared/utils/util.h \
     ../shared/databases/worlddatabase.h \
-    ../shared/databases/chardatabase.h
+    ../shared/databases/chardatabase.h \
+    game/chat/commandline.h \
+    game/chat/chat.h

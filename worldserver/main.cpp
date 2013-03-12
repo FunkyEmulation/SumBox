@@ -11,6 +11,7 @@
 #include "../shared/databases/database.h"
 #include "../shared/logs/log.h"
 #include "../shared/configuration/configmgr.h"
+#include "game/chat/commandline.h"
 
 using namespace std;
 
@@ -59,6 +60,10 @@ int main(int argc, char *argv[])
 
     Log::Write(LOG_TYPE_NORMAL, "Press ctrl + c to quit.");
     Log::Write(LOG_TYPE_NORMAL, "SumBox::Worldserver started in %s sec.", QString::number(t.elapsed() / IN_MILLISECONDS).toAscii().data());
+
+    Chat::Instance();
+    CommandLine commandLine(&a);
+    commandLine.run();
 
     signal(SIGINT, &exit);
     return a.exec();
