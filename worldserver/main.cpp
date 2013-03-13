@@ -12,6 +12,7 @@
 #include "../shared/logs/log.h"
 #include "../shared/configuration/configmgr.h"
 #include "game/chat/commandline.h"
+#include "game/scripting/luaengine.h"
 
 using namespace std;
 
@@ -49,6 +50,8 @@ int main(int argc, char *argv[])
 
     if (!Database::Instance()->OpenWorldDatabase())
         return 0;
+
+    LuaEngine::Instance()->StartEngine();
 
     if(!worldserver.Start(QHostAddress::LocalHost, quint16(ConfigMgr::World()->GetInt("WorldServerPort"))))
     {
