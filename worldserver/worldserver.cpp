@@ -1,4 +1,4 @@
-#include "WorldServer.h"
+#include "worldserver.h"
 
 WorldServer::WorldServer()
 {

@@ -28,8 +28,10 @@ enum Opcodes
 
     CMSG_QUEUE_POSITION = 15,
     CMSG_TICKET_RESPONSE = 16,
+    SMSG_TICKET_REFUSED = 17,
+    SMSG_TICKET_ACCEPTED = 18,
 
-    NUM_MSG_TYPES = 17
+    NUM_MSG_TYPES = 19
 };
 
 struct OpcodeStruct

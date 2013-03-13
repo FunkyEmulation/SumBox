@@ -27,16 +27,15 @@ void WorldSession::OnRead()
 
     while(in.readRawData(curPacket, 1) != -1)
     {
-       if(*curPacket != 0x00) // Ce n'est pas le dernier caractère
+        if(*curPacket != '\u0000' && *curPacket != '\r' && *curPacket != '\n') // Ce n'est pas le dernier caractère
        {
-          if(*curPacket != '\n' && *curPacket != '\r')
             m_packet += *curPacket;
        }
        else
           break;
     }
 
-    if(!m_packet.isEmpty() && *curPacket == 0x00) // Reçu en entier ?
+    if(!m_packet.isEmpty()) // Reçu en entier ?
     {
         Log::Write(LOG_TYPE_NORMAL, "Received packet from <%s> : %s", m_socket->peerAddress().toString().toAscii().data(), m_packet.toAscii().data());
 
@@ -82,4 +81,20 @@ void WorldSession::HandleBeforeAuth(QString& /*packet*/)
 void WorldSession::HandleTicketResponse(QString &packet)
 {
     qDebug() << "HandleTicketResponse called.";
+    QString ticket = packet.mid(2);
+    QSqlQuery req = Database::Auth()->PQuery(AUTH_SELECT_LIVE_CONNECTION, ticket.toAscii().data());
+    if(req.first()) // Key valide
+    {
+        m_infos.insert("id", req.value(req.record().indexOf("id")).toString());
+        WorldPacket TicketAccepted(SMSG_TICKET_ACCEPTED);
+        SendPacket(TicketAccepted);
+
+        // On supprime la key
+        Database::Auth()->PQuery(AUTH_DELETE_LIVE_CONNECTION,ticket.toAscii().data());
+        return;
+    } else
+    {
+        WorldPacket TicketRefused(SMSG_TICKET_REFUSED);
+        SendPacket(TicketRefused);
+    }
 }

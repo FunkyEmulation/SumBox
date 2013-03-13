@@ -24,5 +24,7 @@ OpcodeStruct opcodeTable[NUM_MSG_TYPES] =
     { "CMSG_QUEUE_POSITION", "Af", &WorldSession::HandleBeforeAuth },
 
     // Packets received after client authentication
-    { "CMSG_TICKET_RESPONSE", "AT", &WorldSession::HandleTicketResponse }
+    { "CMSG_TICKET_RESPONSE", "AT", &WorldSession::HandleTicketResponse },
+    { "SMSG_TICKET_REFUSED", "ATE", &WorldSession::HandleServerSide },
+    { "SMSG_TICKET_ACCEPTED", "ATK0", &WorldSession::HandleServerSide }
 };

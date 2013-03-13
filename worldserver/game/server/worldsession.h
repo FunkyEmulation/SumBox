@@ -5,6 +5,7 @@
 #include <QObject>
 #include <QtNetwork>
 #include "../shared/packets/worldpacket.h"
+#include "../shared/databases/database.h"
 
 class WorldPacket;
 
@@ -32,6 +33,7 @@ public slots:
 private:
     QTcpSocket* m_socket;
     QString m_packet;
+    QMap<QString, QVariant> m_infos;
 };
 
 #endif // WORLDSESSION_H
