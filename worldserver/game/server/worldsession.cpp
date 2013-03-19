@@ -30,10 +30,7 @@ void WorldSession::OnRead()
         if(*curPacket != 0x00)
         {
             if(*curPacket != '\n' && *curPacket != '\r')
-            {
-                qDebug() << *curPacket;
                 m_packet += *curPacket;
-            }
         }
         else
             break;
