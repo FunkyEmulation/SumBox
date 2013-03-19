@@ -71,21 +71,11 @@ void WorldSession::SendPacket(WorldPacket data)
         Log::Write(LOG_TYPE_DEBUG, "Packet data : %s", QString(data.GetPacket()).toAscii().data());
 }
 
-void WorldSession::HandleServerSide(QString& /*packet*/)
-{
-
-}
-
-void WorldSession::HandleBeforeAuth(QString& /*packet*/)
-{
-
-}
-
 void WorldSession::HandleTicketResponse(QString& packet)
 {
-    qDebug() << "HandleTicketResponse called";
     QString ticket = packet.mid(2);
     QSqlQuery req = Database::Auth()->PQuery(AUTH_SELECT_LIVE_CONNECTION, ticket.toAscii().data());
+
     if(req.first()) // Key valide
     {
         m_infos.insert("id", req.value(req.record().indexOf("id")).toString());
@@ -94,8 +84,8 @@ void WorldSession::HandleTicketResponse(QString& packet)
 
         // On supprime la key
         Database::Auth()->PQuery(AUTH_DELETE_LIVE_CONNECTION,ticket.toAscii().data());
-        return;
-    } else
+    }
+    else
     {
         WorldPacket TicketRefused(SMSG_TICKET_REFUSED);
         SendPacket(TicketRefused);

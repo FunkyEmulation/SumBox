@@ -20,8 +20,8 @@ public:
 
     // Default handlers
     void HandleNULL(QString& /*packet*/) {}
-    void HandleServerSide(QString& packet); // SMSG packets
-    void HandleBeforeAuth(QString& packet); // CMSG packets before client auth (WorldSession don't exist at this moment)
+    void HandleServerSide(QString& /*packet*/) {} // SMSG packets
+    void HandleBeforeAuth(QString& /*packet*/) {} // CMSG packets before client auth (WorldSession don't exist at this moment)
 
     // Handlers
     void HandleTicketResponse(QString& packet);
