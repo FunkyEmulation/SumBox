@@ -28,13 +28,13 @@ void AuthSocket::OnRead()
 
     while(in.readRawData(curPacket, 1) != -1)
     {
-       if(*curPacket != 0x00) // Ce n'est pas le dernier caractère
-       {
-          if(*curPacket != '\n' && *curPacket != '\r')
-            m_packet += *curPacket;
-       }
-       else
-          break;
+        if(*curPacket != 0x00) // Ce n'est pas le dernier caractère
+        {
+            if(*curPacket != '\n' && *curPacket != '\r')
+                m_packet += *curPacket;
+        }
+        else
+            break;
     }
 
     if(!m_packet.isEmpty() && *curPacket == 0x00) // Reçu en entier ?
@@ -128,9 +128,9 @@ void AuthSocket::SendPersos()
 
 void AuthSocket::QueueManager()
 {
-    // On envoit les infos du compte :
-    SendInformations();
-    return;
+    WorldPacket queuePosition(CMSG_QUEUE_POSITION);
+    queuePosition << "1|1|0|1|-1";
+    SendPacket(queuePosition);
 }
 
 void AuthSocket::SendRandomName()
@@ -217,6 +217,7 @@ void AuthSocket::CheckAccount(QString ids)
         return;
     }
 
+    SendInformations();
     m_state = 2; // Authentification terminée
 }
 

@@ -44,7 +44,6 @@ QSqlQuery MysqlConnection::Query(QString sqlQuery)
     if(sqlQuery.isEmpty() || !m_db.isOpen())
         return QSqlQuery();
 
-    qDebug() << sqlQuery;
     QSqlQuery req = QSqlQuery(m_db);
 
     if(!req.exec(sqlQuery))

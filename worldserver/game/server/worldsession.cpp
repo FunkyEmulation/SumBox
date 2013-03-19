@@ -27,28 +27,34 @@ void WorldSession::OnRead()
 
     while(in.readRawData(curPacket, 1) != -1)
     {
-        if(*curPacket != '\u0000' && *curPacket != '\r' && *curPacket != '\n') // Ce n'est pas le dernier caractère
-       {
-            m_packet += *curPacket;
-       }
-       else
-          break;
+        if(*curPacket != 0x00)
+        {
+            if(*curPacket != '\n' && *curPacket != '\r')
+            {
+                qDebug() << *curPacket;
+                m_packet += *curPacket;
+            }
+        }
+        else
+            break;
     }
 
-    if(!m_packet.isEmpty()) // Reçu en entier ?
+    if(!m_packet.isEmpty() && *curPacket == 0x00)
     {
         Log::Write(LOG_TYPE_NORMAL, "Received packet from <%s> : %s", m_socket->peerAddress().toString().toAscii().data(), m_packet.toAscii().data());
 
-        QString header = m_packet.left(2);
-        OpcodeStruct opcode = GetOpcodeByHeader(header);
+        QString header2 = m_packet.left(2);
+        QString header3 = m_packet.left(3);
+
+        OpcodeStruct opcode = GetOpcodeByHeader(header3);
+
+        if (opcode.name == "MSG_UNKNOWN_OPCODE")
+            opcode = GetOpcodeByHeader(header2);
 
         if (opcode.name != "MSG_UNKNOWN_OPCODE")
-        {
             (this->*opcode.handler)(m_packet);
-            return;
-        }
         else
-            Log::Write(LOG_TYPE_DEBUG, "Packet <%s> is unhandled. Content : %s", header.toAscii().data(), m_packet.toAscii().data());
+            Log::Write(LOG_TYPE_DEBUG, "Packet <%s> is unhandled. Content : %s", header2.toAscii().data(), m_packet.toAscii().data());
 
         m_packet = "";
     }
@@ -78,9 +84,9 @@ void WorldSession::HandleBeforeAuth(QString& /*packet*/)
 
 }
 
-void WorldSession::HandleTicketResponse(QString &packet)
+void WorldSession::HandleTicketResponse(QString& packet)
 {
-    qDebug() << "HandleTicketResponse called.";
+    qDebug() << "HandleTicketResponse called";
     QString ticket = packet.mid(2);
     QSqlQuery req = Database::Auth()->PQuery(AUTH_SELECT_LIVE_CONNECTION, ticket.toAscii().data());
     if(req.first()) // Key valide
