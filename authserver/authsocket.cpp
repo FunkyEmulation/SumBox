@@ -49,7 +49,7 @@ void AuthSocket::OnRead()
 void AuthSocket::OnClose()
 {
     if(!m_infos.isEmpty())
-        Database::Auth()->PQuery(AUTH_UPDATE_ACCOUNT_STATE, 0, m_infos["id"].toInt());
+        Database::Auth()->PQuery(AUTH_UPDATE_ACCOUNT_STATE, 0, m_infos["account_id"].toInt());
 
     Log::Write(LOG_TYPE_NORMAL, "Closing connection with %s", m_socket->peerAddress().toString().toAscii().data());
     m_socket->deleteLater();
@@ -131,6 +131,8 @@ void AuthSocket::QueueManager()
     WorldPacket queuePosition(CMSG_QUEUE_POSITION);
     queuePosition << "1|1|0|1|-1";
     SendPacket(queuePosition);
+
+    SendInformations();
 }
 
 void AuthSocket::SendRandomName()
@@ -186,7 +188,7 @@ void AuthSocket::CheckAccount(QString ids)
         m_infos.insert(req.record().fieldName(i), req.value(i));
 
     // Mot de passe correct
-    if(cryptPassword(m_infos["password"].toString(), m_hashKey) == hashPass)
+    if(cryptPassword(m_infos["hash_password"].toString(), m_hashKey) == hashPass)
     {
         if(m_infos["banned"] == "1")
         {
@@ -196,7 +198,7 @@ void AuthSocket::CheckAccount(QString ids)
             return;
         }
 
-        if(m_infos["logged"] == "1")
+        if(m_infos["online"] == "1")
         {
             m_state = 0;
             WorldPacket data(SMSG_ALREADY_LOGGED);
@@ -206,8 +208,7 @@ void AuthSocket::CheckAccount(QString ids)
 
         // Ids OK, non banni, non logged
         m_state = 2;
-        Database::Auth()->PQuery(AUTH_UPDATE_ACCOUNT_STATE, 1, m_infos["id"].toUInt());
-
+        Database::Auth()->PQuery(AUTH_UPDATE_ACCOUNT_STATE, 1, m_infos["account_id"].toUInt());
     }
     else
     {
@@ -252,7 +253,7 @@ void AuthSocket::SendInformations()
     SendPacket(dataServers);
 
     WorldPacket dataGmLevel(SMSG_GIVE_GMLEVEL);
-    dataGmLevel << m_infos["gmlevel"].toString();
+    dataGmLevel << m_infos["gm_level"].toString();
     SendPacket(dataGmLevel);
 
     WorldPacket dataQuestion(SMSG_GIVE_QUESTION);
@@ -270,12 +271,11 @@ void AuthSocket::SelectServer(uint id)
     }
 
     QString key = GenerateRandomString(16);
-    QString infos = req.value(req.record().indexOf("ip")).toString() + ":";
+    QString infos = req.value(req.record().indexOf("address")).toString() + ":";
     infos += req.value(req.record().indexOf("port")).toString() + ";";
     infos += key;
 
-    qDebug() << key;
-    Database::Auth()->PQuery(AUTH_INSERT_LIVE_CONNECTION, 0, m_infos["id"].toUInt(), key.toAscii().data());
+    Database::Auth()->PQuery(AUTH_UPDATE_ACCOUNT_SESSION_KEY, key.toAscii().data(), m_infos["account_id"].toUInt());
 
     WorldPacket packet(SMSG_SERVER_INFOS);
     packet << infos;
