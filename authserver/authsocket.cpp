@@ -131,8 +131,6 @@ void AuthSocket::QueueManager()
     WorldPacket queuePosition(CMSG_QUEUE_POSITION);
     queuePosition << "1|1|0|1|-1";
     SendPacket(queuePosition);
-
-    SendInformations();
 }
 
 void AuthSocket::SendRandomName()
@@ -218,7 +216,7 @@ void AuthSocket::CheckAccount(QString ids)
         return;
     }
 
-    SendInformations();
+    SendInformations(); // A envoyer avant ou après la file d'attente ?
     m_state = 2; // Authentification terminée
 }
 
