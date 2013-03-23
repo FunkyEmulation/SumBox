@@ -78,16 +78,14 @@ void WorldSession::HandleTicketResponse(QString& packet)
 
     if(req.first()) // Key valide
     {
-        QSqlQuery accountReq = Database::Auth()->PQuery(AUTH_SELECT_ACCOUNT_BY_ID, req.value(req.record().indexOf("id")).toInt());
-
         // Infos account
         m_infos.insert("id", req.value(req.record().indexOf("account_id")).toString());
-        m_infos.insert("account", accountReq.value(req.record().indexOf("username")).toString());
-        m_infos.insert("pseudo", accountReq.value(req.record().indexOf("pseudo")).toString());
-        m_infos.insert("gmlevel", accountReq.value(req.record().indexOf("gm_level")).toInt());
-        m_infos.insert("question", accountReq.value(req.record().indexOf("secret_question")).toString());
-        m_infos.insert("answer", accountReq.value(req.record().indexOf("secret_answer")).toString());
-        m_infos.insert("subscription_time", accountReq.value(req.record().indexOf("subscription_time")).toInt());
+        m_infos.insert("account", req.value(req.record().indexOf("username")).toString());
+        m_infos.insert("pseudo", req.value(req.record().indexOf("pseudo")).toString());
+        m_infos.insert("gmlevel", req.value(req.record().indexOf("gm_level")).toInt());
+        m_infos.insert("question", req.value(req.record().indexOf("secret_question")).toString());
+        m_infos.insert("answer", req.value(req.record().indexOf("secret_answer")).toString());
+        m_infos.insert("subscription_time", req.value(req.record().indexOf("subscription_time")).toInt());
 
         WorldPacket TicketAccepted(SMSG_TICKET_ACCEPTED);
         SendPacket(TicketAccepted);

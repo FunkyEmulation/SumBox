@@ -3,6 +3,7 @@
 
 #include <QtCore>
 #include "../shared/logs/log.h"
+#include "../shared/configuration/configmgr.h"
 #include <QObject>
 #include <QtNetwork>
 #include "authsocket.h"

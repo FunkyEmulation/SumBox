@@ -96,7 +96,7 @@ void AuthSocket::ParsePacket(QString packet)
         else if(m_state == OnAuthentication)
         {
             // Limite de queue atteinte
-            if(AuthQueue::Instance()->GetClients()->count() >= 10)
+            if(AuthQueue::Instance()->GetClients()->count() > ConfigMgr::Auth()->GetInt("QueueLimit"))
             {
                 WorldPacket OutOfBounds(SMSG_QUEUE_OUT_OF_BOUNDS);
                 SendPacket(OutOfBounds);
@@ -260,7 +260,7 @@ void AuthSocket::SendInformations()
     SendPacket(dataPseudo);
 
     WorldPacket dataCommunauty(SMSG_GIVE_COMMUNAUTY);
-    dataCommunauty << "0";
+    dataCommunauty << "0"; // 0 = Fr
     SendPacket(dataCommunauty);
 
     QSqlQuery req = Database::Auth()->Query(AUTH_SELECT_ALL_SERVERS);
@@ -268,8 +268,8 @@ void AuthSocket::SendInformations()
 
     while(req.next())
     {
-        server += req.value(req.record().indexOf("id")).toString() + ";";
-        server += req.value(req.record().indexOf("state")).toString() + ";";
+        server += req.value(req.record().indexOf("realm_id")).toString() + ";";
+        server += req.value(req.record().indexOf("status")).toString() + ";";
         server += "1;"; // int Completion
         server += "1";  // bool canLog
 

@@ -20,7 +20,7 @@ AuthQueue::AuthQueue()
 
 void AuthQueue::Start()
 {
-    m_timer->setInterval(10000);
+    m_timer->setInterval(ConfigMgr::Auth()->GetInt("TimeQueueRefresh"));
     m_timer->start();
 
     QObject::connect(m_timer,SIGNAL(timeout()),this,SLOT(RefreshQueue()));
