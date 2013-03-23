@@ -2,8 +2,8 @@
 #define WORLDPACKET_H
 
 #include <QtCore>
-#include "../shared/packets/worldbuffer.h"
-#include "../shared/opcodes/opcodes.h"
+#include "worldbuffer.h"
+#include "../opcodes/opcodes.h"
 
 class WorldPacket : public WorldBuffer
 {

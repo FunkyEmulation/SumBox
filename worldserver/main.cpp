@@ -4,10 +4,9 @@
 #include <QFile>
 #include <iostream>
 #include <csignal>
-#include "../shared/define.h"
-#include "worldserver.h"
-
 #include <QtSql>
+
+#include "../shared/define.h"
 #include "../shared/databases/database.h"
 #include "../shared/logs/log.h"
 #include "../shared/configuration/configmgr.h"
@@ -42,6 +41,10 @@ int main(int argc, char *argv[])
 
     Log::Instance()->OpenFile("worldserver.log");
 
+    /*Chat::Instance();
+    CommandLine commandLine(&a);
+    commandLine.run();*/
+
     if (!Database::Instance()->OpenAuthDatabase())
         return 0;
 
@@ -53,20 +56,11 @@ int main(int argc, char *argv[])
 
     LuaEngine::Instance()->StartEngine();
 
-    if(!worldserver.Start(QHostAddress::LocalHost, quint16(ConfigMgr::World()->GetInt("WorldServerPort"))))
-    {
-        Log::Write(LOG_TYPE_NORMAL, worldserver.GetErrorString().toAscii().data());
+    if (!World::Instance())
         return 0;
-    }
-    else
-       Log::Write(LOG_TYPE_NORMAL, "Worldserver started on port %i : waiting for connections", ConfigMgr::World()->GetInt("WorldServerPort"));
 
     Log::Write(LOG_TYPE_NORMAL, "Press ctrl + c to quit.");
     Log::Write(LOG_TYPE_NORMAL, "SumBox::Worldserver started in %s sec.", QString::number(t.elapsed() / IN_MILLISECONDS).toAscii().data());
-
-    //Chat::Instance();
-    //CommandLine commandLine(&a);
-    //commandLine.run();
 
     signal(SIGINT, &exit);
     return a.exec();
