@@ -96,7 +96,7 @@ void AuthSocket::ParsePacket(QString packet)
         else if(m_state == OnAuthentication)
         {
             // Limite de queue atteinte
-            if(AuthQueue::Instance()->GetClients()->count() > ConfigMgr::Auth()->GetInt("QueueLimit"))
+            if(AuthQueue::Instance()->GetClientsCount() > ConfigMgr::Auth()->GetInt("QueueLimit"))
             {
                 WorldPacket OutOfBounds(SMSG_QUEUE_OUT_OF_BOUNDS);
                 SendPacket(OutOfBounds);
@@ -161,13 +161,14 @@ void AuthSocket::QueueManager()
 {
     WorldPacket queuePosition(CMSG_QUEUE_POSITION);
 
-    if(AuthQueue::Instance()->GetClients()->indexOf(this) == -1) // Non das la file
+    if(!AuthQueue::Instance()->ClientInQueue(this)) // Non das la file
     {
         queuePosition << "1|1|0|1|-1";
-    } else
+    }
+    else
     {
-        queuePosition << QString::number(AuthQueue::Instance()->GetClients()->indexOf(this) + 1).toAscii().data() << "|"; // Position dans la file
-        queuePosition << QString::number(AuthQueue::Instance()->GetClients()->count()).toAscii().data() << "|"; // Nombre d'abonnés dans la file
+        queuePosition << QString::number(AuthQueue::Instance()->GetClientPosition(this)).toAscii().data() << "|"; // Position dans la file
+        queuePosition << QString::number(AuthQueue::Instance()->GetClientsCount()).toAscii().data() << "|"; // Nombre d'abonnés dans la file
         queuePosition << "0|"; // Nombre de non abonnés
         queuePosition << "1|"; // Abonné ?
         queuePosition << "1"; // Queue id

@@ -2,67 +2,48 @@
 
 AuthQueue*  AuthQueue::m_instance = 0;
 
-AuthQueue* AuthQueue::Instance()
-{
-    if(m_instance == 0)
-    {
-        m_instance = new AuthQueue;
-    }
-
-    return m_instance;
-}
-
 AuthQueue::AuthQueue()
 {
-    m_clients = new ClientList;
+    m_clients.clear();
     m_timer = new QTimer;
+    m_timer->setInterval(ConfigMgr::Auth()->GetInt("TimeQueueRefresh"));
+}
+
+AuthQueue::~AuthQueue()
+{
+    m_clients.clear();
+    delete m_timer; // normalement inutile car géré par Qt?
 }
 
 void AuthQueue::Start()
 {
-    m_timer->setInterval(ConfigMgr::Auth()->GetInt("TimeQueueRefresh"));
     m_timer->start();
-
-    QObject::connect(m_timer,SIGNAL(timeout()),this,SLOT(RefreshQueue()));
-
+    QObject::connect(m_timer, SIGNAL(timeout()), this, SLOT(RefreshQueue()));
 }
 
 void AuthQueue::Stop()
 {
     m_timer->stop();
-    cout << "queue stoppee" << endl;
 }
 
 void AuthQueue::RefreshQueue()
 {
-    if(m_clients->isEmpty())
+    if(m_clients.isEmpty())
     {
+        Stop();
         return;
     }
 
-    AuthSocket* client = m_clients->takeFirst();
-    client->CheckAccount();
-
-    // Plus de client en attente : on arrête la file
-    if(m_clients->isEmpty())
-    {
-        Stop();
-    }
+    if (AuthSocket* client = m_clients.takeFirst())
+        client->CheckAccount();
 }
 
-ClientList* AuthQueue::GetClients()
-{
-    return m_clients;
-}
-
-void AuthQueue::AddClient(AuthSocket *socket)
+void AuthQueue::AddClient(AuthSocket* socket)
 {
     // Queue stoppée, on la relance :
     if(!m_timer->isActive())
-    {
         Start();
-    }
 
-    m_clients->append(socket);
+    m_clients.append(socket);
     Log::Write(LOG_TYPE_NORMAL,"Add client " + socket->GetIp() + " in queue.");
 }
