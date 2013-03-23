@@ -10,7 +10,7 @@
 
 class AuthSocket;
 
-typedef QList<AuthSocket*> ClientList;
+typedef QList<AuthSocket*> AuthClientList;
 
 class AuthQueue : public QObject
 {
@@ -54,7 +54,7 @@ private:
 
     static AuthQueue* m_instance;    
 
-    ClientList m_clients;
+    AuthClientList m_clients;
     QTimer* m_timer;
 };
 

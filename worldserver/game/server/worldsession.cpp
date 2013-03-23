@@ -147,5 +147,5 @@ void WorldSession::HandleCharactersList(QString& packet)
 
 void WorldSession::SendCharacters()
 {
-
+    cout << "Send persos" << endl;
 }

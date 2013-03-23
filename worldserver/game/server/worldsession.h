@@ -7,15 +7,9 @@
 #include "../shared/packets/worldpacket.h"
 #include "../shared/databases/database.h"
 #include "../../WorldQueue.h"
+#include "../shared/define.h"
 
 class WorldPacket;
-
-enum ClientState
-{
-    OnDetails = 0,
-    OnQueue = 1,
-    Logged = 2
-};
 
 class WorldSession : public QObject
 {

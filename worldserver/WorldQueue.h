@@ -10,7 +10,7 @@
 
 class WorldSession;
 
-typedef QList<WorldSession*> ClientList;
+typedef QList<WorldSession*> WorldClientList;
 
 class WorldQueue : public QObject
 {
@@ -54,7 +54,7 @@ private:
 
     static WorldQueue* m_instance;
 
-    ClientList m_clients;
+    WorldClientList m_clients;
     QTimer* m_timer;
 };
 

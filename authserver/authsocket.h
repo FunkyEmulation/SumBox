@@ -8,14 +8,6 @@
 #include "../shared/databases/database.h"
 #include "authqueue.h"
 
-enum ClientState
-{
-    OnCheckingVersion = 0,
-    OnAuthentication = 1,
-    OnQueue = 2,
-    Logged = 3
-};
-
 class AuthSocket : public QObject
 {
     Q_OBJECT
