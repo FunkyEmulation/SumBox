@@ -23,7 +23,8 @@ OpcodeStruct opcodeTable[NUM_MSG_TYPES] =
     { "SMSG_RANDOM_PSEUDO", "AP", &WorldSession::HandleServerSide },
 
     // Packets received before client authentication
-    { "CMSG_QUEUE_POSITION", "Af", &WorldSession::HandleBeforeAuth },
+    { "CMSG_QUEUE_POSITION", "Af", &WorldSession::HandleQueue },
+    { "SMSG_QUEUE_POSITION", "Af", &WorldSession::HandleServerSide },
 
     // Packets received after client authentication
     { "CMSG_TICKET_RESPONSE", "AT", &WorldSession::HandleTicketResponse },

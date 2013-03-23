@@ -62,7 +62,8 @@ SOURCES += main.cpp \
     game/scripting/lua/lbaselib.c \
     game/scripting/lua/lauxlib.c \
     game/scripting/lua/lapi.c \
-    game/world/world.cpp
+    game/world/world.cpp \
+    WorldQueue.cpp
 
 HEADERS += \
     worldserver.h \
@@ -108,4 +109,5 @@ HEADERS += \
     game/scripting/lua/lcode.h \
     game/scripting/lua/lauxlib.h \
     game/scripting/lua/lapi.h \
-    game/world/world.h
+    game/world/world.h \
+    WorldQueue.h

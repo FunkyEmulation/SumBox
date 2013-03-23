@@ -7,6 +7,7 @@ WorldSession::WorldSession(QTcpSocket *socket)
 {
     m_socket = socket;
     m_packet = "";
+    m_state = OnDetails;
 
     connect(m_socket, SIGNAL(readyRead()), this, SLOT(OnRead()));
     connect(m_socket, SIGNAL(disconnected()), this, SLOT(OnClose()));
@@ -71,6 +72,26 @@ void WorldSession::SendPacket(WorldPacket data)
         Log::Write(LOG_TYPE_DEBUG, "Packet data : %s", QString(data.GetPacket()).toAscii().data());
 }
 
+void WorldSession::HandleQueue(QString &packet)
+{
+    WorldPacket queuePosition(SMSG_QUEUE_POSITION);
+
+    if(!WorldQueue::Instance()->ClientInQueue(this)) // Non dans la file
+    {
+        queuePosition << "1|1|0|1|-1";
+    }
+    else
+    {
+        queuePosition << QString::number(WorldQueue::Instance()->GetClientPosition(this)).toAscii().data() << "|"; // Position dans la file
+        queuePosition << QString::number(WorldQueue::Instance()->GetClientsCount()).toAscii().data() << "|"; // Nombre d'abonnés dans la file
+        queuePosition << "0|"; // Nombre de non abonnés
+        queuePosition << "1|"; // Abonné ?
+        queuePosition << "1"; // Queue id
+    }
+
+    SendPacket(queuePosition);
+}
+
 void WorldSession::HandleTicketResponse(QString& packet)
 {
     QString ticket = packet.mid(2);
@@ -119,6 +140,12 @@ void WorldSession::HandleKey(QString& packet)
 }
 
 void WorldSession::HandleCharactersList(QString& packet)
+{
+    m_state = OnQueue;
+    WorldQueue::Instance()->AddClient(this);
+}
+
+void WorldSession::SendCharacters()
 {
 
 }
