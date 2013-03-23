@@ -11,7 +11,7 @@ AuthSocket::AuthSocket(QTcpSocket* socket)
 {
     m_socket = socket;
     m_packet = "";
-    m_state = 0;
+    m_state = OnCheckingVersion;
 
     connect(m_socket, SIGNAL(readyRead()), this, SLOT(OnRead()));
     connect(m_socket, SIGNAL(disconnected()), this, SLOT(OnClose()));
@@ -55,6 +55,11 @@ void AuthSocket::OnClose()
     m_socket->deleteLater();
 }
 
+QString AuthSocket::GetIp() const
+{
+    return m_socket->peerAddress().toString();
+}
+
 void AuthSocket::SendInitPacket()
 {
     QSqlQuery req = Database::Auth()->PQuery(AUTH_SELECT_IP_BANNED, m_socket->peerAddress().toString().toAscii().data());
@@ -82,13 +87,39 @@ void AuthSocket::SendPacket(WorldPacket data)
 void AuthSocket::ParsePacket(QString packet)
 {
     // Phase d'authentification
-    if(m_state < 2)
+    if(m_state != Logged)
     {
-        if(m_state == 0)
+        if(m_state == OnCheckingVersion)
+        {
             CheckVersion(packet);
-        else
-            CheckAccount(packet);
+        }
+        else if(m_state == OnAuthentication)
+        {
+            // Limite de queue atteinte
+            if(AuthQueue::Instance()->GetClients()->count() >= 10)
+            {
+                WorldPacket OutOfBounds(SMSG_QUEUE_OUT_OF_BOUNDS);
+                SendPacket(OutOfBounds);
+                return;
+            }
 
+            // Mauvais paquet : retour à l'étape 0 de l'authentification
+            if(!packet.contains("#1"))
+            {
+                m_state = OnCheckingVersion;
+                WorldPacket data(SMSG_LOGIN_ERROR);
+                SendPacket(data);
+                return;
+            }
+
+            AuthQueue::Instance()->AddClient(this);
+            m_state = OnQueue;
+            m_idsPacket = packet;
+        }
+        else if(m_state == OnQueue)
+        {
+            QueueManager();
+        }
         return;
     }
 
@@ -129,7 +160,19 @@ void AuthSocket::SendPersos()
 void AuthSocket::QueueManager()
 {
     WorldPacket queuePosition(CMSG_QUEUE_POSITION);
-    queuePosition << "1|1|0|1|-1";
+
+    if(AuthQueue::Instance()->GetClients()->indexOf(this) == -1) // Non das la file
+    {
+        queuePosition << "1|1|0|1|-1";
+    } else
+    {
+        queuePosition << QString::number(AuthQueue::Instance()->GetClients()->indexOf(this) + 1).toAscii().data() << "|"; // Position dans la file
+        queuePosition << QString::number(AuthQueue::Instance()->GetClients()->count()).toAscii().data() << "|"; // Nombre d'abonnés dans la file
+        queuePosition << "0|"; // Nombre de non abonnés
+        queuePosition << "1|"; // Abonné ?
+        queuePosition << "1"; // Queue id
+    }
+
     SendPacket(queuePosition);
 }
 
@@ -147,28 +190,19 @@ void AuthSocket::CheckVersion(QString version)
     QString acceptedClientVersion = ConfigMgr::Auth()->GetQString("AcceptClientVersion");
     if(version != acceptedClientVersion) // Mauvaise version
     {
-        m_state = 0;
+        m_state = OnCheckingVersion;
         WorldPacket data(SMSG_BAD_VERSION);
         data << acceptedClientVersion;
         SendPacket(data);
         return;
     }
 
-    m_state = 1;
+    m_state = OnAuthentication;
 }
 
-void AuthSocket::CheckAccount(QString ids)
+void AuthSocket::CheckAccount()
 {
-    // Mauvais paquet : retour à l'étape 0 de l'authentification
-    if(!ids.contains("#1"))
-    {
-        m_state = 0;
-        WorldPacket data(SMSG_LOGIN_ERROR);
-        SendPacket(data);
-        return;
-    }
-
-    QStringList identifiants = ids.split("#1");
+    QStringList identifiants = m_idsPacket.split("#1");
     QString account = identifiants.takeFirst();
     QString hashPass = identifiants.takeFirst();
 
@@ -176,7 +210,7 @@ void AuthSocket::CheckAccount(QString ids)
 
     if(!req.first())
     {
-        m_state = 0;
+        m_state = OnCheckingVersion;
         WorldPacket data(SMSG_LOGIN_ERROR);
         SendPacket(data);
         return;
@@ -190,7 +224,7 @@ void AuthSocket::CheckAccount(QString ids)
     {
         if(m_infos["banned"] == "1")
         {
-            m_state = 0;
+            m_state = OnCheckingVersion;
             WorldPacket data(SMSG_ACCOUNT_BANNED);
             SendPacket(data);
             return;
@@ -198,27 +232,26 @@ void AuthSocket::CheckAccount(QString ids)
 
         if(m_infos["logged"] == "1")
         {
-            m_state = 0;
+            m_state = OnCheckingVersion;
             WorldPacket data(SMSG_ALREADY_LOGGED);
             SendPacket(data);
             return;
         }
 
         // Ids OK, non banni, non logged
-        m_state = 2;
         Database::Auth()->PQuery(AUTH_UPDATE_ACCOUNT_STATE, 1, m_infos["id"].toUInt());
 
     }
     else
     {
-        m_state = 0;
+        m_state = OnCheckingVersion;
         WorldPacket data(SMSG_LOGIN_ERROR);
         SendPacket(data);
         return;
     }
 
     SendInformations();
-    m_state = 2; // Authentification terminée
+    m_state = Logged; // Authentification terminée
 }
 
 void AuthSocket::SendInformations()
@@ -236,12 +269,10 @@ void AuthSocket::SendInformations()
 
     while(req.next())
     {
-        for(quint8 i = 0; i < req.record().count(); ++i)
-        {
-            server += req.value(i).toString();
-            if(i != req.record().count() - 1)
-                server += ";";
-        }
+        server += req.value(req.record().indexOf("id")).toString() + ";";
+        server += req.value(req.record().indexOf("state")).toString() + ";";
+        server += "1;"; // int Completion
+        server += "1";  // bool canLog
 
         server += "|";
     }

@@ -27,7 +27,8 @@ SOURCES += main.cpp \
     ../shared/configuration/configmgr.cpp \
     ../shared/packets/worldpacket.cpp \
     ../shared/databases/worlddatabase.cpp \
-    ../shared/databases/chardatabase.cpp
+    ../shared/databases/chardatabase.cpp \
+    authqueue.cpp
 
 HEADERS += \
     ../shared/define.h \
@@ -45,4 +46,5 @@ HEADERS += \
     ../shared/configuration/configuration.h \
     ../shared/configuration/configmgr.h \
     ../shared/databases/worlddatabase.h \
-    ../shared/databases/chardatabase.h
+    ../shared/databases/chardatabase.h \
+    authqueue.h
