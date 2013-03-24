@@ -52,7 +52,7 @@ public:
         }
     }
 
-    void Init();
+    void Init(ushort logConsoleLevel, ushort logFileLevel, QString logFile);
     void OpenFile(QString fileName);
     void WriteLog(QString logMessage, LogType logType);
     static void Write(LogType logType, QString message, ...);

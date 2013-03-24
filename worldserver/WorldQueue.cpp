@@ -6,7 +6,7 @@ WorldQueue::WorldQueue()
 {
     m_clients.clear();
     m_timer = new QTimer(this);
-    m_timer->setInterval(ConfigMgr::World()->GetInt("TimeQueueRefresh"));
+    m_timer->setInterval(ConfigMgr::World()->GetInt("QueueRefreshTime"));
 }
 
 WorldQueue::~WorldQueue()

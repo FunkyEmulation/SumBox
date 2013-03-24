@@ -15,11 +15,11 @@ Log::~Log()
         m_file->close();
 }
 
-void Log::Init()
+void Log::Init(ushort logConsoleLevel, ushort logFileLevel, QString logFile)
 {
-    m_logTypeConsole = (LogType)ConfigMgr::Auth()->GetUShort("LogConsoleLevel");
-    m_logTypeFile = (LogType)ConfigMgr::Auth()->GetUShort("LogFileLevel");
-    OpenFile(ConfigMgr::Auth()->GetQString("LogFile"));
+    m_logTypeConsole = LogType(logConsoleLevel);
+    m_logTypeFile = LogType(logFileLevel);
+    OpenFile(logFile);
 }
 
 void Log::OpenFile(QString fileName)

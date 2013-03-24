@@ -39,7 +39,7 @@ int main(int argc, char *argv[])
     if (!ConfigMgr::Instance()->LoadWorldConfig("worldserver.conf"))
         return 0;
 
-    Log::Instance()->OpenFile("worldserver.log");
+    Log::Instance()->Init(ConfigMgr::World()->GetUShort("LogConsoleLevel"), ConfigMgr::World()->GetUShort("LogFileLevel"), ConfigMgr::World()->GetQString("LogFile"));
 
     /*Chat::Instance();
     CommandLine commandLine(&a);

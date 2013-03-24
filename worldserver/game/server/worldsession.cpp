@@ -39,7 +39,7 @@ void WorldSession::OnRead()
 
     if(!m_packet.isEmpty() && *curPacket == 0x00)
     {
-        Log::Write(LOG_TYPE_NORMAL, "Received packet from <%s> : %s", m_socket->peerAddress().toString().toAscii().data(), m_packet.toAscii().data());
+        Log::Write(LOG_TYPE_DEBUG, "Received packet from <%s> : %s", m_socket->peerAddress().toString().toAscii().data(), m_packet.toAscii().data());
 
         QString header2 = m_packet.left(2);
         QString header3 = m_packet.left(3);
@@ -72,7 +72,7 @@ void WorldSession::SendPacket(WorldPacket data)
         Log::Write(LOG_TYPE_DEBUG, "Packet data : %s", QString(data.GetPacket()).toAscii().data());
 }
 
-void WorldSession::HandleQueue(QString &packet)
+void WorldSession::HandleQueue(QString& /*packet*/)
 {
     WorldPacket queuePosition(SMSG_QUEUE_POSITION);
 
