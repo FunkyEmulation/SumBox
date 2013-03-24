@@ -173,7 +173,7 @@ void WorldSession::SendCharacters()
     SendPacket(CharsList);
 }
 
-void WorldSession::HandleRandomPseudo(QString& packet)
+void WorldSession::HandleRandomPseudo(QString& /*packet*/)
 {
     int max = rand()%4 +4;
 
@@ -206,7 +206,7 @@ void WorldSession::HandleRandomPseudo(QString& packet)
     SendPacket(randomPseudo);
 }
 
-void WorldSession::HandleCreatePerso(QString &packet)
+void WorldSession::HandleCreatePerso(QString& /*packet*/)
 {
     cout << "Creation perso " << endl;
 }

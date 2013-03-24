@@ -6,7 +6,7 @@
 #include <QtNetwork>
 #include "../shared/packets/worldpacket.h"
 #include "../shared/databases/database.h"
-#include "authqueue.h"
+#include "../shared/queues/authqueue.h"
 
 class AuthSocket : public QObject
 {

@@ -6,7 +6,7 @@
 #include <QtNetwork>
 #include "../shared/packets/worldpacket.h"
 #include "../shared/databases/database.h"
-#include "../../worldqueue.h"
+#include "../shared/queues/worldqueue.h"
 #include "../shared/define.h"
 
 class WorldPacket;

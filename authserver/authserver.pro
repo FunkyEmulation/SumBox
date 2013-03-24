@@ -28,8 +28,8 @@ SOURCES += main.cpp \
     ../shared/packets/worldpacket.cpp \
     ../shared/databases/worlddatabase.cpp \
     ../shared/databases/chardatabase.cpp \
-    authqueue.cpp \
-    ../worldserver/worldqueue.cpp
+    ../shared/queues/worldqueue.cpp \
+    ../shared/queues/authqueue.cpp
 
 HEADERS += \
     ../shared/define.h \
@@ -48,5 +48,5 @@ HEADERS += \
     ../shared/configuration/configmgr.h \
     ../shared/databases/worlddatabase.h \
     ../shared/databases/chardatabase.h \
-    authqueue.h \
-    ../worldserver/worldqueue.h
+    ../shared/queues/worldqueue.h \
+    ../shared/queues/authqueue.h
