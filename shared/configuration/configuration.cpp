@@ -71,7 +71,12 @@ int Configuration::GetInt(QString name)
     return GetValue(name).toInt();
 }
 
-int Configuration::GetUInt(QString name)
+ushort Configuration::GetUShort(QString name)
+{
+    return GetValue(name).toUShort();
+}
+
+uint Configuration::GetUInt(QString name)
 {
     return GetValue(name).toUInt();
 }

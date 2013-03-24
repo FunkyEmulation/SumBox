@@ -15,7 +15,8 @@ public:
     std::string GetString(QString name);
     bool GetBool(QString name);
     int GetInt(QString name);
-    int GetUInt(QString name);
+    ushort GetUShort(QString name);
+    uint GetUInt(QString name);
 
     Configuration* OpenFile(QString fileName);
 

@@ -4,6 +4,8 @@ Log* Log::m_instance = 0;
 
 Log::Log()
 {
+    m_logTypeConsole = LOG_TYPE_NORMAL;
+    m_logTypeFile = LOG_TYPE_NORMAL;
     m_file = NULL;
 }
 
@@ -13,10 +15,17 @@ Log::~Log()
         m_file->close();
 }
 
+void Log::Init(ushort logConsoleLevel, ushort logFileLevel, QString logFile)
+{
+    m_logTypeConsole = LogType(logConsoleLevel);
+    m_logTypeFile = LogType(logFileLevel);
+    OpenFile(logFile);
+}
+
 void Log::OpenFile(QString fileName)
 {
-    m_file = new QFile(fileName);
-    if(m_file->open(QIODevice::WriteOnly))
+    m_file = new QFile(fileName, this);
+    if(m_file->open(QIODevice::WriteOnly | QIODevice::Text))
         return;
 
     QString error = m_file->errorString();
@@ -26,17 +35,17 @@ void Log::OpenFile(QString fileName)
     Log::Write(LOG_TYPE_NORMAL, "Cannot open log file %s : %s", fileName.toAscii().data(), error.toAscii().data());
 }
 
-void Log::WriteLog(QString logMessage)
+void Log::WriteLog(QString logMessage, LogType logType)
 {
-    cout << logMessage.toAscii().data() << endl;
+    if (logType <= m_logTypeConsole)
+        cout << logMessage.toAscii().data() << endl;
 
-    if(m_file)
-        m_file->write(logMessage.toAscii());
+    if(m_file && logType <= m_logTypeFile)
+        m_file->write(logMessage.toAscii() + "\n");
 }
 
 void Log::Write(LogType logType, QString message, ...)
 {
-    // Faire un système pour vérifier quel log level est activé et si écrit dans fichier ou juste console
     QString logTypeString = Log::GetLogTypeString(logType);
 
     va_list ap;
@@ -45,5 +54,5 @@ void Log::Write(LogType logType, QString message, ...)
     logMessage.vsprintf(message.toAscii().data(), ap);
 
     logMessage = logTypeString + logMessage;
-    Log::Instance()->WriteLog(logMessage);
+    Log::Instance()->WriteLog(logMessage, logType);
 }

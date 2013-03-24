@@ -39,7 +39,7 @@ void WorldSession::OnRead()
 
     if(!m_packet.isEmpty())
     {
-        Log::Write(LOG_TYPE_NORMAL, "Received packet from <%s> : %s", m_socket->peerAddress().toString().toAscii().data(), m_packet.toAscii().data());
+        Log::Write(LOG_TYPE_DEBUG, "Received packet from <%s> : %s", m_socket->peerAddress().toString().toAscii().data(), m_packet.toAscii().data());
 
         QString header2 = m_packet.left(2);
         QString header3 = m_packet.left(3);
@@ -72,7 +72,7 @@ void WorldSession::SendPacket(WorldPacket data)
         Log::Write(LOG_TYPE_DEBUG, "Packet data : %s", QString(data.GetPacket()).toAscii().data());
 }
 
-void WorldSession::HandleQueue(QString &packet)
+void WorldSession::HandleQueue(QString& /*packet*/)
 {
     WorldPacket queuePosition(SMSG_QUEUE_POSITION);
 
@@ -118,14 +118,14 @@ void WorldSession::HandleTicketResponse(QString& packet)
     }
 }
 
-void WorldSession::HandleRegionalVersion(QString& packet)
+void WorldSession::HandleRegionalVersion(QString& /*packet*/)
 {
     WorldPacket RegionalVersion(SMSG_REGIONAL_VERSION);
     RegionalVersion << "0";
     SendPacket(RegionalVersion);
 }
 
-void WorldSession::HandleListGifts(QString &packet)
+void WorldSession::HandleListGifts(QString& /*packet*/)
 {
     if(!m_infos["gifts"].isNull())
     {
@@ -139,7 +139,7 @@ void WorldSession::HandleKey(QString& packet)
     Log::Write(LOG_TYPE_DETAIL,"Key : '%s'",packet.mid(2).toAscii().data());
 }
 
-void WorldSession::HandleCharactersList(QString& packet)
+void WorldSession::HandleCharactersList(QString& /*packet*/)
 {
     m_state = OnQueue;
     WorldQueue::Instance()->AddClient(this);

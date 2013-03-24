@@ -5,14 +5,13 @@ WorldQueue*  WorldQueue::m_instance = 0;
 WorldQueue::WorldQueue()
 {
     m_clients.clear();
-    m_timer = new QTimer;
-    m_timer->setInterval(ConfigMgr::World()->GetInt("TimeQueueRefresh"));
+    m_timer = new QTimer(this);
+    m_timer->setInterval(ConfigMgr::World()->GetInt("QueueRefreshTime"));
 }
 
 WorldQueue::~WorldQueue()
 {
     m_clients.clear();
-    delete m_timer; // normalement inutile car géré par Qt?
 }
 
 void WorldQueue::Start()

@@ -13,12 +13,14 @@ class AuthSocket : public QObject
     Q_OBJECT
 public:
     AuthSocket(QTcpSocket* socket);
-    QString GetIp() const;
-    void SendInitPacket();
+    ~AuthSocket();
+
+    QString GetIp() const { return m_socket->peerAddress().toString(); }
+
     void SendPacket(WorldPacket packet);
     void ParsePacket(QString packet);
 
-    void IsBanned(QString);
+    void SendInitPacket();
 
     void CheckVersion(QString version);
     void CheckAccount();

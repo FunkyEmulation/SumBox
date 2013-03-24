@@ -22,7 +22,8 @@ ConfigMgr::~ConfigMgr()
 bool ConfigMgr::LoadAuthConfig(QString fileName)
 {
     Configuration* authConfig = new Configuration();
-    if (m_auth = authConfig->OpenFile(fileName))
+    m_auth = authConfig->OpenFile(fileName);
+    if (m_auth)
         return true;
 
     return false;
@@ -31,7 +32,8 @@ bool ConfigMgr::LoadAuthConfig(QString fileName)
 bool ConfigMgr::LoadWorldConfig(QString fileName)
 {
     Configuration* worldConfig = new Configuration();
-    if (m_world = worldConfig->OpenFile(fileName))
+    m_world = worldConfig->OpenFile(fileName);
+    if (m_world)
         return true;
 
     return false;
