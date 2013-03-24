@@ -6,7 +6,7 @@ AuthQueue::AuthQueue()
 {
     m_clients.clear();
     m_timer = new QTimer(this);
-    m_timer->setInterval(ConfigMgr::Auth()->GetInt("QueueRefreshTime"));
+    m_timer->setInterval(ConfigMgr::Auth()->GetInt("TimeQueueRefresh"));
 }
 
 AuthQueue::~AuthQueue()

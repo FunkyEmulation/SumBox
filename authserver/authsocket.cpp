@@ -74,7 +74,7 @@ void AuthSocket::ParsePacket(QString packet)
         else if(m_state == OnAuthentication)
         {
             // Limite de queue atteinte
-            if(AuthQueue::Instance()->GetClientsCount() > ConfigMgr::Auth()->GetInt("QueueClientLimit"))
+            if(AuthQueue::Instance()->GetClientsCount() > ConfigMgr::Auth()->GetInt("QueueLimit"))
             {
                 WorldPacket OutOfBounds(SMSG_QUEUE_OUT_OF_BOUNDS);
                 SendPacket(OutOfBounds);
