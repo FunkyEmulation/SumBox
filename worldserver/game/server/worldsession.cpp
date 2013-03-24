@@ -118,14 +118,14 @@ void WorldSession::HandleTicketResponse(QString& packet)
     }
 }
 
-void WorldSession::HandleRegionalVersion(QString& packet)
+void WorldSession::HandleRegionalVersion(QString& /*packet*/)
 {
     WorldPacket RegionalVersion(SMSG_REGIONAL_VERSION);
     RegionalVersion << "0";
     SendPacket(RegionalVersion);
 }
 
-void WorldSession::HandleListGifts(QString &packet)
+void WorldSession::HandleListGifts(QString& /*packet*/)
 {
     if(!m_infos["gifts"].isNull())
     {
@@ -139,7 +139,7 @@ void WorldSession::HandleKey(QString& packet)
     Log::Write(LOG_TYPE_DETAIL,"Key : '%s'",packet.mid(2).toAscii().data());
 }
 
-void WorldSession::HandleCharactersList(QString& packet)
+void WorldSession::HandleCharactersList(QString& /*packet*/)
 {
     m_state = OnQueue;
     WorldQueue::Instance()->AddClient(this);
