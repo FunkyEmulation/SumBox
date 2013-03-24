@@ -4,15 +4,9 @@
 #include <QtCore>
 #include <iostream>
 #include "log.h"
+#include "../configuration/configmgr.h"
 
 using namespace std;
-
-enum LogLevel
-{
-    LOG_LEVEL_NORMAL = 0,
-    LOG_LEVEL_DETAIL = 1,
-    LOG_LEVEL_DEBUG  = 2
-};
 
 enum LogType
 {
@@ -21,7 +15,7 @@ enum LogType
     LOG_TYPE_DEBUG  = 2
 };
 
-class Log
+class Log : QObject
 {
 public:
     static Log* Instance()
@@ -58,9 +52,9 @@ public:
         }
     }
 
-    void SetLogLevel(LogLevel level) { m_level = level; }
+    void Init();
     void OpenFile(QString fileName);
-    void WriteLog(QString logMessage);
+    void WriteLog(QString logMessage, LogType logType);
     static void Write(LogType logType, QString message, ...);
 
 private:
@@ -69,8 +63,9 @@ private:
 
     static Log* m_instance;
 
+    LogType m_logTypeConsole;
+    LogType m_logTypeFile;
     QFile* m_file;
-    quint8 m_level;
 };
 
 #endif

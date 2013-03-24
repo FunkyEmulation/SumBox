@@ -39,7 +39,6 @@ void AuthQueue::RefreshQueue()
 
 void AuthQueue::AddClient(AuthSocket* socket)
 {
-    // Queue stoppée, on la relance :
     if(!m_timer->isActive())
         Start();
 

@@ -1,11 +1,8 @@
-#include <iostream>
 #include "authsocket.h"
 #include "../shared/utils/util.h"
 #include "../shared/opcodes/opcodes.h"
 #include "../shared/logs/log.h"
 #include "../shared/configuration/configmgr.h"
-
-using namespace std;
 
 AuthSocket::AuthSocket(QTcpSocket* socket)
 {
@@ -19,6 +16,8 @@ AuthSocket::AuthSocket(QTcpSocket* socket)
     Log::Write(LOG_TYPE_NORMAL, "New incoming connection from %s", m_socket->peerAddress().toString().toAscii().data());
     SendInitPacket();
 }
+
+AuthSocket::~AuthSocket() {}
 
 void AuthSocket::OnRead()
 {
@@ -39,7 +38,7 @@ void AuthSocket::OnRead()
 
     if(!m_packet.isEmpty() && *curPacket == 0x00) // Reçu en entier ?
     {
-        Log::Write(LOG_TYPE_NORMAL, "Received packet from <%s> : %s", m_socket->peerAddress().toString().toAscii().data(), m_packet.toAscii().data());
+        Log::Write(LOG_TYPE_DEBUG, "Received packet from <%s> : %s", m_socket->peerAddress().toString().toAscii().data(), m_packet.toAscii().data());
 
         ParsePacket(m_packet);
         m_packet = "";
@@ -53,27 +52,6 @@ void AuthSocket::OnClose()
 
     Log::Write(LOG_TYPE_NORMAL, "Closing connection with %s", m_socket->peerAddress().toString().toAscii().data());
     m_socket->deleteLater();
-}
-
-QString AuthSocket::GetIp() const
-{
-    return m_socket->peerAddress().toString();
-}
-
-void AuthSocket::SendInitPacket()
-{
-    QSqlQuery req = Database::Auth()->PQuery(AUTH_SELECT_IP_BANNED, m_socket->peerAddress().toString().toAscii().data());
-    if(req.first())
-    {
-        WorldPacket ban(SMSG_ACCOUNT_BANNED);
-        SendPacket(ban);
-        return;
-    }
-
-    WorldPacket data(SMSG_HELLO_CONNECTION_SERVER);
-    m_hashKey = GenerateRandomString(32);
-    data << m_hashKey;
-    SendPacket(data);
 }
 
 void AuthSocket::SendPacket(WorldPacket data)
@@ -96,7 +74,7 @@ void AuthSocket::ParsePacket(QString packet)
         else if(m_state == OnAuthentication)
         {
             // Limite de queue atteinte
-            if(AuthQueue::Instance()->GetClientsCount() > ConfigMgr::Auth()->GetInt("QueueLimit"))
+            if(AuthQueue::Instance()->GetClientsCount() > ConfigMgr::Auth()->GetInt("QueueClientLimit"))
             {
                 WorldPacket OutOfBounds(SMSG_QUEUE_OUT_OF_BOUNDS);
                 SendPacket(OutOfBounds);
@@ -146,6 +124,22 @@ void AuthSocket::ParsePacket(QString packet)
         SendRandomName();
         return;
     }
+}
+
+void AuthSocket::SendInitPacket()
+{
+    QSqlQuery req = Database::Auth()->PQuery(AUTH_SELECT_IP_BANNED, m_socket->peerAddress().toString().toAscii().data());
+    if(req.first())
+    {
+        WorldPacket ban(SMSG_ACCOUNT_BANNED);
+        SendPacket(ban);
+        return;
+    }
+
+    WorldPacket data(SMSG_HELLO_CONNECTION_SERVER);
+    m_hashKey = GenerateRandomString(32);
+    data << m_hashKey;
+    SendPacket(data);
 }
 
 void AuthSocket::SendPersos()
