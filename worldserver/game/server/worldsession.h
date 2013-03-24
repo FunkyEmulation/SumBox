@@ -23,8 +23,6 @@ public:
         return m_socket->peerAddress().toString();
     }
     void SendPacket(WorldPacket packet);
-    // Gère la liste des personnages du serveur actuel
-    void SendCharacters();
 
     // Default handlers
     void HandleNULL(QString& /*packet*/) {}
@@ -43,6 +41,12 @@ public:
     void HandleKey(QString& packet);
     // Met en file d'attente :
     void HandleCharactersList(QString& packet);
+    // Gère la liste des personnages du serveur actuel
+    void SendCharacters();
+    // Génère un pseudo aléatoire
+    void HandleRandomPseudo(QString& packet);
+    // Crée un nouveau perso
+    void HandleCreatePerso(QString& packet);
 
 public slots:
     void OnRead();

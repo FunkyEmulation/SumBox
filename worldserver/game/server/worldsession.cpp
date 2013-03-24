@@ -37,7 +37,7 @@ void WorldSession::OnRead()
             break;
     }
 
-    if(!m_packet.isEmpty() && *curPacket == 0x00)
+    if(!m_packet.isEmpty())
     {
         Log::Write(LOG_TYPE_NORMAL, "Received packet from <%s> : %s", m_socket->peerAddress().toString().toAscii().data(), m_packet.toAscii().data());
 
@@ -147,5 +147,66 @@ void WorldSession::HandleCharactersList(QString& packet)
 
 void WorldSession::SendCharacters()
 {
-    cout << "Send persos" << endl;
+    WorldPacket CharsList(SMSG_SEND_CHARS);
+
+    CharsList << m_infos["subscription_time"].toString() << "|";
+    CharsList << ConfigMgr::Auth()->GetQString("MaxPersos") << "|";
+
+    QSqlQuery req = Database::Char()->PQuery(SELECT_ACCOUNT_CHARACTERS,1);
+    while(req.next())
+    {
+        CharsList << req.value(req.record().indexOf("guid")).toString() + ";";
+        CharsList << req.value(req.record().indexOf("name")).toString() + ";";
+        CharsList << req.value(req.record().indexOf("level")).toString() + ";";
+        CharsList << req.value(req.record().indexOf("gfx_id")).toString() + ";";
+        CharsList << req.value(req.record().indexOf("color_1")).toString() + ";"; // Colors en hexa
+        CharsList << req.value(req.record().indexOf("color_2")).toString() + ";";
+        CharsList << req.value(req.record().indexOf("color_3")).toString() + ";";
+        CharsList << ";"; // Accessories
+        CharsList << "0;"; // Merchant ?
+        CharsList << ";"; // ServeurId
+        CharsList << "0;"; // Est mort ?
+        CharsList << ";"; // DeathCount
+        CharsList << "200;"; // LevelMax
+    }
+
+    SendPacket(CharsList);
+}
+
+void WorldSession::HandleRandomPseudo(QString& packet)
+{
+    int max = rand()%4 +4;
+
+    QString voyelles = "aeiouy";
+    QString consonnes = "bcdfghjklmnpqrstvwxz";
+    QString pseudo = "";
+
+    QList<QString> prefixes;
+    prefixes << "mi" << "el" << "th" << "id" << "nu" << "ig" << "heo" << "er" << "am" << "vor";
+    prefixes << "ga" << "in" << "may" <<  "sa" << "ar" << "se" << "ha" << "lu" << "gw" << "ea";
+    prefixes << "fin" << "me" << "rami" << "ne" << "le" << "fe" << "or" << "pen" << "que" << "rod";
+    prefixes << "cele" << "ar" << "sae" << "eg" << "ii" << "tu" << "ri" << "ta" << "ur" << "val" << "ol";
+
+    pseudo += prefixes[rand() % prefixes.length()]; // préfixe aléatoire
+    while(pseudo.length() < max)
+    {
+        if(voyelles.contains(pseudo[pseudo.length() - 1])) // Derniere lettre = voyelle ?
+        {
+            pseudo += consonnes[rand()%consonnes.length()];
+        } else // derniere lettre = consonne
+        {
+            pseudo += voyelles[rand()%voyelles.length()];
+        }
+    }
+
+    pseudo.prepend("|");
+
+    WorldPacket randomPseudo(SMSG_RANDOM_PSEUDO);
+    randomPseudo << pseudo;
+    SendPacket(randomPseudo);
+}
+
+void WorldSession::HandleCreatePerso(QString &packet)
+{
+    cout << "Creation perso " << endl;
 }

@@ -140,12 +140,6 @@ void AuthSocket::ParsePacket(QString packet)
         SelectServer(packet.mid(2).toUInt());
         return;
     }
-
-    if(packet == "AP")
-    {
-        SendRandomName();
-        return;
-    }
 }
 
 void AuthSocket::SendPersos()
@@ -176,15 +170,6 @@ void AuthSocket::QueueManager()
 
     SendPacket(queuePosition);
 }
-
-void AuthSocket::SendRandomName()
-{
-    QString randomName = GenerateRandomPseudo(4, 8);
-    WorldPacket randomPseudo(SMSG_RANDOM_PSEUDO);
-    randomPseudo << randomName;
-    SendPacket(randomPseudo);
-}
-
 
 void AuthSocket::CheckVersion(QString version)
 {

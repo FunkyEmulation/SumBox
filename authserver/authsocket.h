@@ -25,7 +25,6 @@ public:
     void SendInformations();
     void QueueManager();
     void SendPersos();
-    void SendRandomName();
     void SelectServer(uint id);
 
 public slots:
