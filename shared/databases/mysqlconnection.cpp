@@ -12,7 +12,7 @@ MysqlConnection::MysqlConnection(ConnectionInfo& connectionInfo)
     m_db.setUserName(m_connectionInfo.username);
     m_db.setPassword(m_connectionInfo.password);
 
-    m_queries.clear();
+    m_db.setConnectOptions("MYSQL_OPT_RECONNECT=1");
 }
 
 MysqlConnection::~MysqlConnection()
