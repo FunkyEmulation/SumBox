@@ -5,14 +5,13 @@ AuthQueue*  AuthQueue::m_instance = 0;
 AuthQueue::AuthQueue()
 {
     m_clients.clear();
-    m_timer = new QTimer;
+    m_timer = new QTimer(this);
     m_timer->setInterval(ConfigMgr::Auth()->GetInt("TimeQueueRefresh"));
 }
 
 AuthQueue::~AuthQueue()
 {
     m_clients.clear();
-    delete m_timer; // normalement inutile car géré par Qt?
 }
 
 void AuthQueue::Start()
