@@ -39,7 +39,8 @@ public:
         m_queries[id] = sql;
     }
 
-    bool Open();
+    bool Open(bool loadQueries = true);
+    bool Reconnect();
     void Close();
 
     QString GetSqlQuery(quint16 sqlQueryId)

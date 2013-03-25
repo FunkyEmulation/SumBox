@@ -31,22 +31,16 @@ public:
 
     // Handlers
     void HandleQueue(QString& packet);
-    // Vérifie la clé de connection et initialise les détails compte :
-    void HandleTicketResponse(QString& packet);
-    // ?
-    void HandleRegionalVersion(QString& packet);
-    // Gère la liste des cadeaux du compte. A faire
-    void HandleListGifts(QString& packet);
-    // Stocke la clé de cryptage renseignée par le client
-    void HandleKey(QString& packet);
-    // Met en file d'attente :
-    void HandleCharactersList(QString& packet);
-    // Gère la liste des personnages du serveur actuel
-    void SendCharacters();
-    // Génère un pseudo aléatoire
-    void HandleRandomPseudo(QString& packet);
-    // Crée un nouveau perso
-    void HandleCreatePerso(QString& packet);
+    void HandleTicketResponse(QString& packet);     // Vérifie la clé de connection et initialise les détails compte :
+    void HandleRegionalVersion(QString& packet);    // ?
+    void HandleListGifts(QString& packet);          // Gère la liste des cadeaux du compte. A faire
+    void HandleKey(QString& packet);                // Stocke la clé de cryptage renseignée par le client
+    void HandleCharactersList(QString& packet);     // Met en file d'attente :
+    void HandleSendCharacterList(QString& packet);  // Gère la liste des personnages du serveur actuel
+    void HandleRandomPseudo(QString& packet);       // Génère un pseudo aléatoire
+    void HandleCreatePerso(QString& packet);        // Crée un nouveau perso
+
+    void SendCharacterList();
 
 public slots:
     void OnRead();

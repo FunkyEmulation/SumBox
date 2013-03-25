@@ -14,12 +14,10 @@
 
 using namespace std;
 
-AuthServer authserver;
-
 void exit(int /*s*/)
 {
     Log::Write(LOG_TYPE_NORMAL, "Stopping SumBox::Authserver...");
-    authserver.Stop();
+    AuthServer::Instance()->Stop();
     QCoreApplication::exit();
 }
 
@@ -40,9 +38,9 @@ int main(int argc, char *argv[])
     if (!Database::Instance()->OpenAuthDatabase())
         return 0;
 
-    if(!authserver.Start(QHostAddress::LocalHost, quint16(ConfigMgr::Auth()->GetInt("AuthServerPort"))))
+    if(!AuthServer::Instance()->Start(QHostAddress::LocalHost, quint16(ConfigMgr::Auth()->GetInt("AuthServerPort"))))
     {
-        Log::Write(LOG_TYPE_NORMAL, authserver.GetErrorString().toAscii().data());
+        Log::Write(LOG_TYPE_NORMAL, AuthServer::Instance()->GetErrorString().toAscii().data());
         return 0;
     }
     else

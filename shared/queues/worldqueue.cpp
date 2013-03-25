@@ -34,12 +34,12 @@ void WorldQueue::RefreshQueue()
     }
 
     if (WorldSession* client = m_clients.takeFirst())
-        client->SendCharacters();
+        client->SendCharacterList();
 }
 
 void WorldQueue::AddClient(WorldSession* socket)
 {
-    // Queue stoppée, on la relance :
+    // Queue stoppÃ©e, on la relance :
     if(!m_timer->isActive())
         Start();
 

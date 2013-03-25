@@ -29,7 +29,9 @@ SOURCES += main.cpp \
     ../shared/databases/worlddatabase.cpp \
     ../shared/databases/chardatabase.cpp \
     ../shared/queues/worldqueue.cpp \
-    ../shared/queues/authqueue.cpp
+    ../shared/queues/authqueue.cpp \
+    ../worldserver/game/handlers/characterhandler.cpp \
+    ../worldserver/game/handlers/acounthandler.cpp
 
 HEADERS += \
     ../shared/define.h \

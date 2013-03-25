@@ -1,13 +1,16 @@
 #include "authserver.h"
 
+AuthServer*  AuthServer::m_instance = 0;
+
 AuthServer::AuthServer()
 {
-    m_server = new QTcpServer();
+    m_server = new QTcpServer(this);
+    m_sockets.clear();
 }
 
 AuthServer::~AuthServer()
 {
-    delete m_server;
+    m_sockets.clear();
 }
 
 bool AuthServer::Start(QHostAddress address, quint16 port)
@@ -30,4 +33,9 @@ void AuthServer::OnConnect()
     QTcpSocket* socket = m_server->nextPendingConnection();
     AuthSocket* newSockObject = new AuthSocket(socket);
     m_sockets.push_back(newSockObject);
+}
+
+void AuthServer::RemoveSocket(AuthSocket* socket)
+{
+    m_sockets.removeOne(socket);
 }

@@ -1,4 +1,5 @@
 #include "authsocket.h"
+#include "authserver.h"
 #include "../shared/utils/util.h"
 #include "../shared/opcodes/opcodes.h"
 #include "../shared/logs/log.h"
@@ -51,6 +52,7 @@ void AuthSocket::OnClose()
         Database::Auth()->PQuery(AUTH_UPDATE_ACCOUNT_STATE, 0, m_infos["account_id"].toInt());
 
     Log::Write(LOG_TYPE_NORMAL, "Closing connection with %s", m_socket->peerAddress().toString().toAscii().data());
+    AuthServer::Instance()->RemoveSocket(this);
     m_socket->deleteLater();
 }
 
@@ -74,7 +76,7 @@ void AuthSocket::ParsePacket(QString packet)
         else if(m_state == OnAuthentication)
         {
             // Limite de queue atteinte
-            if(AuthQueue::Instance()->GetClientsCount() > ConfigMgr::Auth()->GetInt("QueueLimit"))
+            if(AuthQueue::Instance()->GetClientsCount() > ConfigMgr::Auth()->GetInt("QueueClientLimit"))
             {
                 WorldPacket OutOfBounds(SMSG_QUEUE_OUT_OF_BOUNDS);
                 SendPacket(OutOfBounds);
@@ -219,7 +221,7 @@ void AuthSocket::CheckAccount()
         }
 
         // Ids OK, non banni, non logged
-        Database::Auth()->PQuery(AUTH_UPDATE_ACCOUNT_STATE, 1, m_infos["id"].toUInt());
+        Database::Auth()->PQuery(AUTH_UPDATE_ACCOUNT_STATE, 1, m_infos["account_id"].toUInt());
     }
     else
     {

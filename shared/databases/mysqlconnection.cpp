@@ -20,7 +20,7 @@ MysqlConnection::~MysqlConnection()
     Close();
 }
 
-bool MysqlConnection::Open()
+bool MysqlConnection::Open(bool loadQueries)
 {
     if(!m_db.open())
     {
@@ -28,9 +28,22 @@ bool MysqlConnection::Open()
         return false;
     }
 
-    LoadQueries();
+    if (loadQueries)
+        LoadQueries();
+
     Log::Write(LOG_TYPE_NORMAL, "Database connection accomplished on %s", m_connectionInfo.database.toAscii().data());
     return true;
+}
+
+bool MysqlConnection::Reconnect()
+{
+    Log::Write(LOG_TYPE_NORMAL, "MySQL connection lost. Trying to reconnect...");
+    Close();
+
+    if (Open(false))
+        return true;
+
+    return false;
 }
 
 void MysqlConnection::Close()
@@ -49,7 +62,15 @@ QSqlQuery MysqlConnection::Query(QString sqlQuery)
     if(!req.exec(sqlQuery))
     {
         Log::Write(LOG_TYPE_NORMAL, "SQL error with %s : %s", sqlQuery.toAscii().data());
-        Log::Write(LOG_TYPE_NORMAL, "%s", req.lastError().text().toAscii().data());
+        Log::Write(LOG_TYPE_NORMAL, "[Error %u] %s", req.lastError().number(), req.lastError().text().toAscii().data());
+
+        if (req.lastError().number() == 2013)
+        {
+            if (Reconnect())
+                Query(sqlQuery);
+            else
+                Log::Write(LOG_TYPE_NORMAL, "Reconnect failed : MySQL connection lost.");
+        }
     }
 
     return req;
