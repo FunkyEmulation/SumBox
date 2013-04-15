@@ -10,8 +10,8 @@ void WorldSession::HandleQueue(QString& /*packet*/)
     }
     else
     {
-        queuePosition << QString::number(WorldQueue::Instance()->GetClientPosition(this)).toAscii().data() << "|"; // Position dans la file
-        queuePosition << QString::number(WorldQueue::Instance()->GetClientsCount()).toAscii().data() << "|"; // Nombre d'abonnés dans la file
+        queuePosition << WorldQueue::Instance()->GetClientPosition(this) << "|"; // Position dans la file
+        queuePosition << WorldQueue::Instance()->GetClientsCount() << "|"; // Nombre d'abonnés dans la file
         queuePosition << "0|"; // Nombre de non abonnés
         queuePosition << "1|"; // Abonné ?
         queuePosition << "1"; // Queue id
@@ -42,7 +42,7 @@ void WorldSession::HandleTicketResponse(QString& packet)
 
 void WorldSession::HandleRegionalVersion(QString& /*packet*/)
 {
-    WorldPacket RegionalVersion(SMSG_REGIONAL_VERSION);
+    WorldPacket RegionalVersion(MSG_REGIONAL_VERSION);
     RegionalVersion << "0";
     SendPacket(RegionalVersion);
 }

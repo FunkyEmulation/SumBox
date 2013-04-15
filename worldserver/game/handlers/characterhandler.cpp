@@ -73,7 +73,7 @@ void WorldSession::HandleRandomPseudo(QString& /*packet*/)
 
     pseudo.prepend("|");
 
-    WorldPacket randomPseudo(SMSG_RANDOM_PSEUDO);
+    WorldPacket randomPseudo(MSG_RANDOM_PSEUDO);
     randomPseudo << pseudo;
     SendPacket(randomPseudo);
 }

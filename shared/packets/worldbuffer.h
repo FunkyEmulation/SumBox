@@ -31,9 +31,9 @@ public:
         return *this;
     }
 
-    WorldBuffer &operator<<(uint value)
+    WorldBuffer &operator<<(quint32 value)
     {
-        m_buffer->write((char*)&value, sizeof(uint));
+        m_buffer->write((char*)&value, sizeof(quint32));
         return *this;
     }
 

@@ -29,14 +29,12 @@ OpcodeStruct opcodeTable[NUM_MSG_TYPES] =
     { "CMSG_TICKET_RESPONSE", "AT", &WorldSession::HandleTicketResponse },
     { "SMSG_TICKET_REFUSED", "ATE", &WorldSession::HandleServerSide },
     { "SMSG_TICKET_ACCEPTED", "ATK0", &WorldSession::HandleServerSide },
-    { "CMSG_REGIONAL_VERSION", "AV", &WorldSession::HandleRegionalVersion },
-    { "SMSG_REGIONAL_VERSION", "AV", &WorldSession::HandleServerSide },
+    { "MSG_REGIONAL_VERSION", "AV", &WorldSession::HandleRegionalVersion },
     { "CMSG_REQUEST_GIFTS", "Ag", &WorldSession::HandleListGifts },
     { "SMSG_LIST_GIFTS", "Ag1", &WorldSession::HandleServerSide },
     { "CMSG_GIVE_KEY", "Ai", &WorldSession::HandleKey },
     { "CMSG_REQUEST_CHARS", "AL", &WorldSession::HandleCharactersList },
     { "SMSG_CHARACTER_LIST", "ALK", &WorldSession::HandleSendCharacterList },
-    { "CMSG_RANDOM_PSEUDO", "AP", &WorldSession::HandleRandomPseudo },
-    { "SMSG_RANDOM_PSEUDO", "APK", &WorldSession::HandleServerSide },
+    { "MSG_RANDOM_PSEUDO", "AP", &WorldSession::HandleRandomPseudo },
     { "CMSG_CREATE_CHAR", "AA", &WorldSession::HandleCreatePerso }
 };
