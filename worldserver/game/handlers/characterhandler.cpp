@@ -1,7 +1,5 @@
 #include "../server/worldsession.h"
 
-
-
 void WorldSession::HandleCharactersList(QString& /*packet*/)
 {
     m_state = OnQueue;

@@ -4,7 +4,7 @@
 #include <QtCore>
 #include <QObject>
 #include <QtNetwork>
-#include "../shared/logs/log.h"
+#include "logs/log.h"
 #include "game/server/worldsession.h"
 
 typedef QList<WorldSession*> SessionList;

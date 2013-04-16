@@ -14,6 +14,8 @@ CONFIG   -= app_bundle
 
 TEMPLATE = app
 
+INCLUDEPATH += . ../shared ../worldserver
+DEPENDPATH += . ../shared ../worldserver
 
 SOURCES += main.cpp \
     worldserver.cpp \

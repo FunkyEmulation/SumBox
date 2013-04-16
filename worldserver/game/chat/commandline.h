@@ -4,7 +4,7 @@
 #include <QtCore>
 #include <iostream>
 #include "chat.h"
-#include "../world/world.h"
+#include "game/world/world.h"
 
 using namespace std;
 

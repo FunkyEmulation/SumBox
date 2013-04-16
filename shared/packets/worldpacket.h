@@ -3,7 +3,7 @@
 
 #include <QtCore>
 #include "worldbuffer.h"
-#include "../opcodes/opcodes.h"
+#include "opcodes/opcodes.h"
 
 class WorldPacket : public WorldBuffer
 {

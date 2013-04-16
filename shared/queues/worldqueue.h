@@ -4,9 +4,9 @@
 #include <QtCore>
 #include <QObject>
 #include <QtNetwork>
-#include "../shared/logs/log.h"
-#include "../shared/configuration/configmgr.h"
-#include "../../worldserver/game/server/worldsession.h"
+#include "logs/log.h"
+#include "configuration/configmgr.h"
+#include "game/server/worldsession.h"
 
 class WorldSession;
 

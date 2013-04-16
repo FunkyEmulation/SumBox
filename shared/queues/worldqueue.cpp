@@ -1,4 +1,4 @@
-#include "WorldQueue.h"
+#include "worldqueue.h"
 
 WorldQueue*  WorldQueue::m_instance = 0;
 

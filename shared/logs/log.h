@@ -4,7 +4,7 @@
 #include <QtCore>
 #include <iostream>
 #include "log.h"
-#include "../configuration/configmgr.h"
+#include "configuration/configmgr.h"
 
 using namespace std;
 

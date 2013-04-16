@@ -2,7 +2,7 @@
 #define LUAENGINE_H
 
 #include <QtCore>
-#include "../../../shared/logs/log.h"
+#include "logs/log.h"
 
 extern "C"
 {

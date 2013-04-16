@@ -2,9 +2,9 @@
 #define WORLD_H
 
 #include <QtCore>
-#include "../../worldserver.h"
-#include "../../../shared/logs/log.h"
-#include "../../../shared/configuration/configmgr.h"
+#include "worldserver.h"
+#include "logs/log.h"
+#include "configuration/configmgr.h"
 
 class World
 {

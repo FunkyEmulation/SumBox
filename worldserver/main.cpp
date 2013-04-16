@@ -6,10 +6,10 @@
 #include <csignal>
 #include <QtSql>
 
-#include "../shared/define.h"
-#include "../shared/databases/database.h"
-#include "../shared/logs/log.h"
-#include "../shared/configuration/configmgr.h"
+#include "define.h"
+#include "databases/database.h"
+#include "logs/log.h"
+#include "configuration/configmgr.h"
 #include "game/chat/commandline.h"
 #include "game/scripting/luaengine.h"
 

@@ -1,4 +1,4 @@
-#include "../server/worldsession.h"
+#include "game/server/worldsession.h"
 
 void WorldSession::HandleQueue(QString& /*packet*/)
 {

@@ -1,5 +1,5 @@
 #include "database.h"
-#include "../configuration/configmgr.h"
+#include "configuration/configmgr.h"
 
 Database* Database::m_instance = 0;
 

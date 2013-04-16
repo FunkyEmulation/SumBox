@@ -1,5 +1,5 @@
 #include "configmgr.h"
-#include "../logs/log.h"
+#include "logs/log.h"
 
 ConfigMgr* ConfigMgr::m_instance = 0;
 

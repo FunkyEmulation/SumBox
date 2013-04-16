@@ -4,13 +4,13 @@
 #include <QFile>
 #include <iostream>
 #include <csignal>
-#include "../shared/define.h"
+#include "define.h"
 #include "authserver.h"
 
 #include <QtSql>
-#include "../shared/databases/database.h"
-#include "../shared/logs/log.h"
-#include "../shared/configuration/configmgr.h"
+#include "databases/database.h"
+#include "logs/log.h"
+#include "configuration/configmgr.h"
 
 using namespace std;
 

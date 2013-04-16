@@ -4,8 +4,8 @@
 #include <QtCore>
 #include <QObject>
 #include <QtNetwork>
-#include "../shared/logs/log.h"
-#include "../shared/configuration/configmgr.h"
+#include "logs/log.h"
+#include "configuration/configmgr.h"
 #include "authsocket.h"
 
 class AuthSocket;

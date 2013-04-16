@@ -4,10 +4,10 @@
 #include <QtCore>
 #include <QObject>
 #include <QtNetwork>
-#include "../shared/packets/worldpacket.h"
-#include "../shared/databases/database.h"
-#include "../shared/queues/worldqueue.h"
-#include "../shared/define.h"
+#include "packets/worldpacket.h"
+#include "databases/database.h"
+#include "queues/worldqueue.h"
+#include "define.h"
 
 class WorldPacket;
 

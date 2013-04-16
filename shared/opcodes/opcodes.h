@@ -2,7 +2,7 @@
 #define OPCODES_H
 
 #include <QtCore>
-#include "../worldserver/game/server/worldsession.h"
+#include "game/server/worldsession.h"
 
 class WorldSession;
 
