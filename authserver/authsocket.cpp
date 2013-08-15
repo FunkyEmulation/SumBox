@@ -5,13 +5,10 @@
 #include "logs/log.h"
 #include "configuration/configmgr.h"
 
-AuthSocket::AuthSocket(QTcpSocket* socket)
+AuthSocket::AuthSocket(QTcpSocket *socket) : SocketReader(socket)
 {
-    m_socket = socket;
-    m_packet = "";
     m_state = OnCheckingVersion;
 
-    connect(m_socket, SIGNAL(readyRead()), this, SLOT(OnRead()));
     connect(m_socket, SIGNAL(disconnected()), this, SLOT(OnClose()));
 
     Log::Write(LOG_TYPE_NORMAL, "New incoming connection from %s", m_socket->peerAddress().toString().toAscii().data());
@@ -19,32 +16,6 @@ AuthSocket::AuthSocket(QTcpSocket* socket)
 }
 
 AuthSocket::~AuthSocket() {}
-
-void AuthSocket::OnRead()
-{
-    QDataStream in(m_socket);
-
-    char *curPacket = new char;
-
-    while(in.readRawData(curPacket, 1) != -1)
-    {
-        if(*curPacket != 0x00) // Ce n'est pas le dernier caractère
-        {
-            if(*curPacket != '\n' && *curPacket != '\r')
-                m_packet += *curPacket;
-        }
-        else
-            break;
-    }
-
-    if(!m_packet.isEmpty() && *curPacket == 0x00) // Reçu en entier ?
-    {
-        Log::Write(LOG_TYPE_DEBUG, "Received packet from <%s> : %s", m_socket->peerAddress().toString().toAscii().data(), m_packet.toAscii().data());
-
-        ParsePacket(m_packet);
-        m_packet = "";
-    }
-}
 
 void AuthSocket::OnClose()
 {
@@ -64,8 +35,13 @@ void AuthSocket::SendPacket(WorldPacket data)
         Log::Write(LOG_TYPE_DEBUG, "Packet data : %s", QString(data.GetPacket()).toAscii().data());
 }
 
-void AuthSocket::ParsePacket(QString packet)
+void AuthSocket::ProcessPacket(QString packet)
 {
+    if(packet.isEmpty())
+        return;
+
+    Log::Write(LOG_TYPE_DEBUG, "Received packet from <%s> : %s", m_socket->peerAddress().toString().toAscii().data(), packet.toAscii().data());
+
     // Phase d'authentification
     if(m_state != Logged)
     {

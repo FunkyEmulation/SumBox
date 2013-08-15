@@ -33,7 +33,8 @@ SOURCES += main.cpp \
     ../shared/queues/worldqueue.cpp \
     ../shared/queues/authqueue.cpp \
     ../worldserver/game/handlers/characterhandler.cpp \
-    ../worldserver/game/handlers/acounthandler.cpp
+    ../worldserver/game/handlers/acounthandler.cpp \
+    ../shared/servers/SocketReader.cpp
 
 HEADERS += \
     ../shared/define.h \
@@ -53,4 +54,5 @@ HEADERS += \
     ../shared/databases/worlddatabase.h \
     ../shared/databases/chardatabase.h \
     ../shared/queues/worldqueue.h \
-    ../shared/queues/authqueue.h
+    ../shared/queues/authqueue.h \
+    ../shared/servers/SocketReader.h

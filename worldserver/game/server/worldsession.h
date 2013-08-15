@@ -8,10 +8,11 @@
 #include "databases/database.h"
 #include "queues/worldqueue.h"
 #include "define.h"
+#include "servers/SocketReader.h"
 
 class WorldPacket;
 
-class WorldSession : public QObject
+class WorldSession : private SocketReader
 {
     Q_OBJECT
 public:
@@ -43,15 +44,14 @@ public:
     void SendCharacterList();
 
 public slots:
-    void OnRead();
     void OnClose();
 
 private:
-    QTcpSocket* m_socket;
-    QString m_packet;
     QMap<QString, QVariant> m_infos;
     ClientState m_state;
     QString m_ticket; // Avant connection
+
+    virtual void ProcessPacket(QString packet);
 };
 
 #endif // WORLDSESSION_H

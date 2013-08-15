@@ -17,9 +17,9 @@ void WorldSession::SendCharacterList()
     WorldPacket CharsList(SMSG_CHARACTER_LIST);
 
     QSqlQuery req = Database::Char()->PQuery(SELECT_ACCOUNT_CHARACTERS, m_infos["account_id"].toInt());
-
-    CharsList << QDateTime(m_infos["subscription_time"].toDateTime()).toTime_t() << "|";
-    CharsList << req.size();
+    QString subscription(m_infos["subscription_timestamp"].convert(QVariant::String));
+    qDebug() << "subscription = " << subscription;
+    CharsList << subscription << "|";
 
     while (req.next())
     {

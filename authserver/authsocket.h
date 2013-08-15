@@ -7,10 +7,12 @@
 #include "../shared/packets/worldpacket.h"
 #include "../shared/databases/database.h"
 #include "../shared/queues/authqueue.h"
+#include "servers/SocketReader.h"
 
-class AuthSocket : public QObject
+class AuthSocket : private SocketReader
 {
     Q_OBJECT
+
 public:
     AuthSocket(QTcpSocket* socket);
     ~AuthSocket();
@@ -18,7 +20,6 @@ public:
     QString GetIp() const { return m_socket->peerAddress().toString(); }
 
     void SendPacket(WorldPacket packet);
-    void ParsePacket(QString packet);
 
     void SendInitPacket();
 
@@ -30,16 +31,15 @@ public:
     void SelectServer(uint id);
 
 public slots:
-    void OnRead();
     void OnClose();
 
 private:
     QString m_idsPacket;
-    QTcpSocket* m_socket;
-    QString m_packet;
     QString m_hashKey;
     QMap<QString, QVariant> m_infos; // account - pseudo - password - gmlevel - servers - secret_question - secret_answer - logged - banned
     ClientState m_state;
+
+    virtual void ProcessPacket(QString packet);
 };
 
 #endif // AUTHSOCKET_H
