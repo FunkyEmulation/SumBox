@@ -9,6 +9,7 @@
 #include "queues/worldqueue.h"
 #include "define.h"
 #include "servers/SocketReader.h"
+#include "game/world/objects/Account.h"
 
 class WorldPacket;
 
@@ -47,7 +48,7 @@ public slots:
     void OnClose();
 
 private:
-    QMap<QString, QVariant> m_infos;
+    Account* m_account;
     ClientState m_state;
     QString m_ticket; // Avant connection
 

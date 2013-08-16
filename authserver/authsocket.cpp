@@ -118,7 +118,7 @@ void AuthSocket::SendPersos()
 {
     WorldPacket persos(SMSG_GIVE_PERSOS);
     persos << m_infos["subscription_time"].toString().toAscii().data();
-    // Manque |NbrePersos,surServerId|nbrePersos,surServerid2...
+    // Manque |ServerId,NbrePersos|ServerId2,NbrePersos ...
 
     SendPacket(persos);
 }

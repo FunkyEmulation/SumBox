@@ -34,7 +34,9 @@ OpcodeStruct opcodeTable[NUM_MSG_TYPES] =
     { "SMSG_LIST_GIFTS", "Ag1", &WorldSession::HandleServerSide },
     { "CMSG_GIVE_KEY", "Ai", &WorldSession::HandleKey },
     { "CMSG_REQUEST_CHARS", "AL", &WorldSession::HandleCharactersList },
-    { "SMSG_CHARACTER_LIST", "AL", &WorldSession::HandleSendCharacterList },
-    { "MSG_RANDOM_PSEUDO", "AP", &WorldSession::HandleRandomPseudo },
-    { "CMSG_CREATE_CHAR", "AA", &WorldSession::HandleCreatePerso }
+    { "SMSG_CHARACTER_LIST", "AL|", &WorldSession::HandleSendCharacterList },
+    { "CMSG_RANDOM_PSEUDO", "AP", &WorldSession::HandleRandomPseudo },
+    { "CMSG_CREATE_CHAR", "AA", &WorldSession::HandleCreatePerso },
+    { "SMSG_CREATE_CHAR_OK", "AA|", &WorldSession::HandleServerSide },
+    { "SMSG_CREATE_CHAR_ERROR", "AAE", &WorldSession::HandleServerSide }
 };
