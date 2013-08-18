@@ -29,6 +29,7 @@ SET time_zone = "+00:00";
 CREATE TABLE IF NOT EXISTS `character` (
   `guid` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `account` int(10) unsigned NOT NULL,
+  `server_id` int(4) unsigned NOT NULL,
   `name` varchar(15) COLLATE utf8_unicode_ci NOT NULL,
   `class` tinyint(3) unsigned NOT NULL,
   `gender` tinyint(3) unsigned NOT NULL,

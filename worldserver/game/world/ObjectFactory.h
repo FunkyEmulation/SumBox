@@ -2,7 +2,9 @@
 #define OBJECTFACTORY_H
 
 #include <QtCore>
-#include "../../../shared/databases/database.h"
+#include "databases/database.h"
+#include "objects/Account.h"
+#include "objects/Character.h"
 
 class Account;
 class Character;
@@ -29,7 +31,8 @@ public:
     Account* GetAccount(int id);
     Account* LoadAccount(QString key);
     Character* GetCharacter(int id);
-    Character* LoadCharacter(QSqlQuery req);
+    QList<Character*> LoadAccountCharacters(Account* const acc);
+    Character* CreateCharacter(int account, QString name, int breed, int gender, int gfxId, char* color1, char* color2, char* color3);
 
 private:
     static ObjectFactory* m_instance;

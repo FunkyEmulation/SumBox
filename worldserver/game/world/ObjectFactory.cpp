@@ -1,6 +1,5 @@
 #include "ObjectFactory.h"
-#include "objects/Account.h"
-#include "objects/Character.h"
+#include "configuration/configmgr.h"
 
 ObjectFactory* ObjectFactory::m_instance = NULL;
 
@@ -18,6 +17,9 @@ Account* ObjectFactory::LoadAccount(QString key)
 
     if (req.first())
     {
+        if(m_accounts.contains(req.value(req.record().indexOf("account_id")).toInt()))
+            return NULL;
+
         Account* acc = new Account(
             req.value(req.record().indexOf("account_id")).toInt(),
             req.value(req.record().indexOf("username")).toString(),
@@ -27,18 +29,11 @@ Account* ObjectFactory::LoadAccount(QString key)
             req.value(req.record().indexOf("secret_answer")).toString(),
             ((ulong)req.value(req.record().indexOf("subscription")).toInt()) * 1000
         );
+        if(acc->m_subscriptionTime < 0)
+            acc->m_subscriptionTime = 0;
+        m_accounts.insert(acc->GetId(), acc);
 
-        QList<Character*> chars;
-        QSqlQuery charsReq = Database::Char()->PQuery(SELECT_ACCOUNT_CHARACTERS, req.value(req.record().indexOf("account_id")).toInt());
-        while(charsReq.next())
-        {
-            Character* curChar = LoadCharacter(charsReq);
-            curChar->m_account = acc;
-            chars.append(curChar);
-        }
-        acc->m_characters = chars;
-
-        m_accounts.insert(req.value(req.record().indexOf("account_id")).toInt(), acc);
+        LoadAccountCharacters(acc);
 
         return acc;
     }
@@ -55,21 +50,51 @@ Character* ObjectFactory::GetCharacter(int id)
         return NULL;
 }
 
-Character* ObjectFactory::LoadCharacter(QSqlQuery req)
+QList<Character*> ObjectFactory::LoadAccountCharacters(Account* const acc)
 {
-    Character* Char = new Character(
-        req.value(req.record().indexOf("guid")).toInt(),
-        req.value(req.record().indexOf("name")).toString(),
-        req.value(req.record().indexOf("gender")).toInt(),
-        req.value(req.record().indexOf("gfx_id")).toInt(),
-        req.value(req.record().indexOf("color_1")).toInt(),
-        req.value(req.record().indexOf("color_2")).toInt(),
-        req.value(req.record().indexOf("color_3")).toInt(),
-        100,
-        req.value(req.record().indexOf("level")).toInt(),
-        req.value(req.record().indexOf("class")).toInt()
-    );
+    QList<Character*> characters;
 
-    m_characters.insert(req.value(req.record().indexOf("guid")).toInt(), Char);
-    return Char;
+    if(!m_accounts.contains(acc->GetId()))
+        return characters;
+
+    QSqlQuery reqChars = Database::Char()->PQuery(SELECT_ACCOUNT_SERVER_CHARACTERS, acc->GetId(), ConfigMgr::World()->GetInt("ServerId"));
+    while(reqChars.next())
+    {
+        if(m_characters.contains(reqChars.value(reqChars.record().indexOf("guid")).toInt()))
+            continue;
+
+        Character* curChar = new Character(
+            reqChars.value(reqChars.record().indexOf("guid")).toInt(),
+            reqChars.value(reqChars.record().indexOf("name")).toString(),
+            reqChars.value(reqChars.record().indexOf("gender")).toInt(),
+            reqChars.value(reqChars.record().indexOf("gfx_id")).toInt(),
+            reqChars.value(reqChars.record().indexOf("color_1")).toInt(),
+            reqChars.value(reqChars.record().indexOf("color_2")).toInt(),
+            reqChars.value(reqChars.record().indexOf("color_3")).toInt(),
+            100,
+            reqChars.value(reqChars.record().indexOf("level")).toInt(),
+            reqChars.value(reqChars.record().indexOf("class")).toInt()
+        );
+        curChar->m_account = acc;
+
+        m_characters.insert(curChar->GetId(), curChar);
+        characters.append(curChar);
+    }
+
+    acc->m_characters.append(characters);
+
+    return characters;
+}
+
+Character* ObjectFactory::CreateCharacter(int account, QString name, int breed, int gender, int gfxId, char* color1, char* color2, char* color3)
+{
+    if(!m_accounts.contains(account))
+        return NULL;
+
+    Database::Char()->PQuery(INSERT_NEW_CHAR, account, ConfigMgr::World()->GetInt("ServerId"), name.toAscii().data(), breed, gender, gfxId, color1, color2, color3);
+    QList<Character*> charsCreated = LoadAccountCharacters(m_accounts.value(account));
+    if(charsCreated.isEmpty())
+        return NULL;
+    else
+        return charsCreated.last();
 }

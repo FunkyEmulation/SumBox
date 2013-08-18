@@ -1,5 +1,4 @@
 #include "game/server/worldsession.h"
-#include "../world/ObjectFactory.h"
 
 void WorldSession::HandleQueue(QString& /*packet*/)
 {

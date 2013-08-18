@@ -12,6 +12,7 @@ typedef QList<Character*> CharsList;
 class Account
 {
 public:
+    ~Account();
     QString GetCharsString() const; // Renvoit la liste des personnages sous forme de string pour le packet AL
     // Getters
     CharsList GetCharacters() const { return m_characters; }

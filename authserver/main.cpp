@@ -33,9 +33,15 @@ int main(int argc, char *argv[])
     if (!ConfigMgr::Instance()->LoadAuthConfig("authserver.conf"))
         return 0;
 
+    if(!ConfigMgr::Instance()->LoadWorldConfig("worldserver.conf"))
+        return 0;
+
     Log::Instance()->Init(ConfigMgr::Auth()->GetUShort("LogConsoleLevel"), ConfigMgr::Auth()->GetUShort("LogFileLevel"), ConfigMgr::Auth()->GetQString("LogFile"));
 
     if (!Database::Instance()->OpenAuthDatabase())
+        return 0;
+
+    if(!Database::Instance()->OpenCharDatabase())
         return 0;
 
     if(!AuthServer::Instance()->Start(QHostAddress::LocalHost, quint16(ConfigMgr::Auth()->GetInt("AuthServerPort"))))

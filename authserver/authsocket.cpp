@@ -117,8 +117,26 @@ void AuthSocket::SendInitPacket()
 void AuthSocket::SendPersos()
 {
     WorldPacket persos(SMSG_GIVE_PERSOS);
-    persos << m_infos["subscription_time"].toString().toAscii().data();
+    persos << QString::number(((ulong)m_infos["subscription_time"].toInt()) * 1000).toAscii().data();
     // Manque |ServerId,NbrePersos|ServerId2,NbrePersos ...
+
+    QMap<int, int> serversPersos;
+    QSqlQuery req = Database::Char()->PQuery(SELECT_ACCOUNT_CHARACTERS, m_infos["account_id"].toInt());
+    while(req.next())
+    {
+        int curServerId = req.value(req.record().indexOf("server_id")).toInt();
+        if(serversPersos.contains(curServerId))
+            serversPersos[curServerId]++;
+        else
+            serversPersos.insert(curServerId, 1);
+    }
+    if(!serversPersos.isEmpty())
+    {
+        for(QMap<int, int>::Iterator i = serversPersos.begin(); i != serversPersos.end(); ++i)
+        {
+            persos << "|" << QString::number(i.key()) << "," << QString::number(i.value());
+        }
+    }
 
     SendPacket(persos);
 }
@@ -176,6 +194,9 @@ void AuthSocket::CheckAccount()
 
     for(quint8 i = 0; i < req.record().count(); ++i)
         m_infos.insert(req.record().fieldName(i), req.value(i));
+
+    if(m_infos["subscription_time"].toInt() < 0)
+        m_infos["subscription_time"] = QVariant(0);
 
     // Mot de passe correct
     if(cryptPassword(m_infos["hash_password"].toString(), m_hashKey) == hashPass)

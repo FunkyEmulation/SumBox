@@ -59,7 +59,7 @@ void WorldSession::HandleCreatePerso(QString& packet)
     if(datas.size() < 6)
         return; // Ne devrait pas arriver sauf envoit manuel
 
-    QString pseudo(datas.takeFirst());
+    QString pseudo(datas.at(0));
 
     WorldPacket error(SMSG_CREATE_CHAR_ERROR);
     QSqlQuery req = Database::Char()->PQuery(CHECK_CHAR_EXISTS, pseudo.toAscii().data());
@@ -69,7 +69,7 @@ void WorldSession::HandleCreatePerso(QString& packet)
         SendPacket(error);
         return;
     }
-    if(IsValidName(pseudo))
+    if(!IsValidName(pseudo))
     {
         error << "n";
         SendPacket(error);
@@ -82,6 +82,18 @@ void WorldSession::HandleCreatePerso(QString& packet)
         return;
     }
 
-    WorldPacket success(SMSG_CREATE_CHAR_OK);
-    SendPacket(success);
+    // TODO: Checker la validité de la race
+    int gfxId = (datas[1] + datas[2]).toInt();
+    Character* newCharacter = ObjectFactory::Instance()->CreateCharacter(m_account->GetId(), pseudo, datas[1].toInt(), datas[2].toInt(), gfxId, datas.at(3).toAscii().data(), datas.at(4).toAscii().data(), datas.at(5).toAscii().data());
+    if(newCharacter != NULL)
+    {
+        WorldPacket success(SMSG_CREATE_CHAR_OK);
+        SendPacket(success);
+        SendCharacterList();
+    }
+    else
+    {
+        SendPacket(error);
+        return;
+    }
 }

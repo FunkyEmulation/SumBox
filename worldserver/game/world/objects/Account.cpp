@@ -1,4 +1,10 @@
 #include "Account.h"
+#include "configuration/configmgr.h"
+
+Account::~Account()
+{
+    qDeleteAll(m_characters);
+}
 
 QString Account::GetCharsString() const
 {
@@ -16,10 +22,9 @@ QString Account::GetCharsString() const
         chars += QString::number(m_characters.at(i)->GetColor3()) + ";";
         chars += ";"; // Accessories
         chars += "0;"; // Merchant ?
-        chars += ";"; // ServeurId
-        chars += "0;"; // Est mort ?
+        chars += ConfigMgr::World()->GetQString("ServerId") + ";"; // ServeurId
         chars += ";"; // DeathCount
-        chars += "200;"; // LevelMax
+        chars += "200"; // LevelMax
     }
 
     return chars;

@@ -9,7 +9,7 @@
 #include "queues/worldqueue.h"
 #include "define.h"
 #include "servers/SocketReader.h"
-#include "game/world/objects/Account.h"
+#include "game/world/ObjectFactory.h"
 
 class WorldPacket;
 
