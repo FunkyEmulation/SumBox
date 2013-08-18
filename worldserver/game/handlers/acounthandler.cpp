@@ -55,5 +55,5 @@ void WorldSession::HandleListGifts(QString& /*packet*/)
 void WorldSession::HandleKey(QString& packet)
 {
     m_ticket = packet.mid(2);
-    Log::Write(LOG_TYPE_DETAIL,"Key : '%s'",packet.mid(2).toAscii().data());
+    Log::Write(LOG_TYPE_DETAIL,"Key : '%s'",packet.mid(2).toLatin1().data());
 }

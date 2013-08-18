@@ -2,7 +2,7 @@
 
 void CharDatabase::LoadQueries()
 {
-    LoadQuery(SELECT_ACCOUNT_CHARACTERS, "SELECT * FROM `character` WHERE `account` = '%s'");
+    LoadQuery(SELECT_ACCOUNT_CHARACTERS, "SELECT * FROM `character` WHERE `account` = %u");
     LoadQuery(SELECT_ACCOUNT_SERVER_CHARACTERS, "SELECT * FROM `character` WHERE `account` = %u AND `server_id` = %u ORDER BY `guid`");
     LoadQuery(CHECK_CHAR_EXISTS, "SELECT count(`guid`) AS `count` FROM `character` WHERE `name` = '%s'");
 

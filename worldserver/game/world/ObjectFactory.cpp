@@ -13,7 +13,7 @@ Account* ObjectFactory::GetAccount(int id)
 
 Account* ObjectFactory::LoadAccount(QString key)
 {
-    QSqlQuery req = Database::Auth()->PQuery(AUTH_SELECT_ACCOUNT_SESSION_KEY, key.toAscii().data());
+    QSqlQuery req = Database::Auth()->PQuery(AUTH_SELECT_ACCOUNT_SESSION_KEY, key.toLatin1().data());
 
     if (req.first())
     {
@@ -91,7 +91,7 @@ Character* ObjectFactory::CreateCharacter(int account, QString name, int breed, 
     if(!m_accounts.contains(account))
         return NULL;
 
-    Database::Char()->PQuery(INSERT_NEW_CHAR, account, ConfigMgr::World()->GetInt("ServerId"), name.toAscii().data(), breed, gender, gfxId, color1, color2, color3);
+    Database::Char()->PQuery(INSERT_NEW_CHAR, account, ConfigMgr::World()->GetInt("ServerId"), name.toLatin1().data(), breed, gender, gfxId, color1, color2, color3);
     QList<Character*> charsCreated = LoadAccountCharacters(m_accounts.value(account));
     if(charsCreated.isEmpty())
         return NULL;

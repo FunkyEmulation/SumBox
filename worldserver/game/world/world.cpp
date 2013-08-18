@@ -18,7 +18,7 @@ bool World::StartServer()
 {
     if(!m_worldServer.Start(QHostAddress::LocalHost, quint16(ConfigMgr::World()->GetInt("WorldServerPort"))))
     {
-        Log::Write(LOG_TYPE_NORMAL, m_worldServer.GetErrorString().toAscii().data());
+        Log::Write(LOG_TYPE_NORMAL, m_worldServer.GetErrorString().toLatin1().data());
         return false;
     }
     else
