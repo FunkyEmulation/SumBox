@@ -23,7 +23,7 @@ void WorldSession::HandleQueue(QString& /*packet*/)
 void WorldSession::HandleTicketResponse(QString& packet)
 {
     QString ticket = packet.mid(2);
-    QSqlQuery req = Database::Auth()->PQuery(AUTH_SELECT_ACCOUNT_SESSION_KEY, ticket.toAscii().data());
+    QSqlQuery req = Database::Auth()->PQuery(AUTH_SELECT_ACCOUNT_SESSION_KEY, ticket.toLatin1().data());
 
     if (req.first())
     {
@@ -58,5 +58,5 @@ void WorldSession::HandleListGifts(QString& /*packet*/)
 void WorldSession::HandleKey(QString& packet)
 {
     m_infos.insert("key",packet.mid(2));
-    Log::Write(LOG_TYPE_DETAIL,"Key : '%s'",packet.mid(2).toAscii().data());
+    Log::Write(LOG_TYPE_DETAIL,"Key : '%s'",packet.mid(2).toLatin1().data());
 }
