@@ -79,23 +79,39 @@ void AuthSocket::ProcessPacket(QString packet)
         return;
     }
 
-    if(packet == "Af")
+    if(packet.at(0) == 'A') // Normalement le seul type de packet sur l'auth
     {
-        QueueManager();
-        return;
+        switch(packet.at(1).toAscii())
+        {
+            case 'f':
+                QueueManager();
+            break;
+            case 'x':
+                SendPersos();
+            break;
+            case 'X':
+                SelectServer(packet.mid(2).toUInt());
+            break;
+            case 'F':
+                SearchFriend(packet.mid(2));
+            break;
+            default:
+                Log::Write(LOG_TYPE_DEBUG, "Unhandled header packet : %s", packet.left(2).toLatin1().data());
+            break;
+        }
+    }
+}
+
+void AuthSocket::SearchFriend(QString pseudo)
+{
+    /*WorldPacket packet(SMSG_SEARCH_FRIEND);
+    QSqlQuery req = Database::Auth()->PQuery(AUTH_SEARCH_FRIEND, pseudo);
+    if(req.first() && req.value(req.record().indexOf("characters")))
+    {
+        packet << req.value(req.record().indexOf("characters")).toString().replace("|", ";").toLatin1().data();
     }
 
-    if(packet == "Ax")
-    {
-        SendPersos();
-        return;
-    }
-
-    if(packet.left(2) == "AX")
-    {
-        SelectServer(packet.mid(2).toUInt());
-        return;
-    }
+    SendPacket(packet);*/
 }
 
 void AuthSocket::SendInitPacket()
@@ -118,22 +134,11 @@ void AuthSocket::SendPersos()
 {
     WorldPacket persos(SMSG_GIVE_PERSOS);
     persos << QString::number(((ulong)m_infos["subscription_time"].toInt()) * 1000).toLatin1().data();
-    QMap<int, int> serversPersos;
-    QSqlQuery req = Database::Char()->PQuery(SELECT_ACCOUNT_CHARACTERS, m_infos["account_id"].toInt());
+
+    QSqlQuery req = Database::Auth()->PQuery(AUTH_SELECT_ACCOUNT_CHARACTERS, m_infos["account_id"].toInt());
     while(req.next())
     {
-        int curServerId = req.value(req.record().indexOf("server_id")).toInt();
-        if(serversPersos.contains(curServerId))
-            serversPersos[curServerId]++;
-        else
-            serversPersos.insert(curServerId, 1);
-    }
-    if(!serversPersos.isEmpty())
-    {
-        for(QMap<int, int>::Iterator i = serversPersos.begin(); i != serversPersos.end(); ++i)
-        {
-            persos << "|" << QString::number(i.key()) << "," << QString::number(i.value());
-        }
+        persos << "|" << req.value(req.record().indexOf("realm_id")).toString().toLatin1().data() << "," << req.value(req.record().indexOf("num_characters")).toString().toLatin1().data();
     }
 
     SendPacket(persos);
@@ -152,7 +157,7 @@ void AuthSocket::QueueManager()
         queuePosition << QString::number(AuthQueue::Instance()->GetClientPosition(this)).toLatin1().data() << "|"; // Position dans la file
         queuePosition << QString::number(AuthQueue::Instance()->GetClientsCount()).toLatin1().data() << "|"; // Nombre d'abonnés dans la file
         queuePosition << "0|"; // Nombre de non abonnés
-        queuePosition << "1|"; // Abonné ?
+        queuePosition << (m_infos["subscription_time"].toInt() > 0 ? "1" : "0");
         queuePosition << "1"; // Queue id
     }
 
