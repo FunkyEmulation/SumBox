@@ -9,6 +9,7 @@ Account::~Account()
 QString Account::GetCharsString() const
 {
     QString chars;
+    chars += "|" + QString::number(m_characters.count());
 
     for(int i = 0; i < m_characters.count(); ++i)
     {
@@ -23,6 +24,7 @@ QString Account::GetCharsString() const
         chars += ";"; // Accessories
         chars += "0;"; // Merchant ?
         chars += ConfigMgr::World()->GetQString("ServerId") + ";"; // ServeurId
+        chars += "0;"; // Est mort ?
         chars += ";"; // DeathCount
         chars += "200"; // LevelMax
     }

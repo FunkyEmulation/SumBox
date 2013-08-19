@@ -42,7 +42,10 @@ public:
     void HandleRandomPseudo(QString& packet);       // Génère un pseudo aléatoire
     void HandleCreatePerso(QString& packet);        // Crée un nouveau perso
 
-    void SendCharacterList();
+    void SendCharacterList(); // Envoit la liste des personnages du compte
+    void HandleDeleteChar(QString& packet); // Supprime un personnage
+    void HandleSelectChar(QString& packet); // Sélection d'un personnage pour entrer en jeux
+
 
 public slots:
     void OnClose();

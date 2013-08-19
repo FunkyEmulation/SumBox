@@ -75,7 +75,7 @@ void WorldSession::HandleCreatePerso(QString& packet)
         SendPacket(error);
         return;
     }
-    if(m_account->GetCharacters().count() >= 5)
+    if(m_account->GetCharacters()->count() >= 5)
     {
         error << "f";
         SendPacket(error);
@@ -96,4 +96,31 @@ void WorldSession::HandleCreatePerso(QString& packet)
         SendPacket(error);
         return;
     }
+}
+
+void WorldSession::HandleDeleteChar(QString &packet)
+{
+    QStringList datas = packet.mid(2).split("|");
+    if(datas.isEmpty())
+        return; // Ne devrait pas arriver
+
+    int charId = datas.at(0).toInt();
+    Character* target;
+    if((target = ObjectFactory::Instance()->GetCharacter(charId)) != NULL && target->GetAccount() == m_account)
+    {
+        if(target->GetLvl() < 20 || (target->GetLvl() >= 20 && datas.count() >= 2 && datas.at(1) == m_account->GetAnswer()))
+        {
+            Database::Char()->PQuery(DELETE_CHAR, charId);
+            m_account->GetCharacters()->removeOne(target);
+            SendCharacterList();
+            return;
+        }
+    }
+
+    SendPacket(WorldPacket(SMSG_DELETE_CHAR_ERROR));
+}
+
+void WorldSession::HandleSelectChar(QString &packet)
+{
+
 }

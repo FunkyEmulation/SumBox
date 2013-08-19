@@ -3,6 +3,7 @@
 #include <QList>
 
 QString charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_";
+static bool initialize = true;
 
 bool IsValidName(QString name)
 {
@@ -16,8 +17,6 @@ bool IsValidName(QString name)
 
 QString GenerateRandomString(quint8 length)
 {
-    static bool initialize = true;
-
     if(initialize)
     {
         srand(time(NULL));
@@ -33,6 +32,12 @@ QString GenerateRandomString(quint8 length)
 
 QString GenerateRandomPseudo(int minLength,int maxLength)
 {
+    if(initialize)
+    {
+        srand(time(NULL));
+        initialize = false;
+    }
+
     int max = rand()%(maxLength-minLength) +minLength;
 
     QString voyelles = "aeiouy";

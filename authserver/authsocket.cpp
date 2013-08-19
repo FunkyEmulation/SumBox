@@ -120,7 +120,6 @@ void AuthSocket::SendPersos()
     persos << QString::number(((ulong)m_infos["subscription_time"].toInt()) * 1000).toLatin1().data();
     QMap<int, int> serversPersos;
     QSqlQuery req = Database::Char()->PQuery(SELECT_ACCOUNT_CHARACTERS, m_infos["account_id"].toInt());
-    qDebug() << " after req" << endl;
     while(req.next())
     {
         int curServerId = req.value(req.record().indexOf("server_id")).toInt();

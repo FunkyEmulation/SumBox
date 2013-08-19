@@ -15,7 +15,7 @@ public:
     ~Account();
     QString GetCharsString() const; // Renvoit la liste des personnages sous forme de string pour le packet AL
     // Getters
-    CharsList GetCharacters() const { return m_characters; }
+    CharsList* GetCharacters() { return &m_characters; }
     int GetId() const { return m_id; }
     QString GetName() const { return m_accountName; }
     QString GetPseudo() const { return m_pseudo; }
