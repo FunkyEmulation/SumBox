@@ -72,7 +72,8 @@ SOURCES += main.cpp \
     game/world/objects/Account.cpp \
     game/world/ObjectFactory.cpp \
     game/world/objects/Character.cpp \
-    ../shared/utils/util.cpp
+    ../shared/utils/util.cpp \
+    game/handlers/QueueHandler.cpp
 
 HEADERS += \
     worldserver.h \
