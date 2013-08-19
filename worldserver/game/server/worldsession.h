@@ -32,7 +32,7 @@ public:
     void HandleBeforeAuth(QString& /*packet*/) {} // CMSG packets before client auth (WorldSession don't exist at this moment)
 
     // Handlers
-    void HandleQueue(QString& packet);
+    void HandleQueuePosition(QString& packet);
     void HandleTicketResponse(QString& packet);     // Vérifie la clé de connection et initialise les détails compte :
     void HandleRegionalVersion(QString& packet);    // ?
     void HandleListGifts(QString& packet);          // Gère la liste des cadeaux du compte. A faire

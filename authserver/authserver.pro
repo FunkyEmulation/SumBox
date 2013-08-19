@@ -38,7 +38,8 @@ SOURCES += main.cpp \
     ../shared/utils/util.cpp \
     ../worldserver/game/world/ObjectFactory.cpp \
     ../worldserver/game/world/objects/Account.cpp \
-    ../worldserver/game/world/objects/Character.cpp
+    ../worldserver/game/world/objects/Character.cpp \
+    ../worldserver/game/handlers/QueueHandler.cpp
 
 HEADERS += \
     ../shared/define.h \
