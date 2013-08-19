@@ -146,7 +146,7 @@ void AuthSocket::SendPersos()
 
 void AuthSocket::QueueManager()
 {
-    WorldPacket queuePosition(SMSG_QUEUE_POSITION);
+    WorldPacket queuePosition(MSG_QUEUE_POSITION);
 
     if(!AuthQueue::Instance()->ClientInQueue(this)) // Non das la file
     {

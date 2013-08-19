@@ -2,7 +2,7 @@
 
 void WorldSession::HandleQueue(QString& /*packet*/)
 {
-    WorldPacket queuePosition(SMSG_QUEUE_POSITION);
+    WorldPacket queuePosition(MSG_QUEUE_POSITION);
 
     if(!WorldQueue::Instance()->ClientInQueue(this)) // Non dans la file
     {
