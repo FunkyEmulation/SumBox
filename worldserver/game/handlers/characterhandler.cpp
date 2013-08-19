@@ -1,4 +1,5 @@
 #include "../server/worldsession.h"
+#include "utils/util.h"
 
 void WorldSession::HandleCharactersList(QString& /*packet*/)
 {
@@ -15,31 +16,7 @@ void WorldSession::SendCharacterList()
 {
     Log::Write(LOG_TYPE_DEBUG, "Send Character list");
     WorldPacket CharsList(SMSG_CHARACTER_LIST);
-
-    QSqlQuery req = Database::Char()->PQuery(SELECT_ACCOUNT_CHARACTERS, m_infos["account_id"].toInt());
-
-    CharsList << QDateTime(m_infos["subscription_time"].toDateTime()).toTime_t() << "|";
-    CharsList << req.size();
-
-    while (req.next())
-    {
-        qDebug() << "boucle";
-        CharsList << "|";
-        CharsList << req.value(req.record().indexOf("guid")).toUInt() + ";";
-        CharsList << req.value(req.record().indexOf("name")).toString() + ";";
-        CharsList << req.value(req.record().indexOf("level")).toUInt() + ";";
-        CharsList << req.value(req.record().indexOf("gfx_id")).toUInt() + ";";
-        CharsList << req.value(req.record().indexOf("color_1")).toInt() + ";"; // Colors en hexa
-        CharsList << req.value(req.record().indexOf("color_2")).toInt() + ";";
-        CharsList << req.value(req.record().indexOf("color_3")).toInt() + ";";
-        CharsList << ";"; // Accessories
-        CharsList << "0;"; // Merchant ?
-        CharsList << ";"; // ServeurId
-        CharsList << "0;"; // Est mort ?
-        CharsList << ";"; // DeathCount
-        CharsList << "200;"; // LevelMax
-    }
-
+    CharsList << QString::number(m_account->GetSubscriptionTime()) << m_account->GetCharsString();
     SendPacket(CharsList);
 }
 
@@ -71,12 +48,79 @@ void WorldSession::HandleRandomPseudo(QString& /*packet*/)
 
     pseudo.prepend("|");
 
-    WorldPacket randomPseudo(MSG_RANDOM_PSEUDO);
+    WorldPacket randomPseudo(CMSG_RANDOM_PSEUDO);
     randomPseudo << pseudo;
     SendPacket(randomPseudo);
 }
 
-void WorldSession::HandleCreatePerso(QString& /*packet*/)
+void WorldSession::HandleCreatePerso(QString& packet)
 {
-    cout << "Creation perso " << endl;
+    QStringList datas = packet.mid(2).split("|");
+    if(datas.size() < 6)
+        return; // Ne devrait pas arriver sauf envoit manuel
+
+    QString pseudo(datas.at(0));
+
+    WorldPacket error(SMSG_CREATE_CHAR_ERROR);
+    QSqlQuery req = Database::Char()->PQuery(CHECK_CHAR_EXISTS, pseudo.toAscii().data());
+    if(req.next() && req.value(req.record().indexOf("count")).toInt() >= 1)
+    {
+        error << "a";
+        SendPacket(error);
+        return;
+    }
+    if(!IsValidName(pseudo))
+    {
+        error << "n";
+        SendPacket(error);
+        return;
+    }
+    if(m_account->GetCharacters()->count() >= 5)
+    {
+        error << "f";
+        SendPacket(error);
+        return;
+    }
+
+    // TODO: Checker la validité de la race
+    int gfxId = (datas[1] + datas[2]).toInt();
+    Character* newCharacter = ObjectFactory::Instance()->CreateCharacter(m_account->GetId(), pseudo, datas[1].toInt(), datas[2].toInt(), gfxId, datas.at(3).toAscii().data(), datas.at(4).toAscii().data(), datas.at(5).toAscii().data());
+    if(newCharacter != NULL)
+    {
+        WorldPacket success(SMSG_CREATE_CHAR_OK);
+        SendPacket(success);
+        SendCharacterList();
+    }
+    else
+    {
+        SendPacket(error);
+        return;
+    }
+}
+
+void WorldSession::HandleDeleteChar(QString &packet)
+{
+    QStringList datas = packet.mid(2).split("|");
+    if(datas.isEmpty())
+        return; // Ne devrait pas arriver
+
+    int charId = datas.at(0).toInt();
+    Character* target;
+    if((target = ObjectFactory::Instance()->GetCharacter(charId)) != NULL && target->GetAccount() == m_account)
+    {
+        if(target->GetLvl() < 20 || (target->GetLvl() >= 20 && datas.count() >= 2 && datas.at(1) == m_account->GetAnswer()))
+        {
+            Database::Char()->PQuery(DELETE_CHAR, charId);
+            m_account->GetCharacters()->removeOne(target);
+            SendCharacterList();
+            return;
+        }
+    }
+
+    SendPacket(WorldPacket(SMSG_DELETE_CHAR_ERROR));
+}
+
+void WorldSession::HandleSelectChar(QString &packet)
+{
+
 }

@@ -60,7 +60,7 @@ int main(int argc, char *argv[])
         return 0;
 
     Log::Write(LOG_TYPE_NORMAL, "Press ctrl + c to quit.");
-    Log::Write(LOG_TYPE_NORMAL, "SumBox::Worldserver started in %s sec.", QString::number(t.elapsed() / IN_MILLISECONDS).toAscii().data());
+    Log::Write(LOG_TYPE_NORMAL, "SumBox::Worldserver started in %s sec.", QString::number(t.elapsed() / IN_MILLISECONDS).toLatin1().data());
 
     signal(SIGINT, &exit);
     return a.exec();

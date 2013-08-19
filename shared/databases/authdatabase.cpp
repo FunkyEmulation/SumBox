@@ -3,9 +3,9 @@
 void AuthDatabase::LoadQueries()
 {
     // account queries
-    LoadQuery(AUTH_SELECT_ACCOUNT, "SELECT * FROM account WHERE username = '%s'");
+    LoadQuery(AUTH_SELECT_ACCOUNT, "SELECT *, UNIX_TIMESTAMP(`subscription_time`) - UNIX_TIMESTAMP(NOW()) AS `subscription_time` FROM `account` WHERE `username` = '%s'");
     LoadQuery(AUTH_UPDATE_ACCOUNT_STATE, "UPDATE account SET online = %u WHERE account_id = %u");
-    LoadQuery(AUTH_SELECT_ACCOUNT_SESSION_KEY, "SELECT * FROM account WHERE session_key = '%s'");
+    LoadQuery(AUTH_SELECT_ACCOUNT_SESSION_KEY, "SELECT *, UNIX_TIMESTAMP(`subscription_time`) - UNIX_TIMESTAMP(NOW()) AS `subscription` FROM account WHERE session_key = '%s'");
     LoadQuery(AUTH_UPDATE_ACCOUNT_SESSION_KEY, "UPDATE account SET session_key = '%s' WHERE account_id = %u");
 
     // banned_ip queries

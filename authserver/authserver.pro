@@ -33,7 +33,12 @@ SOURCES += main.cpp \
     ../shared/queues/worldqueue.cpp \
     ../shared/queues/authqueue.cpp \
     ../worldserver/game/handlers/characterhandler.cpp \
-    ../worldserver/game/handlers/acounthandler.cpp
+    ../worldserver/game/handlers/acounthandler.cpp \
+    ../shared/servers/SocketReader.cpp \
+    ../shared/utils/util.cpp \
+    ../worldserver/game/world/ObjectFactory.cpp \
+    ../worldserver/game/world/objects/Account.cpp \
+    ../worldserver/game/world/objects/Character.cpp
 
 HEADERS += \
     ../shared/define.h \
@@ -53,4 +58,8 @@ HEADERS += \
     ../shared/databases/worlddatabase.h \
     ../shared/databases/chardatabase.h \
     ../shared/queues/worldqueue.h \
-    ../shared/queues/authqueue.h
+    ../shared/queues/authqueue.h \
+    ../shared/servers/SocketReader.h \
+    ../worldserver/game/world/ObjectFactory.h \
+    ../worldserver/game/world/objects/Account.h \
+    ../worldserver/game/world/objects/Character.h

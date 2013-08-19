@@ -33,21 +33,27 @@ int main(int argc, char *argv[])
     if (!ConfigMgr::Instance()->LoadAuthConfig("authserver.conf"))
         return 0;
 
+    if(!ConfigMgr::Instance()->LoadWorldConfig("worldserver.conf"))
+        return 0;
+
     Log::Instance()->Init(ConfigMgr::Auth()->GetUShort("LogConsoleLevel"), ConfigMgr::Auth()->GetUShort("LogFileLevel"), ConfigMgr::Auth()->GetQString("LogFile"));
 
     if (!Database::Instance()->OpenAuthDatabase())
         return 0;
 
+    if(!Database::Instance()->OpenCharDatabase())
+        return 0;
+
     if(!AuthServer::Instance()->Start(QHostAddress::LocalHost, quint16(ConfigMgr::Auth()->GetInt("AuthServerPort"))))
     {
-        Log::Write(LOG_TYPE_NORMAL, AuthServer::Instance()->GetErrorString().toAscii().data());
+        Log::Write(LOG_TYPE_NORMAL, AuthServer::Instance()->GetErrorString().toLatin1().data());
         return 0;
     }
     else
        Log::Write(LOG_TYPE_NORMAL, "AuthServer started on port %i : waiting for connections", ConfigMgr::Auth()->GetInt("AuthServerPort"));
 
     Log::Write(LOG_TYPE_NORMAL, "Press ctrl + c to quit.");
-    Log::Write(LOG_TYPE_NORMAL, "SumBox::Authserver started in %s sec.", QString::number(t.elapsed() / IN_MILLISECONDS).toAscii().data());
+    Log::Write(LOG_TYPE_NORMAL, "SumBox::Authserver started in %s sec.", QString::number(t.elapsed() / IN_MILLISECONDS).toLatin1().data());
 
     signal(SIGINT, &exit);
     return a.exec();

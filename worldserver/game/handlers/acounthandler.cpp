@@ -23,13 +23,10 @@ void WorldSession::HandleQueue(QString& /*packet*/)
 void WorldSession::HandleTicketResponse(QString& packet)
 {
     QString ticket = packet.mid(2);
-    QSqlQuery req = Database::Auth()->PQuery(AUTH_SELECT_ACCOUNT_SESSION_KEY, ticket.toAscii().data());
+    m_account = ObjectFactory::Instance()->LoadAccount(ticket);
 
-    if (req.first())
+    if (m_account != NULL)
     {
-        for(quint8 i = 0; i < req.record().count(); ++i)
-            m_infos.insert(req.record().fieldName(i), req.value(i));
-
         WorldPacket TicketAccepted(SMSG_TICKET_ACCEPTED);
         SendPacket(TicketAccepted);
     }
@@ -49,14 +46,14 @@ void WorldSession::HandleRegionalVersion(QString& /*packet*/)
 
 void WorldSession::HandleListGifts(QString& /*packet*/)
 {
-    if(!m_infos["gifts"].isNull())
+    /*if(!m_infos["gifts"].isNull())
     {
      //WorldPacket ListPacket(SMSG_LIST_GIFTS);
-    }
+    }*/
 }
 
 void WorldSession::HandleKey(QString& packet)
 {
-    m_infos.insert("key",packet.mid(2));
-    Log::Write(LOG_TYPE_DETAIL,"Key : '%s'",packet.mid(2).toAscii().data());
+    m_ticket = packet.mid(2);
+    Log::Write(LOG_TYPE_DETAIL,"Key : '%s'",packet.mid(2).toLatin1().data());
 }

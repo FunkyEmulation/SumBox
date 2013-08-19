@@ -8,10 +8,12 @@
 #include "databases/database.h"
 #include "queues/worldqueue.h"
 #include "define.h"
+#include "servers/SocketReader.h"
+#include "game/world/ObjectFactory.h"
 
 class WorldPacket;
 
-class WorldSession : public QObject
+class WorldSession : private SocketReader
 {
     Q_OBJECT
 public:
@@ -40,18 +42,20 @@ public:
     void HandleRandomPseudo(QString& packet);       // Génère un pseudo aléatoire
     void HandleCreatePerso(QString& packet);        // Crée un nouveau perso
 
-    void SendCharacterList();
+    void SendCharacterList(); // Envoit la liste des personnages du compte
+    void HandleDeleteChar(QString& packet); // Supprime un personnage
+    void HandleSelectChar(QString& packet); // Sélection d'un personnage pour entrer en jeux
+
 
 public slots:
-    void OnRead();
     void OnClose();
 
 private:
-    QTcpSocket* m_socket;
-    QString m_packet;
-    QMap<QString, QVariant> m_infos;
+    Account* m_account;
     ClientState m_state;
     QString m_ticket; // Avant connection
+
+    virtual void ProcessPacket(QString packet);
 };
 
 #endif // WORLDSESSION_H
