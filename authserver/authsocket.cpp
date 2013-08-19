@@ -81,7 +81,7 @@ void AuthSocket::ProcessPacket(QString packet)
 
     if(packet.at(0) == 'A') // Normalement le seul type de packet sur l'auth
     {
-        switch(packet.at(1).toAscii())
+        switch(packet.at(1).toLatin1())
         {
             case 'f':
                 QueueManager();
@@ -104,14 +104,14 @@ void AuthSocket::ProcessPacket(QString packet)
 
 void AuthSocket::SearchFriend(QString pseudo)
 {
-    /*WorldPacket packet(SMSG_SEARCH_FRIEND);
-    QSqlQuery req = Database::Auth()->PQuery(AUTH_SEARCH_FRIEND, pseudo);
-    if(req.first() && req.value(req.record().indexOf("characters")))
+    WorldPacket packet(SMSG_SEARCH_FRIEND);
+    QSqlQuery req = Database::Auth()->PQuery(AUTH_SEARCH_FRIEND, pseudo.toLatin1().data());
+    while(req.next())
     {
-        packet << req.value(req.record().indexOf("characters")).toString().replace("|", ";").toLatin1().data();
+        packet << req.value(req.record().indexOf("realm_id")).toString().toLatin1().data() << "," << req.value(req.record().indexOf("num_characters")).toString().toLatin1().data() << ";";
     }
 
-    SendPacket(packet);*/
+    SendPacket(packet);
 }
 
 void AuthSocket::SendInitPacket()
