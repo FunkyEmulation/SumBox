@@ -21,7 +21,7 @@ Configuration* Configuration::OpenFile(QString fileName)
     if(!m_file->open(QIODevice::ReadOnly))
     {
         QString error = m_file->errorString();
-        cout << "Cannot open configuration file " << fileName.toLatin1().data() << " : " << error.toLatin1().data() << endl;
+        cout << "Cannot open configuration file " << fileName.toAscii().data() << " : " << error.toAscii().data() << endl;
 
         delete m_file;
         return NULL;
@@ -35,7 +35,7 @@ Configuration* Configuration::OpenFile(QString fileName)
     for (itr = keys.constBegin(); itr != keys.constEnd(); ++itr)
         m_config.insert((*itr), settings.value((*itr)).toString());
 
-    cout << "Configuration file " << fileName.toLatin1().data() << " successfully loaded." << endl;
+    cout << "Configuration file " << fileName.toAscii().data() << " successfully loaded." << endl;
     m_file->close();
     return this;
 }
@@ -46,7 +46,7 @@ QString Configuration::GetValue(QString name)
     if(i != m_config.end())
         return i.value();
 
-    Log::Write(LOG_TYPE_NORMAL, "Trying to get config value \"%s\" but the value don't exist.", name.toLatin1().data());
+    Log::Write(LOG_TYPE_NORMAL, "Trying to get config value \"%s\" but the value don't exist.", name.toAscii().data());
     return QString();
 }
 
@@ -63,7 +63,7 @@ std::string Configuration::GetString(QString name)
 bool Configuration::GetBool(QString name)
 {
     QString val = GetValue(name);
-    return (val.toLower() == "true" || val.toLower() == "yes" || val == "1");
+    return (val == "true" || val == "TRUE" || val == "yes" || val == "YES" || val == "1");
 }
 
 int Configuration::GetInt(QString name)

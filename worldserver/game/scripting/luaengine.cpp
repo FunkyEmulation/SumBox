@@ -25,9 +25,9 @@ void LuaEngine::StartEngine()
     {
         QString fileName = (*itr);
 
-        if (luaL_loadfile(m_luaState, fileName.toLatin1().data()) != 0)
+        if (luaL_loadfile(m_luaState, fileName.toAscii().data()) != 0)
         {
-            Log::Write(LOG_TYPE_NORMAL, "LuaEngine::Error while loading %s script.", fileName.toLatin1().data());
+            Log::Write(LOG_TYPE_NORMAL, "LuaEngine::Error while loading %s script.", fileName.toAscii().data());
             ReportState(m_luaState);
         }
         else
@@ -35,7 +35,7 @@ void LuaEngine::StartEngine()
             int err = lua_pcall(m_luaState, 0, 0, 0);
             if (err != 0 && err == LUA_ERRRUN)
             {
-                Log::Write(LOG_TYPE_NORMAL, "LuaEngine::Error while loading %s script.", fileName.toLatin1().data());
+                Log::Write(LOG_TYPE_NORMAL, "LuaEngine::Error while loading %s script.", fileName.toAscii().data());
                 ReportState(m_luaState);
             }
         }
@@ -51,7 +51,7 @@ void LuaEngine::LoadLuaScripts()
     QDir luaDirectory(directory);
 
     if (!luaDirectory.exists())
-        Log::Write(LOG_TYPE_NORMAL, "Lua Scripts \"%s\" directory not found !", directory.toLatin1().data());
+        Log::Write(LOG_TYPE_NORMAL, "Lua Scripts \"%s\" directory not found !", directory.toAscii().data());
     else
     {
         QStringList luaScripts = luaDirectory.entryList(QStringList("*.lua"));

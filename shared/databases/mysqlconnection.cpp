@@ -31,7 +31,7 @@ bool MysqlConnection::Open(bool loadQueries)
     if (loadQueries)
         LoadQueries();
 
-    Log::Write(LOG_TYPE_NORMAL, "Database connection accomplished on %s", m_connectionInfo.database.toLatin1().data());
+    Log::Write(LOG_TYPE_NORMAL, "Database connection accomplished on %s", m_connectionInfo.database.toAscii().data());
     return true;
 }
 
@@ -49,7 +49,7 @@ bool MysqlConnection::Reconnect()
 void MysqlConnection::Close()
 {
     m_db.close();
-    Log::Write(LOG_TYPE_NORMAL, "Closing database connection on %s", m_connectionInfo.database.toLatin1().data());
+    Log::Write(LOG_TYPE_NORMAL, "Closing database connection on %s", m_connectionInfo.database.toAscii().data());
 }
 
 QSqlQuery MysqlConnection::Query(QString sqlQuery)
@@ -61,8 +61,8 @@ QSqlQuery MysqlConnection::Query(QString sqlQuery)
 
     if(!req.exec(sqlQuery))
     {
-        Log::Write(LOG_TYPE_NORMAL, "SQL error with %s : %s", sqlQuery.toLatin1().data());
-        Log::Write(LOG_TYPE_NORMAL, "[Error %u] %s", req.lastError().number(), req.lastError().text().toLatin1().data());
+        Log::Write(LOG_TYPE_NORMAL, "SQL error with %s : %s", sqlQuery.toAscii().data());
+        Log::Write(LOG_TYPE_NORMAL, "[Error %u] %s", req.lastError().number(), req.lastError().text().toAscii().data());
 
         if (req.lastError().number() == 2013)
         {
@@ -84,7 +84,7 @@ QSqlQuery MysqlConnection::PQuery(QString sqlQuery, ...)
     va_list ap;
     va_start(ap, sqlQuery);
     QString query;
-    query.vsprintf(sqlQuery.toLatin1().data(), ap);
+    query.vsprintf(sqlQuery.toAscii().data(), ap);
 
     return Query(query);
 }
@@ -100,7 +100,7 @@ QSqlQuery MysqlConnection::PQuery(quint16 sqlQueryId, ...)
     va_list ap;
     va_start(ap, sqlQuery);
     QString query;
-    query.vsprintf(sqlQuery.toLatin1().data(), ap);
+    query.vsprintf(sqlQuery.toAscii().data(), ap);
 
     return Query(query);
 }

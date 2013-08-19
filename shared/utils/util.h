@@ -58,8 +58,8 @@ QString cryptPassword(QString password, QString hashKey)
 
     for (int i = 0; i < password.length(); i++)
     {
-        char PPass = password[i].toLatin1();
-        char PKey = hashKey[i].toLatin1();
+        char PPass = password[i].toAscii();
+        char PKey = hashKey[i].toAscii();
 
         int APass = (int)PPass / 16;
         int AKey = (int)PPass % 16;

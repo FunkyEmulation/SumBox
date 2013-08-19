@@ -36,7 +36,7 @@ bool Chat::ParseCommand(QString command)
             return true;
         }
 
-        Log::Write(LOG_TYPE_NORMAL, "Command \"%s\" don't exist.", commandName.toLatin1().data());
+        Log::Write(LOG_TYPE_NORMAL, "Command \"%s\" don't exist.", commandName.toAscii().data());
     }
 
     return false;
