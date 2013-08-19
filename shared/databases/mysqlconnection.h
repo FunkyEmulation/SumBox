@@ -31,7 +31,7 @@ class MysqlConnection
 {
 public:
     MysqlConnection(ConnectionInfo& connectionInfo);
-    ~MysqlConnection();
+    virtual ~MysqlConnection();
 
     virtual void LoadQueries() = 0;
     void LoadQuery(quint16 id, QString sql)

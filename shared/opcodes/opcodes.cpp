@@ -23,8 +23,7 @@ OpcodeStruct opcodeTable[NUM_MSG_TYPES] =
     { "SMSG_SEARCH_FRIEND", "AF", &WorldSession::HandleServerSide },
 
     // Packets received before client authentication
-    { "CMSG_QUEUE_POSITION", "Af", &WorldSession::HandleQueue },
-    { "SMSG_QUEUE_POSITION", "Af", &WorldSession::HandleServerSide },
+    { "MSG_QUEUE_POSITION", "Af", &WorldSession::HandleQueuePosition },
 
     // Packets received after client authentication
     { "CMSG_TICKET_RESPONSE", "AT", &WorldSession::HandleTicketResponse },
