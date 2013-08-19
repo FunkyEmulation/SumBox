@@ -57,7 +57,7 @@ QList<Character*> ObjectFactory::LoadAccountCharacters(Account* const acc)
     if(!m_accounts.contains(acc->GetId()))
         return characters;
 
-    QSqlQuery reqChars = Database::Char()->PQuery(SELECT_ACCOUNT_SERVER_CHARACTERS, acc->GetId(), ConfigMgr::World()->GetInt("ServerId"));
+    QSqlQuery reqChars = Database::Char()->PQuery(SELECT_ACCOUNT_CHARACTERS, acc->GetId());
     while(reqChars.next())
     {
         if(m_characters.contains(reqChars.value(reqChars.record().indexOf("guid")).toInt()))
@@ -91,8 +91,9 @@ Character* ObjectFactory::CreateCharacter(int account, QString name, int breed, 
     if(!m_accounts.contains(account))
         return NULL;
 
-    Database::Char()->PQuery(INSERT_NEW_CHAR, account, ConfigMgr::World()->GetInt("ServerId"), name.toLatin1().data(), breed, gender, gfxId, color1, color2, color3);
+    Database::Char()->PQuery(INSERT_NEW_CHAR, account, name.toLatin1().data(), breed, gender, gfxId, color1, color2, color3);
     QList<Character*> charsCreated = LoadAccountCharacters(m_accounts.value(account));
+    Database::Auth()->PQuery(AUTH_UPDATE_ACCOUNT_CHARS, account, ConfigMgr::Instance()->World()->GetInt("ServerId"), m_accounts.value(account)->GetCharacters()->count());
     if(charsCreated.isEmpty())
         return NULL;
     else

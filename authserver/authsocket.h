@@ -29,6 +29,7 @@ public:
     void QueueManager();
     void SendPersos();
     void SelectServer(uint id);
+    void SearchFriend(QString pseudo);
 
 public slots:
     void OnClose();

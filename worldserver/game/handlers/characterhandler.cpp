@@ -112,6 +112,7 @@ void WorldSession::HandleDeleteChar(QString &packet)
         {
             Database::Char()->PQuery(DELETE_CHAR, charId);
             m_account->GetCharacters()->removeOne(target);
+            Database::Auth()->PQuery(AUTH_UPDATE_ACCOUNT_CHARS, m_account->GetId(), ConfigMgr::Instance()->World()->GetInt("ServerId"), m_account->GetCharacters()->count());
             SendCharacterList();
             return;
         }
