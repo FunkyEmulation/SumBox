@@ -6,7 +6,6 @@
 #include <QtNetwork>
 #include "logs/log.h"
 #include "configuration/configmgr.h"
-#include "game/server/worldsession.h"
 
 class WorldSession;
 
