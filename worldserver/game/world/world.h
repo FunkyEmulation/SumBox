@@ -6,6 +6,8 @@
 #include "logs/log.h"
 #include "configuration/configmgr.h"
 
+typedef QList<WorldSession*> SessionList;
+
 class World
 {
 public:
@@ -30,7 +32,9 @@ public:
     }
 
     bool IsRunning() { return m_is_running; }
-    bool StartServer();
+
+    void AddSession(WorldSession* session);
+    void RemoveSession(WorldSession* session);
 
 private:
     World();
@@ -38,8 +42,8 @@ private:
 
     static World* m_instance;
 
-    WorldServer m_worldServer;
     bool m_is_running;
+    SessionList m_sessions;
 };
 
 #endif

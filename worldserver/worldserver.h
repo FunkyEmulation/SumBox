@@ -7,14 +7,29 @@
 #include "logs/log.h"
 #include "game/server/worldsession.h"
 
-typedef QList<WorldSession*> SessionList;
-
 class WorldServer : QObject
 {
     Q_OBJECT
 public:
-    WorldServer();
-    ~WorldServer();
+    static WorldServer* Instance()
+    {
+        static QMutex mutex;
+        if(m_instance == 0)
+        {
+            mutex.lock();
+            m_instance = new WorldServer;
+            mutex.unlock();
+        }
+        return m_instance;
+    }
+
+    static void Drop()
+    {
+        static QMutex mutex;
+        mutex.lock();
+        delete m_instance;
+        mutex.unlock();
+    }
 
     QString GetErrorString() { return m_server->errorString(); }
     bool Start(QHostAddress address, quint16 port);
@@ -24,8 +39,12 @@ private slots:
     void OnConnect();
 
 private:
+    WorldServer();
+    ~WorldServer();
+
+    static WorldServer* m_instance;
+
     QTcpServer* m_server;
-    SessionList m_sessions;
 };
 
 #endif // WORLDSERVER_H

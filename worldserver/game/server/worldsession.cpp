@@ -2,6 +2,7 @@
 #include "opcodes/opcodes.h"
 #include "logs/log.h"
 #include "configuration/configmgr.h"
+#include "game/world/world.h"
 
 WorldSession::WorldSession(QTcpSocket *socket) : SocketReader(socket)
 {
@@ -42,6 +43,7 @@ void WorldSession::ProcessPacket(QString packet)
 void WorldSession::OnClose()
 {
     Log::Write(LOG_TYPE_NORMAL, "Closing connection with %s", m_socket->peerAddress().toString().toLatin1().data());
+    World::Instance()->RemoveSession(this);
     m_socket->deleteLater();
 }
 

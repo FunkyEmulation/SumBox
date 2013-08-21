@@ -15,12 +15,10 @@
 
 using namespace std;
 
-WorldServer worldserver;
-
 void stop(int /*s*/)
 {
     Log::Write(LOG_TYPE_NORMAL, "Stopping SumBox::Worldserver...");
-    worldserver.Stop();
+    WorldServer::Instance()->Stop();
     QCoreApplication::exit();
 }
 
@@ -62,13 +60,18 @@ int main(int argc, char *argv[])
 
     LuaEngine::Instance()->StartEngine();
 
-    if (!World::Instance())
+    if(!WorldServer::Instance()->Start(QHostAddress::LocalHost, quint16(ConfigMgr::World()->GetInt("WorldServerPort"))))
+    {
+        Log::Write(LOG_TYPE_NORMAL, WorldServer::Instance()->GetErrorString().toLatin1().data());
         return close();
+    }
+    else
+       Log::Write(LOG_TYPE_NORMAL, "Worldserver started on port %i : waiting for connections", ConfigMgr::World()->GetInt("WorldServerPort"));
 
     Log::Write(LOG_TYPE_NORMAL, "Press ctrl + c to quit.");
     Log::Write(LOG_TYPE_NORMAL, "SumBox::Worldserver started in %s sec.", QString::number(t.elapsed() / IN_MILLISECONDS).toLatin1().data());
 
-    signal(SIGINT, &stop);
-    signal(SIGTERM, &stop);
+    signal(SIGINT, &exit);
+    signal(SIGINT, &exit);
     return a.exec();
 }
