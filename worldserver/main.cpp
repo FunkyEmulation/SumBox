@@ -17,11 +17,17 @@ using namespace std;
 
 WorldServer worldserver;
 
-void exit(int /*s*/)
+void stop(int /*s*/)
 {
     Log::Write(LOG_TYPE_NORMAL, "Stopping SumBox::Worldserver...");
     worldserver.Stop();
     QCoreApplication::exit();
+}
+
+int close()
+{
+    stop(0);
+    return 0;
 }
 
 int main(int argc, char *argv[])
@@ -34,10 +40,10 @@ int main(int argc, char *argv[])
     cout << "Starting SumBox::WorldServer..." << endl;
 
     if (!ConfigMgr::Instance()->LoadAuthConfig("authserver.conf"))
-        return 0;
+        return close();
 
     if (!ConfigMgr::Instance()->LoadWorldConfig("worldserver.conf"))
-        return 0;
+        return close();
 
     Log::Instance()->Init(ConfigMgr::World()->GetUShort("LogConsoleLevel"), ConfigMgr::World()->GetUShort("LogFileLevel"), ConfigMgr::World()->GetQString("LogFile"));
 
@@ -46,22 +52,23 @@ int main(int argc, char *argv[])
     commandLine.run();*/
 
     if (!Database::Instance()->OpenAuthDatabase())
-        return 0;
+        return close();
 
     if (!Database::Instance()->OpenCharDatabase())
-        return 0;
+        return close();
 
     if (!Database::Instance()->OpenWorldDatabase())
-        return 0;
+        return close();
 
     LuaEngine::Instance()->StartEngine();
 
     if (!World::Instance())
-        return 0;
+        return close();
 
     Log::Write(LOG_TYPE_NORMAL, "Press ctrl + c to quit.");
     Log::Write(LOG_TYPE_NORMAL, "SumBox::Worldserver started in %s sec.", QString::number(t.elapsed() / IN_MILLISECONDS).toLatin1().data());
 
-    signal(SIGINT, &exit);
+    signal(SIGINT, &stop);
+    signal(SIGTERM, &stop);
     return a.exec();
 }
