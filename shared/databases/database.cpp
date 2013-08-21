@@ -1,7 +1,7 @@
 #include "database.h"
 #include "configuration/configmgr.h"
 
-Database* Database::m_instance = 0;
+template<> Database*  Singleton<Database>::m_instance = 0;
 
 Database::Database()
 {

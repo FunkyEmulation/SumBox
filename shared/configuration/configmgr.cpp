@@ -1,7 +1,7 @@
 #include "configmgr.h"
 #include "logs/log.h"
 
-ConfigMgr* ConfigMgr::m_instance = 0;
+template<> ConfigMgr*  Singleton<ConfigMgr>::m_instance = 0;
 
 ConfigMgr::ConfigMgr()
 {

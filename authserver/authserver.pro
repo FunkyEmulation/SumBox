@@ -65,4 +65,5 @@ HEADERS += \
     ../worldserver/game/world/ObjectFactory.h \
     ../worldserver/game/world/objects/Account.h \
     ../worldserver/game/world/objects/Character.h \
-    ../worldserver/game/world/world.h
+    ../worldserver/game/world/world.h \
+    ../shared/utils/singleton.h

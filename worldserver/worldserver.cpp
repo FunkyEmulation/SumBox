@@ -1,7 +1,7 @@
 #include "worldserver.h"
 #include "game/world/world.h"
 
-WorldServer* WorldServer::m_instance = 0;
+template<> WorldServer*  Singleton<WorldServer>::m_instance = 0;
 
 WorldServer::WorldServer()
 {
@@ -24,7 +24,7 @@ bool WorldServer::Start(QHostAddress address, quint16 port)
 
 void WorldServer::Stop()
 {
-    Log::Close();
+    Log::Delete();
     m_server->close();
 }
 

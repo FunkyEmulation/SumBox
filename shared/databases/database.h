@@ -5,29 +5,13 @@
 #include "authdatabase.h"
 #include "chardatabase.h"
 #include "worlddatabase.h"
+#include "utils/singleton.h"
 
-class Database
+class Database : public Singleton<Database>
 {
 public:
-    static Database* Instance()
-    {
-        static QMutex mutex;
-        if(!m_instance)
-        {
-            mutex.lock();
-            m_instance = new Database;
-            mutex.unlock();
-        }
-        return m_instance;
-    }
-
-    static void Drop()
-    {
-        static QMutex mutex;
-        mutex.lock();
-        delete m_instance;
-        mutex.unlock();
-    }
+    Database();
+    ~Database();
 
     static AuthDatabase* Auth()
     {
@@ -49,9 +33,6 @@ public:
     bool OpenWorldDatabase();
 
 private:
-    Database();
-    ~Database();
-
     AuthDatabase* GetAuthDatabase()
     {
         return m_authDatabase;
@@ -66,8 +47,6 @@ private:
     {
         return m_worldDatabase;
     }
-
-    static Database* m_instance;
 
     AuthDatabase* m_authDatabase;
     CharDatabase* m_charDatabase;
