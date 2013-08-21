@@ -3,29 +3,13 @@
 
 #include <QtCore>
 #include "configuration.h"
+#include "utils/singleton.h"
 
-class ConfigMgr
+class ConfigMgr : public Singleton<ConfigMgr>
 {
 public:
-    static ConfigMgr* Instance()
-    {
-        static QMutex mutex;
-        if(!m_instance)
-        {
-            mutex.lock();
-            m_instance = new ConfigMgr;
-            mutex.unlock();
-        }
-        return m_instance;
-    }
-
-    static void Close()
-    {
-        static QMutex mutex;
-        mutex.lock();
-        delete m_instance;
-        mutex.unlock();
-    }
+    ConfigMgr();
+    ~ConfigMgr();
 
     Configuration* GetAuthConfig() { Q_ASSERT(m_auth); return m_auth; }
     Configuration* GetWorldConfig() { Q_ASSERT(m_world); return m_world; }
@@ -37,11 +21,6 @@ public:
     bool LoadWorldConfig(QString fileName);
 
 private:
-    ConfigMgr();
-    ~ConfigMgr();
-
-    static ConfigMgr* m_instance;
-
     Configuration* m_auth;
     Configuration* m_world;
 };

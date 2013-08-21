@@ -7,35 +7,19 @@
 #include "logs/log.h"
 #include "configuration/configmgr.h"
 #include "authsocket.h"
+#include "utils/singleton.h"
 
 class AuthSocket;
 
 typedef QList<AuthSocket*> AuthClientList;
 
-class AuthQueue : public QObject
+class AuthQueue : public Singleton<AuthQueue>
 {
     Q_OBJECT
 
 public:
-    static AuthQueue* Instance()
-    {
-        static QMutex mutex;
-        if(m_instance == 0)
-        {
-            mutex.lock();
-            m_instance = new AuthQueue;
-            mutex.unlock();
-        }
-        return m_instance;
-    }
-
-    static void Drop()
-    {
-        static QMutex mutex;
-        mutex.lock();
-        delete m_instance;
-        mutex.unlock();
-    }
+    AuthQueue();
+    ~AuthQueue();
 
     void Start();
     void Stop();
@@ -49,11 +33,6 @@ public slots:
     void RefreshQueue();
 
 private:
-    AuthQueue();
-    ~AuthQueue();
-
-    static AuthQueue* m_instance;    
-
     AuthClientList m_clients;
     QTimer* m_timer;
 };

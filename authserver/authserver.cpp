@@ -1,6 +1,6 @@
 #include "authserver.h"
 
-AuthServer*  AuthServer::m_instance = 0;
+template<> AuthServer*  Singleton<AuthServer>::m_instance = 0;
 
 AuthServer::AuthServer()
 {
@@ -24,7 +24,7 @@ bool AuthServer::Start(QHostAddress address, quint16 port)
 
 void AuthServer::Stop()
 {
-    Log::Close();
+    Log::Delete();
     m_server->close();
 }
 

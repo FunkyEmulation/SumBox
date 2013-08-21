@@ -18,6 +18,7 @@ void stop(int /*s*/)
 {
     Log::Write(LOG_TYPE_NORMAL, "Stopping SumBox::Authserver...");
     AuthServer::Instance()->Stop();
+    AuthServer::Instance()->Delete();
     QCoreApplication::exit();
 }
 

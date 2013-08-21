@@ -5,6 +5,7 @@
 #include <iostream>
 #include "log.h"
 #include "configuration/configmgr.h"
+#include "utils/singleton.h"
 
 using namespace std;
 
@@ -15,28 +16,11 @@ enum LogType
     LOG_TYPE_DEBUG  = 2
 };
 
-class Log : QObject
+class Log : public Singleton<Log>
 {
 public:
-    static Log* Instance()
-    {
-        static QMutex mutex;
-        if(!m_instance)
-        {
-            mutex.lock();
-            m_instance = new Log;
-            mutex.unlock();
-        }
-        return m_instance;
-    }
-
-    static void Close()
-    {
-        static QMutex mutex;
-        mutex.lock();
-        delete m_instance;
-        mutex.unlock();
-    }
+    Log();
+    ~Log();
 
     static QString GetLogTypeString(LogType logType)
     {
@@ -58,11 +42,6 @@ public:
     static void Write(LogType logType, QString message, ...);
 
 private:
-    Log();
-    ~Log();
-
-    static Log* m_instance;
-
     LogType m_logTypeConsole;
     LogType m_logTypeFile;
     QFile* m_file;

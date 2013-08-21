@@ -1,6 +1,6 @@
 #include "authqueue.h"
 
-AuthQueue*  AuthQueue::m_instance = 0;
+template<> AuthQueue*  Singleton<AuthQueue>::m_instance = 0;
 
 AuthQueue::AuthQueue()
 {
