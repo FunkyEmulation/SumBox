@@ -1,4 +1,5 @@
 #include "SocketReader.h"
+#include "logs/log.h"
 
 SocketReader::SocketReader(QTcpSocket *socket)
 {
@@ -24,4 +25,18 @@ void SocketReader::OnRead()
             m_packet = "";
         }
     }
+}
+
+void SocketReader::OnClose()
+{
+    Log::Write(LOG_TYPE_NORMAL, "Closing connection with %s", m_socket->peerAddress().toString().toLatin1().data());
+    m_socket->deleteLater();
+}
+
+void SocketReader::SendPacket(WorldPacket data)
+{
+    m_socket->write(data.GetPacket() + (char)0x00);
+    Log::Write(LOG_TYPE_DEBUG, "Send packet %s ( Header : %s )", GetOpcodeName(data.GetOpcode()).toLatin1().data(), GetOpcodeHeader(data.GetOpcode()).toLatin1().data());
+    if(data.GetPacket().length() > 0)
+        Log::Write(LOG_TYPE_DEBUG, "Packet data : %s", QString(data.GetPacket()).toLatin1().data());
 }

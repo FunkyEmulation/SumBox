@@ -4,27 +4,20 @@
 #include <QtCore>
 #include <QObject>
 #include <QtNetwork>
-#include "packets/worldpacket.h"
 #include "databases/database.h"
 #include "queues/worldqueue.h"
 #include "define.h"
 #include "servers/SocketReader.h"
 #include "game/world/ObjectFactory.h"
 
-class WorldPacket;
-
-class WorldSession : private SocketReader
+class WorldSession : public SocketReader
 {
     Q_OBJECT
 public:
     WorldSession(QTcpSocket* socket);
     ~WorldSession();
 
-    QString GetIp() const
-    {
-        return m_socket->peerAddress().toString();
-    }
-    void SendPacket(WorldPacket packet);
+    virtual void ProcessPacket(QString packet);
 
     // Default handlers
     void HandleNULL(QString& /*packet*/) {}
@@ -54,8 +47,6 @@ private:
     Account* m_account;
     ClientState m_state;
     QString m_ticket; // Avant connection
-
-    virtual void ProcessPacket(QString packet);
 };
 
 #endif // WORLDSESSION_H

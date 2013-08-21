@@ -1,4 +1,5 @@
 #include "worldpacket.h"
+#include "opcodes/opcodes.h"
 
 WorldPacket::WorldPacket(quint8 opcode) : WorldBuffer(&m_packet, QIODevice::WriteOnly)
 {

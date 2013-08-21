@@ -1,4 +1,7 @@
 #include "worldserver.h"
+#include "game/world/world.h"
+
+WorldServer* WorldServer::m_instance = 0;
 
 WorldServer::WorldServer()
 {
@@ -28,6 +31,6 @@ void WorldServer::Stop()
 void WorldServer::OnConnect()
 {
     QTcpSocket* socket = m_server->nextPendingConnection();
-    WorldSession* newSockObject = new WorldSession(socket);
-    m_sessions.push_back(newSockObject);
+    WorldSession* session = new WorldSession(socket);
+    World::Instance()->AddSession(session);
 }

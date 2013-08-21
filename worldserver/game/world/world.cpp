@@ -4,25 +4,20 @@ World* World::m_instance = 0;
 
 World::World()
 {
-    StartServer();
     m_is_running = true;
 }
 
 World::~World()
 {
-    m_worldServer.Stop();
     m_is_running = false;
 }
 
-bool World::StartServer()
+void World::AddSession(WorldSession *session)
 {
-    if(!m_worldServer.Start(QHostAddress::LocalHost, quint16(ConfigMgr::World()->GetInt("WorldServerPort"))))
-    {
-        Log::Write(LOG_TYPE_NORMAL, m_worldServer.GetErrorString().toLatin1().data());
-        return false;
-    }
-    else
-       Log::Write(LOG_TYPE_NORMAL, "Worldserver started on port %i : waiting for connections", ConfigMgr::World()->GetInt("WorldServerPort"));
+    m_sessions.push_back(session);
+}
 
-    return true;
+void World::RemoveSession(WorldSession* session)
+{
+    m_sessions.removeOne(session);
 }
