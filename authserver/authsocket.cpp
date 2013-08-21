@@ -277,6 +277,7 @@ void AuthSocket::SelectServer(uint id)
     infos += req.value(req.record().indexOf("port")).toString() + ";";
     infos += key;
 
+    qDebug() << key;
     Database::Auth()->PQuery(AUTH_UPDATE_ACCOUNT_SESSION_KEY, key.toLatin1().data(), m_infos["account_id"].toUInt());
 
     WorldPacket packet(SMSG_SERVER_INFOS);

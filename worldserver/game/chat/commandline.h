@@ -58,7 +58,7 @@ public:
             }
             else if (feof(stdin))
             {
-                World::Close();
+                World::Delete();
             }
         }
     }

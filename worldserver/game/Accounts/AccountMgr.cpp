@@ -1,9 +1,16 @@
-#include "ObjectFactory.h"
-#include "configuration/configmgr.h"
+#include "AccountMgr.h"
 
-template<> ObjectFactory*  Singleton<ObjectFactory>::m_instance = 0;
+template<> AccountMgr*  Singleton<AccountMgr>::m_instance = 0;
 
 /*
+Account* ObjectFactory::GetAccount(int id)
+{
+    if(m_accounts.contains(id))
+        return m_accounts.value(id);
+    else
+        return NULL;
+}
+
 Character* ObjectFactory::GetCharacter(int id)
 {
     if(m_characters.contains(id))

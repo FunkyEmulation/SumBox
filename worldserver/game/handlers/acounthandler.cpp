@@ -2,10 +2,12 @@
 
 void WorldSession::HandleTicketResponse(QString& packet)
 {
-    QString ticket = packet.mid(2);
-    m_account = ObjectFactory::Instance()->LoadAccount(ticket);
+    QString session_key = packet.mid(2);
+    QSqlQuery result = Database::Auth()->PQuery(AUTH_SELECT_ACCOUNT_SESSION_KEY, session_key.toLatin1().data());
 
-    if (m_account != NULL)
+    SetAccountInfos(result);
+
+    if (GetAccountInfos().id != 0)
     {
         WorldPacket TicketAccepted(SMSG_TICKET_ACCEPTED);
         SendPacket(TicketAccepted);

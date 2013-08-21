@@ -10,12 +10,33 @@
 #include "servers/SocketReader.h"
 #include "game/world/ObjectFactory.h"
 
+struct sAccountInfos
+{
+    quint32 id;
+	QString username;
+	QString pseudo;
+    quint8 gmLevel;
+	QString secretQuestion;
+	QString secretAnswer;
+    qint64 subscriptionTime;
+};
+
+typedef QList<qint32> CharactersList;
+
 class WorldSession : public SocketReader
 {
     Q_OBJECT
 public:
     WorldSession(QTcpSocket* socket);
     ~WorldSession();
+
+    void SetAccountInfos(QSqlQuery req);
+    sAccountInfos GetAccountInfos() { return m_accountInfos; }
+
+    bool InCharsList(qint32 guid)
+    {
+        return m_charsList.contains(guid);
+    }
 
     virtual void ProcessPacket(QString packet);
 
@@ -44,9 +65,13 @@ public slots:
     void OnClose();
 
 private:
-    Account* m_account;
     ClientState m_state;
     QString m_ticket; // Avant connection
+
+	// Account infos
+	sAccountInfos m_accountInfos;
+    CharactersList m_charsList;
+	
 };
 
 #endif // WORLDSESSION_H

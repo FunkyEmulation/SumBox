@@ -5,33 +5,17 @@
 #include "worldserver.h"
 #include "logs/log.h"
 #include "configuration/configmgr.h"
+#include "utils/singleton.h"
 
 class WorldSession;
 
 typedef QList<WorldSession*> SessionList;
 
-class World
+class World : public Singleton<World>
 {
 public:
-    static World* Instance()
-    {
-        static QMutex mutex;
-        if(!m_instance)
-        {
-            mutex.lock();
-            m_instance = new World;
-            mutex.unlock();
-        }
-        return m_instance;
-    }
-
-    static void Close()
-    {
-        static QMutex mutex;
-        mutex.lock();
-        delete m_instance;
-        mutex.unlock();
-    }
+    World();
+    ~World();
 
     bool IsRunning() { return m_is_running; }
 
@@ -39,11 +23,6 @@ public:
     void RemoveSession(WorldSession* session);
 
 private:
-    World();
-    ~World();
-
-    static World* m_instance;
-
     bool m_is_running;
     SessionList m_sessions;
 };

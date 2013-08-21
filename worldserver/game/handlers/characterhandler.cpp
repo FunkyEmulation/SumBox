@@ -14,10 +14,42 @@ void WorldSession::HandleSendCharacterList(QString& /*packet*/)
 
 void WorldSession::SendCharacterList()
 {
-    Log::Write(LOG_TYPE_DEBUG, "Send Character list");
-    WorldPacket CharsList(SMSG_CHARACTER_LIST);
-    CharsList << QString::number(m_account->GetSubscriptionTime()) << m_account->GetCharsString();
-    SendPacket(CharsList);
+    // Définir une nomanclature pour les logs.
+    Log::Write(LOG_TYPE_DEBUG, "SMSG_CHARACTER_LIST");
+
+    QSqlQuery queryResult = Database::Char()->PQuery(SELECT_ACCOUNT_CHARACTERS, GetAccountInfos().id);
+    QSqlRecord rows = queryResult.record();
+
+    WorldPacket data(SMSG_CHARACTER_LIST);
+    data << GetAccountInfos().subscriptionTime;
+    data << "|" << queryResult.size();
+
+    while(queryResult.next())
+    {
+        qint32 guid = queryResult.value(rows.indexOf("guid")).toInt();
+
+        data << "|";
+        data << guid << ";";
+        data << queryResult.value(rows.indexOf("name")).toString() << ";";
+        data << queryResult.value(rows.indexOf("level")).toInt() << ";";
+        data << queryResult.value(rows.indexOf("gfx_id")).toInt() << ";";
+        data << queryResult.value(rows.indexOf("color_1")).toInt() << ";";
+        data << queryResult.value(rows.indexOf("color_2")).toInt() << ";";
+        data << queryResult.value(rows.indexOf("color_3")).toInt() << ";";
+
+        data << ";"; // Accessories
+        data << "0;"; // Merchant ?
+        data << ConfigMgr::World()->GetUInt("ServerId") << ";";
+        data << "0;"; // IsDead ?
+        data << ";"; // DeathCount
+        data << 200; // LevelMax
+
+        // Rien pour la classe ?
+
+        m_charsList.push_back(guid);
+    }
+
+    SendPacket(data);
 }
 
 void WorldSession::HandleRandomPseudo(QString& /*packet*/)
@@ -34,16 +66,17 @@ void WorldSession::HandleRandomPseudo(QString& /*packet*/)
     prefixes << "fin" << "me" << "rami" << "ne" << "le" << "fe" << "or" << "pen" << "que" << "rod";
     prefixes << "cele" << "ar" << "sae" << "eg" << "ii" << "tu" << "ri" << "ta" << "ur" << "val" << "ol";
 
-    pseudo += prefixes[rand() % prefixes.length()]; // préfixe aléatoire
+    // préfixe aléatoire
+    pseudo += prefixes[rand() % prefixes.length()];
+
     while(pseudo.length() < max)
     {
-        if(voyelles.contains(pseudo[pseudo.length() - 1])) // Derniere lettre = voyelle ?
-        {
+        // Derniere lettre = voyelle ?
+        if(voyelles.contains(pseudo[pseudo.length() - 1]))
             pseudo += consonnes[rand()%consonnes.length()];
-        } else // derniere lettre = consonne
-        {
+        // derniere lettre = consonne
+        else
             pseudo += voyelles[rand()%voyelles.length()];
-        }
     }
 
     pseudo.prepend("|");
@@ -63,19 +96,22 @@ void WorldSession::HandleCreatePerso(QString& packet)
 
     WorldPacket error(SMSG_CREATE_CHAR_ERROR);
     QSqlQuery req = Database::Char()->PQuery(CHECK_CHAR_EXISTS, pseudo.toLatin1().data());
+
     if(req.next() && req.value(req.record().indexOf("count")).toInt() >= 1)
     {
         error << "a";
         SendPacket(error);
         return;
     }
+
     if(!IsValidName(pseudo))
     {
         error << "n";
         SendPacket(error);
         return;
     }
-    if(m_account->GetCharacters()->count() >= 5)
+
+    if(m_charsList.count() > 4)
     {
         error << "f";
         SendPacket(error);
@@ -84,18 +120,16 @@ void WorldSession::HandleCreatePerso(QString& packet)
 
     // TODO: Checker la validité de la race
     int gfxId = (datas[1] + datas[2]).toInt();
-    Character* newCharacter = ObjectFactory::Instance()->CreateCharacter(m_account->GetId(), pseudo, datas[1].toInt(), datas[2].toInt(), gfxId, datas.at(3).toLatin1().data(), datas.at(4).toLatin1().data(), datas.at(5).toLatin1().data());
+    Character* newCharacter = NULL; //ObjectFactory::Instance()->CreateCharacter(m_account->GetId(), pseudo, datas[1].toInt(), datas[2].toInt(), gfxId, datas.at(3).toLatin1().data(), datas.at(4).toLatin1().data(), datas.at(5).toLatin1().data());
+
     if(newCharacter != NULL)
     {
-        WorldPacket success(SMSG_CREATE_CHAR_OK);
-        SendPacket(success);
+        WorldPacket data(SMSG_CREATE_CHAR_OK);
+        SendPacket(data);
         SendCharacterList();
     }
     else
-    {
         SendPacket(error);
-        return;
-    }
 }
 
 void WorldSession::HandleDeleteChar(QString &packet)
@@ -104,21 +138,22 @@ void WorldSession::HandleDeleteChar(QString &packet)
     if(datas.isEmpty())
         return; // Ne devrait pas arriver
 
-    int charId = datas.at(0).toInt();
-    Character* target;
-    if((target = ObjectFactory::Instance()->GetCharacter(charId)) != NULL && target->GetAccount() == m_account)
+    qint32 guid = datas.at(0).toInt();
+
+    if(InCharsList(guid))
     {
-        if(target->GetLvl() < 20 || (target->GetLvl() >= 20 && datas.count() >= 2 && datas.at(1) == m_account->GetAnswer()))
-        {
-            Database::Char()->PQuery(DELETE_CHAR, charId);
-            m_account->GetCharacters()->removeOne(target);
-            Database::Auth()->PQuery(AUTH_UPDATE_ACCOUNT_CHARS, m_account->GetId(), ConfigMgr::Instance()->World()->GetInt("ServerId"), m_account->GetCharacters()->count());
+        //if(target->GetLvl() < 20 || (target->GetLvl() >= 20 && datas.count() >= 2 && datas.at(1) == m_account->GetAnswer()))
+        //{
+            Database::Char()->PQuery(DELETE_CHAR, guid);
+            Database::Auth()->PQuery(AUTH_UPDATE_ACCOUNT_CHARS, GetAccountInfos().id, ConfigMgr::Instance()->World()->GetInt("ServerId"), (m_charsList.count() - 1));
+
             SendCharacterList();
             return;
-        }
+        //}
     }
 
-    SendPacket(WorldPacket(SMSG_DELETE_CHAR_ERROR));
+    WorldPacket data(SMSG_DELETE_CHAR_ERROR);
+    SendPacket(data);
 }
 
 void WorldSession::HandleSelectChar(QString &packet)
