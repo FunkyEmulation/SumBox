@@ -1,7 +1,7 @@
 #include "worldqueue.h"
 #include "game/server/worldsession.h"
 
-WorldQueue*  WorldQueue::m_instance = 0;
+template<> WorldQueue*  Singleton<WorldQueue>::m_instance = 0;
 
 WorldQueue::WorldQueue()
 {

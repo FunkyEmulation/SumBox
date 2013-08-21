@@ -6,30 +6,14 @@
 #include <QtNetwork>
 #include "logs/log.h"
 #include "game/server/worldsession.h"
+#include "utils/singleton.h"
 
-class WorldServer : QObject
+class WorldServer : public Singleton<WorldServer>
 {
     Q_OBJECT
 public:
-    static WorldServer* Instance()
-    {
-        static QMutex mutex;
-        if(m_instance == 0)
-        {
-            mutex.lock();
-            m_instance = new WorldServer;
-            mutex.unlock();
-        }
-        return m_instance;
-    }
-
-    static void Drop()
-    {
-        static QMutex mutex;
-        mutex.lock();
-        delete m_instance;
-        mutex.unlock();
-    }
+    WorldServer();
+    ~WorldServer();
 
     QString GetErrorString() { return m_server->errorString(); }
     bool Start(QHostAddress address, quint16 port);
@@ -39,11 +23,6 @@ private slots:
     void OnConnect();
 
 private:
-    WorldServer();
-    ~WorldServer();
-
-    static WorldServer* m_instance;
-
     QTcpServer* m_server;
 };
 

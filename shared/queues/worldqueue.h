@@ -6,35 +6,19 @@
 #include <QtNetwork>
 #include "logs/log.h"
 #include "configuration/configmgr.h"
+#include "utils/singleton.h"
 
 class WorldSession;
 
 typedef QList<WorldSession*> WorldClientList;
 
-class WorldQueue : public QObject
+class WorldQueue : public Singleton<WorldQueue>
 {
     Q_OBJECT
 
 public:
-    static WorldQueue* Instance()
-    {
-        static QMutex mutex;
-        if(m_instance == 0)
-        {
-            mutex.lock();
-            m_instance = new WorldQueue;
-            mutex.unlock();
-        }
-        return m_instance;
-    }
-
-    static void Drop()
-    {
-        static QMutex mutex;
-        mutex.lock();
-        delete m_instance;
-        mutex.unlock();
-    }
+    WorldQueue();
+    ~WorldQueue();
 
     void Start();
     void Stop();
@@ -48,11 +32,6 @@ public slots:
     void RefreshQueue();
 
 private:
-    WorldQueue();
-    ~WorldQueue();
-
-    static WorldQueue* m_instance;
-
     WorldClientList m_clients;
     QTimer* m_timer;
 };

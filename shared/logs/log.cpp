@@ -1,6 +1,6 @@
 #include "log.h"
 
-Log* Log::m_instance = 0;
+template<> Log*  Singleton<Log>::m_instance = 0;
 
 Log::Log()
 {
