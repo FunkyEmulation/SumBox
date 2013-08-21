@@ -1,4 +1,5 @@
 #include "opcodes.h"
+#include "game/server/worldsession.h"
 
 OpcodeStruct opcodeTable[NUM_MSG_TYPES] =
 {

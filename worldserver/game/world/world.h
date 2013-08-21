@@ -6,6 +6,8 @@
 #include "logs/log.h"
 #include "configuration/configmgr.h"
 
+class WorldSession;
+
 typedef QList<WorldSession*> SessionList;
 
 class World

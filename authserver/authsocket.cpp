@@ -22,17 +22,8 @@ void AuthSocket::OnClose()
     if(!m_infos.isEmpty())
         Database::Auth()->PQuery(AUTH_UPDATE_ACCOUNT_STATE, 0, m_infos["account_id"].toInt());
 
-    Log::Write(LOG_TYPE_NORMAL, "Closing connection with %s", m_socket->peerAddress().toString().toLatin1().data());
     AuthServer::Instance()->RemoveSocket(this);
-    m_socket->deleteLater();
-}
-
-void AuthSocket::SendPacket(WorldPacket data)
-{
-    m_socket->write(data.GetPacket() + (char)0x00);
-    Log::Write(LOG_TYPE_DEBUG, "Send packet %s ( Header : %s )", GetOpcodeName(data.GetOpcode()).toLatin1().data(), GetOpcodeHeader(data.GetOpcode()).toLatin1().data());
-    if(data.GetPacket().length() > 0)
-        Log::Write(LOG_TYPE_DEBUG, "Packet data : %s", QString(data.GetPacket()).toLatin1().data());
+    SocketReader::OnClose();
 }
 
 void AuthSocket::ProcessPacket(QString packet)
