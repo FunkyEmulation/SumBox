@@ -50,7 +50,6 @@ void WorldSession::SendCharacterList()
         m_charsList.push_back(guid);
     }
 
-    qDebug() << data.GetPacket().data();
     SendPacket(data);
 }
 
