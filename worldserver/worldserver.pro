@@ -87,7 +87,6 @@ HEADERS += \
     ../shared/logs/log.h \
     ../shared/opcodes/opcodes.h \
     ../shared/packets/worldpacket.h \
-    ../shared/packets/worldbuffer.h \
     ../shared/utils/util.h \
     ../shared/databases/worlddatabase.h \
     ../shared/databases/chardatabase.h \

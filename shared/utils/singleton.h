@@ -30,7 +30,7 @@ public:
 
 protected:
     Singleton() {}
-    ~Singleton() {}
+    virtual ~Singleton() {}
 
 private:
     static T* m_instance;

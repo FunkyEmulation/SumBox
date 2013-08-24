@@ -48,7 +48,6 @@ HEADERS += \
     ../shared/utils/util.h \
     ../shared/opcodes/opcodes.h \
     ../shared/packets/worldpacket.h \
-    ../shared/packets/worldbuffer.h \
     ../worldserver/game/server/worldsession.h \
     ../shared/databases/mysqlconnection.h \
     ../shared/databases/authdatabase.h \
