@@ -87,7 +87,7 @@ void WorldSession::HandleRandomPseudo(QString& /*packet*/)
     SendPacket(randomPseudo);
 }
 
-void WorldSession::HandleCreatePerso(QString& packet)
+void WorldSession::HandleCreateCharacter(QString& packet)
 {
     QStringList datas = packet.mid(2).split("|");
     if(datas.size() < 6)
@@ -123,11 +123,13 @@ void WorldSession::HandleCreatePerso(QString& packet)
     quint16 gfxId = datas[1].toUInt() + datas[2].toUInt();
 
     sCharacterCreateInfos charCreateInfos(pseudo, toByte(datas[1]), toByte(datas[2]), gfxId, datas.at(3).toUInt(), datas.at(4).toUInt(), datas.at(5).toUInt());
-    Character* newCharacter = new Character(this);
+    Character* newChar = new Character(this);
 
     quint32 guid = 0; // TODO : Generate GUID
-    if(newCharacter->Create(guid, charCreateInfos))
+    if(newChar->Create(guid, charCreateInfos))
     {
+        newChar->SaveToDB(true);
+
         WorldPacket data(SMSG_CREATE_CHAR_OK);
         SendPacket(data);
         SendCharacterList();
@@ -135,10 +137,10 @@ void WorldSession::HandleCreatePerso(QString& packet)
     else
         SendPacket(error);
 
-    delete newCharacter;
+    delete newChar;
 }
 
-void WorldSession::HandleDeleteChar(QString &packet)
+void WorldSession::HandleDeleteCharacter(QString &packet)
 {
     QStringList datas = packet.mid(2).split("|");
     if(datas.isEmpty())
