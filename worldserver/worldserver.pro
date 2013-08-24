@@ -68,12 +68,12 @@ SOURCES += main.cpp \
     ../shared/queues/worldqueue.cpp \
     game/handlers/characterhandler.cpp \
     game/handlers/acounthandler.cpp \
-    ../shared/servers/SocketReader.cpp \
-    game/world/objects/Account.cpp \
-    game/world/ObjectFactory.cpp \
-    game/world/objects/Character.cpp \
     ../shared/utils/util.cpp \
-    game/handlers/QueueHandler.cpp
+    game/handlers/QueueHandler.cpp \
+    game/Accounts/AccountMgr.cpp \
+    game/Entities/Character/Character.cpp \
+    ../shared/servers/SocketHandler.cpp \
+    game/Entities/ObjectMgr.cpp
 
 HEADERS += \
     worldserver.h \
@@ -121,9 +121,10 @@ HEADERS += \
     game/scripting/lua/lapi.h \
     game/world/world.h \
     ../shared/queues/worldqueue.h \
-    ../shared/servers/SocketReader.h \
-    game/world/objects/Account.h \
     game/world/objects/Character.h \
-    game/world/ObjectFactory.h \
-    game/world/objects/Being.h \
-    game/world/objects/LivingBeing.h
+    game/Accounts/AccountMgr.h \
+    game/Entities/Character/Character.h \
+    ../shared/servers/SocketHandler.h \
+    game/Entities/Object/Object.h \
+    game/Entities/Unit/Unit.h \
+    game/Entities/ObjectMgr.h

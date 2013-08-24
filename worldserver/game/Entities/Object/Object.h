@@ -1,14 +1,13 @@
-#ifndef BEING_H
-#define BEING_H
+#ifndef OBJECT_H
+#define OBJECT_H
 
 #include <QtCore>
 
 /*
- * Entité ayant un id, un nom, une apparence
- * Héritée par LivingBeing
+ * Entité objet ayant un id, un nom, une apparence
  */
 
-class Being
+class Object
 {
 public:
     // Getters
@@ -33,4 +32,4 @@ protected:
 
 };
 
-#endif // BEING_H
+#endif // OBJECT_H

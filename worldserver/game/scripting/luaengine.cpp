@@ -1,6 +1,6 @@
 #include "luaengine.h"
 
-LuaEngine* LuaEngine::m_instance = 0;
+template<> LuaEngine*  Singleton<LuaEngine>::m_instance = 0;
 
 LuaEngine::LuaEngine()
 {
