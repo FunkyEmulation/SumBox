@@ -50,6 +50,7 @@ void WorldSession::SendCharacterList()
         m_charsList.push_back(guid);
     }
 
+    qDebug() << data.GetPacket().data();
     SendPacket(data);
 }
 
@@ -120,10 +121,13 @@ void WorldSession::HandleCreatePerso(QString& packet)
     }
 
     // TODO: Checker la validité de la race
-    int gfxId = (datas[1] + datas[2]).toInt();
-    Character* newCharacter = new Character();
+    quint16 gfxId = datas[1].toUInt() + datas[2].toUInt();
 
-    if(newCharacter->Create(/*m_account->GetId(), pseudo, datas[1].toInt(), datas[2].toInt(), gfxId, datas.at(3).toLatin1().data(), datas.at(4).toLatin1().data(), datas.at(5).toLatin1().data()*/))
+    sCharacterCreateInfos charCreateInfos(pseudo, toByte(datas[1]), toByte(datas[2]), gfxId, datas.at(3).toUInt(), datas.at(4).toUInt(), datas.at(5).toUInt());
+    Character* newCharacter = new Character(this);
+
+    quint32 guid = 0; // TODO : Generate GUID
+    if(newCharacter->Create(guid, charCreateInfos))
     {
         WorldPacket data(SMSG_CREATE_CHAR_OK);
         SendPacket(data);
@@ -131,13 +135,15 @@ void WorldSession::HandleCreatePerso(QString& packet)
     }
     else
         SendPacket(error);
+
+    delete newCharacter;
 }
 
 void WorldSession::HandleDeleteChar(QString &packet)
 {
     QStringList datas = packet.mid(2).split("|");
     if(datas.isEmpty())
-        return; // Ne devrait pas arriver
+        return;
 
     qint32 guid = datas.at(0).toInt();
 

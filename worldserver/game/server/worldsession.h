@@ -32,10 +32,8 @@ public:
     void SetAccountInfos(QSqlQuery req);
     sAccountInfos GetAccountInfos() { return m_accountInfos; }
 
-    bool InCharsList(qint32 guid)
-    {
-        return m_charsList.contains(guid);
-    }
+    bool InCharsList(qint32 guid) { return m_charsList.contains(guid); }
+    quint32 GetCharsCount() { return m_charsList.count(); }
 
     virtual void ProcessPacket(QString packet);
 

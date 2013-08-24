@@ -51,3 +51,12 @@ QString CryptPassword(QString password, QString hashKey)
     return crypted;
 }
 
+char* toChar(QString string)
+{
+    return string.toLatin1().data();
+}
+
+char toByte(QString string)
+{
+    return string.toLatin1().at(0);
+}

@@ -18,4 +18,7 @@ QString GenerateRandomString(quint8 length);
  */
 QString CryptPassword(QString password, QString hashKey);
 
+char* toChar(QString string);
+char toByte(QString string);
+
 #endif

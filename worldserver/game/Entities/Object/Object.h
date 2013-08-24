@@ -10,8 +10,9 @@
 class Object
 {
 public:
-    // Getters
-    int GetId() const { return m_id; }
+    void SetGUID(quint32 guid) { m_guid = guid; }
+    quint32 GetGUID() const { return m_guid; }
+
     QString GetName() const { return m_name; }
     int GetGender() const { return m_gender; }
     int GetGfxId() const { return m_gfxId; }
@@ -21,7 +22,7 @@ public:
     int GetSize() const { return m_size; }
 
 protected:
-    int m_id;
+    quint32 m_guid;
     QString m_name;
     int m_gender;
     int m_gfxId;
