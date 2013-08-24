@@ -1,6 +1,6 @@
 #include "world.h"
 
-World* World::m_instance = 0;
+template<> World*  Singleton<World>::m_instance = 0;
 
 World::World()
 {

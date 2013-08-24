@@ -3,6 +3,7 @@
 
 #include <QtCore>
 #include "logs/log.h"
+#include "utils/singleton.h"
 
 extern "C"
 {
@@ -13,39 +14,17 @@ extern "C"
 
 typedef QList<QString> LuaScriptsList;
 
-class LuaEngine
+class LuaEngine : public Singleton<LuaEngine>
 {
 public:
-    static LuaEngine* Instance()
-    {
-        static QMutex mutex;
-        if(!m_instance)
-        {
-            mutex.lock();
-            m_instance = new LuaEngine;
-            mutex.unlock();
-        }
-        return m_instance;
-    }
-
-    static void Close()
-    {
-        static QMutex mutex;
-        mutex.lock();
-        delete m_instance;
-        mutex.unlock();
-    }
+    LuaEngine();
+    ~LuaEngine();
 
     void StartEngine();
     void LoadLuaScripts();
     void ReportState(lua_State* L);
 
 private:
-    LuaEngine();
-    ~LuaEngine();
-
-    static LuaEngine* m_instance;
-
     lua_State* m_luaState;
     LuaScriptsList m_luaScripts;
 };

@@ -19,6 +19,8 @@ public:
         m_buffer->seek(off);
     }
 
+    // Faire un template
+
     WorldBuffer &operator<<(quint8 value)
     {
         m_buffer->write((char*)&value, sizeof(quint8));
@@ -37,9 +39,33 @@ public:
         return *this;
     }
 
-    WorldBuffer &operator<<(int value)
+    WorldBuffer &operator<<(quint64 value)
     {
-        m_buffer->write((char*)&value, sizeof(int));
+        m_buffer->write((char*)&value, sizeof(quint64));
+        return *this;
+    }
+
+    WorldBuffer &operator<<(qint8 value)
+    {
+        m_buffer->write((char*)&value, sizeof(qint8));
+        return *this;
+    }
+
+    WorldBuffer &operator<<(qint16 value)
+    {
+        m_buffer->write((char*)&value, sizeof(qint16));
+        return *this;
+    }
+
+    WorldBuffer &operator<<(qint32 value)
+    {
+        m_buffer->write((char*)&value, sizeof(qint32));
+        return *this;
+    }
+
+    WorldBuffer &operator<<(qint64 value)
+    {
+        m_buffer->write((char*)&value, sizeof(qint64));
         return *this;
     }
 

@@ -4,9 +4,17 @@
 #include "configuration/configmgr.h"
 #include "game/world/world.h"
 
-WorldSession::WorldSession(QTcpSocket *socket) : SocketReader(socket)
+WorldSession::WorldSession(QTcpSocket *socket) : SocketHandler(socket)
 {
     m_state = OnDetails;
+    m_accountInfos.id = 0;
+    m_accountInfos.username = QString();
+    m_accountInfos.pseudo = QString();
+    m_accountInfos.gmLevel = 0;
+    m_accountInfos.secretQuestion = QString();
+    m_accountInfos.secretAnswer = QString();
+    m_accountInfos.subscriptionTime = 0;
+    m_charsList.clear();
 
     connect(m_socket, SIGNAL(disconnected()), this, SLOT(OnClose()));
 
@@ -42,5 +50,24 @@ void WorldSession::ProcessPacket(QString packet)
 void WorldSession::OnClose()
 {
     World::Instance()->RemoveSession(this);
-    SocketReader::OnClose();
+    SocketHandler::OnClose();
+}
+
+void WorldSession::SetAccountInfos(QSqlQuery queryResult)
+{
+    if (queryResult.first())
+    {
+        m_accountInfos.id               = queryResult.value(queryResult.record().indexOf("account_id")).toInt();
+        m_accountInfos.username         = queryResult.value(queryResult.record().indexOf("username")).toString();
+        m_accountInfos.pseudo           = queryResult.value(queryResult.record().indexOf("pseudo")).toString();
+        m_accountInfos.gmLevel          = queryResult.value(queryResult.record().indexOf("gm_level")).toInt();
+        m_accountInfos.secretQuestion   = queryResult.value(queryResult.record().indexOf("secret_question")).toString();
+        m_accountInfos.secretAnswer     = queryResult.value(queryResult.record().indexOf("secret_answer")).toString();
+
+        qint32 subscriptionTime = queryResult.value(queryResult.record().indexOf("subscription")).toLongLong() * 1000;
+
+        if (subscriptionTime > 0)
+            m_accountInfos.subscriptionTime = subscriptionTime;
+    }
+
 }
