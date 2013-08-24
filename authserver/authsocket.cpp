@@ -5,7 +5,7 @@
 #include "logs/log.h"
 #include "configuration/configmgr.h"
 
-AuthSocket::AuthSocket(QTcpSocket *socket) : SocketReader(socket)
+AuthSocket::AuthSocket(QTcpSocket *socket) : SocketHandler(socket)
 {
     m_state = OnCheckingVersion;
 
@@ -23,7 +23,7 @@ void AuthSocket::OnClose()
         Database::Auth()->PQuery(AUTH_UPDATE_ACCOUNT_STATE, 0, m_infos["account_id"].toInt());
 
     AuthServer::Instance()->RemoveSocket(this);
-    SocketReader::OnClose();
+    SocketHandler::OnClose();
 }
 
 void AuthSocket::ProcessPacket(QString packet)
@@ -193,7 +193,7 @@ void AuthSocket::CheckAccount()
         m_infos["subscription_time"] = QVariant(0);
 
     // Mot de passe correct
-    if(cryptPassword(m_infos["hash_password"].toString(), m_hashKey) == hashPass)
+    if(CryptPassword(m_infos["hash_password"].toString(), m_hashKey) == hashPass)
     {
         if(m_infos["banned"] == "1")
         {

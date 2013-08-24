@@ -7,9 +7,9 @@
 #include "define.h"
 #include "databases/database.h"
 #include "queues/authqueue.h"
-#include "servers/SocketReader.h"
+#include "servers/SocketHandler.h"
 
-class AuthSocket : public SocketReader
+class AuthSocket : public SocketHandler
 {
     Q_OBJECT
 

@@ -7,8 +7,7 @@
 #include "databases/database.h"
 #include "queues/worldqueue.h"
 #include "define.h"
-#include "servers/SocketReader.h"
-#include "game/world/ObjectFactory.h"
+#include "servers/SocketHandler.h"
 
 struct sAccountInfos
 {
@@ -23,7 +22,7 @@ struct sAccountInfos
 
 typedef QList<qint32> CharactersList;
 
-class WorldSession : public SocketReader
+class WorldSession : public SocketHandler
 {
     Q_OBJECT
 public:

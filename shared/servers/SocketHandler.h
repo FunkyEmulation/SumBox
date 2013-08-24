@@ -8,11 +8,11 @@
 
 class WorldPacket;
 
-class SocketReader : public QObject
+class SocketHandler : public QObject
 {
     Q_OBJECT
 public:
-    SocketReader(QTcpSocket* socket);
+    SocketHandler(QTcpSocket* socket);
 
     QString GetIp() const
     {
@@ -20,6 +20,7 @@ public:
     }
 
     void SendPacket(WorldPacket data);
+    virtual void ProcessPacket(QString packet) = 0;
 
 public slots:
     void OnRead();
@@ -28,8 +29,6 @@ public slots:
 protected:
     QTcpSocket* m_socket;
     QString m_packet;
-
-    virtual void ProcessPacket(QString packet) = 0;
 };
 
 #endif // SOCKETREADER_H

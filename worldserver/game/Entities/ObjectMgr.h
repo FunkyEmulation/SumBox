@@ -4,15 +4,14 @@
 #include <QtCore>
 #include "databases/database.h"
 #include "utils/singleton.h"
-#include "objects/Character.h"
 
 class Character;
 
-class ObjectFactory : public Singleton<ObjectFactory>
+class ObjectMgr : public Singleton<ObjectMgr>
 {
 public:
-    ObjectFactory();
-    ~ObjectFactory();
+    ObjectMgr();
+    ~ObjectMgr();
 /*
     Character* GetCharacter(int id);
     QList<Character*> LoadAccountCharacters(Account* const acc);

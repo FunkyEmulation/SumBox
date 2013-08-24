@@ -14,12 +14,8 @@ bool IsValidName(QString name);
  */
 QString GenerateRandomString(quint8 length);
 /*
- * Génère un pseudo aléatoire
- */
-QString GenerateRandomPseudo(int minLength,int maxLength);
-/*
  * Crypte un mot de passe servant à la comparaison lors de l'authentification
  */
-QString cryptPassword(QString password, QString hashKey);
+QString CryptPassword(QString password, QString hashKey);
 
 #endif

@@ -4,7 +4,7 @@
 #include "configuration/configmgr.h"
 #include "game/world/world.h"
 
-WorldSession::WorldSession(QTcpSocket *socket) : SocketReader(socket)
+WorldSession::WorldSession(QTcpSocket *socket) : SocketHandler(socket)
 {
     m_state = OnDetails;
     m_accountInfos.id = 0;
@@ -50,7 +50,7 @@ void WorldSession::ProcessPacket(QString packet)
 void WorldSession::OnClose()
 {
     World::Instance()->RemoveSession(this);
-    SocketReader::OnClose();
+    SocketHandler::OnClose();
 }
 
 void WorldSession::SetAccountInfos(QSqlQuery queryResult)

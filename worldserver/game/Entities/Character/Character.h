@@ -7,12 +7,16 @@
 #include "databases/database.h"
 #include "define.h"
 #include "game/server/worldsession.h"
+#include "game/Entities/Unit/Unit.h"
 
-class Character
+class Character : public Unit
 {
 public:
     Character();
     ~Character();
+
+    bool Create();
+    bool LoadFromDB();
 
 private:
     WorldSession* m_session;

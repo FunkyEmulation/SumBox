@@ -32,13 +32,14 @@ SOURCES += main.cpp \
     ../shared/databases/chardatabase.cpp \
     ../shared/queues/worldqueue.cpp \
     ../shared/queues/authqueue.cpp \
-    ../worldserver/game/handlers/characterhandler.cpp \
     ../worldserver/game/handlers/acounthandler.cpp \
-    ../shared/servers/SocketReader.cpp \
     ../shared/utils/util.cpp \
-    ../worldserver/game/world/ObjectFactory.cpp \
     ../worldserver/game/handlers/QueueHandler.cpp \
-    ../worldserver/game/world/world.cpp
+    ../worldserver/game/world/world.cpp \
+    ../shared/servers/SocketHandler.cpp \
+    ../worldserver/game/Entities/ObjectMgr.cpp \
+    ../worldserver/game/handlers/characterhandler.cpp \
+    ../worldserver/game/Entities/Character/Character.cpp
 
 HEADERS += \
     ../shared/define.h \
@@ -59,7 +60,10 @@ HEADERS += \
     ../shared/databases/chardatabase.h \
     ../shared/queues/worldqueue.h \
     ../shared/queues/authqueue.h \
-    ../shared/servers/SocketReader.h \
-    ../worldserver/game/world/ObjectFactory.h \
     ../worldserver/game/world/world.h \
-    ../shared/utils/singleton.h
+    ../shared/utils/singleton.h \
+    ../shared/servers/SocketHandler.h \
+    ../worldserver/game/Entities/Object/Object.h \
+    ../worldserver/game/Entities/ObjectMgr.h \
+    ../worldserver/game/Entities/Unit/Unit.h \
+    ../worldserver/game/Entities/Character/Character.h

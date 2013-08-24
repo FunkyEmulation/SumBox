@@ -1,5 +1,6 @@
 #include "../server/worldsession.h"
 #include "utils/util.h"
+#include "game/Entities/Character/Character.h"
 
 void WorldSession::HandleCharactersList(QString& /*packet*/)
 {
@@ -120,9 +121,9 @@ void WorldSession::HandleCreatePerso(QString& packet)
 
     // TODO: Checker la validité de la race
     int gfxId = (datas[1] + datas[2]).toInt();
-    Character* newCharacter = NULL; //ObjectFactory::Instance()->CreateCharacter(m_account->GetId(), pseudo, datas[1].toInt(), datas[2].toInt(), gfxId, datas.at(3).toLatin1().data(), datas.at(4).toLatin1().data(), datas.at(5).toLatin1().data());
+    Character* newCharacter = new Character();
 
-    if(newCharacter != NULL)
+    if(newCharacter->Create(/*m_account->GetId(), pseudo, datas[1].toInt(), datas[2].toInt(), gfxId, datas.at(3).toLatin1().data(), datas.at(4).toLatin1().data(), datas.at(5).toLatin1().data()*/))
     {
         WorldPacket data(SMSG_CREATE_CHAR_OK);
         SendPacket(data);

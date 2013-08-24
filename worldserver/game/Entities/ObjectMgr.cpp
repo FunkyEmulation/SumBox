@@ -1,7 +1,7 @@
-#include "ObjectFactory.h"
+#include "ObjectMgr.h"
 #include "configuration/configmgr.h"
 
-template<> ObjectFactory*  Singleton<ObjectFactory>::m_instance = 0;
+template<> ObjectMgr*  Singleton<ObjectMgr>::m_instance = 0;
 
 /*
 Character* ObjectFactory::GetCharacter(int id)
