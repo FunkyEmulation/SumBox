@@ -50,11 +50,10 @@ public:
     void HandleKey(QString& packet);                // Stocke la clé de cryptage renseignée par le client
     void HandleCharactersList(QString& packet);     // Met en file d'attente :
     void HandleSendCharacterList(QString& packet);  // Gère la liste des personnages du serveur actuel
-    void HandleRandomPseudo(QString& packet);       // Génère un pseudo aléatoire
-    void HandleCreatePerso(QString& packet);        // Crée un nouveau perso
-
     void SendCharacterList(); // Envoit la liste des personnages du compte
-    void HandleDeleteChar(QString& packet); // Supprime un personnage
+    void HandleRandomPseudo(QString& packet);       // Génère un pseudo aléatoire
+    void HandleCreateCharacter(QString& packet);    // Crée un nouveau perso
+    void HandleDeleteCharacter(QString& packet); // Supprime un personnage
     void HandleSelectChar(QString& packet); // Sélection d'un personnage pour entrer en jeux
 
 

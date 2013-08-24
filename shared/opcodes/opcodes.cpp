@@ -37,10 +37,10 @@ OpcodeStruct opcodeTable[NUM_MSG_TYPES] =
     { "CMSG_REQUEST_CHARS", "AL", &WorldSession::HandleCharactersList },
     { "SMSG_CHARACTER_LIST", "AL|", &WorldSession::HandleSendCharacterList },
     { "CMSG_RANDOM_PSEUDO", "AP", &WorldSession::HandleRandomPseudo },
-    { "CMSG_CREATE_CHAR", "AA", &WorldSession::HandleCreatePerso },
+    { "CMSG_CREATE_CHAR", "AA", &WorldSession::HandleCreateCharacter },
     { "SMSG_CREATE_CHAR_OK", "AA|", &WorldSession::HandleServerSide },
     { "SMSG_CREATE_CHAR_ERROR", "AAE", &WorldSession::HandleServerSide },
-    { "CMSG_DELETE_CHAR", "AD", &WorldSession::HandleDeleteChar },
+    { "CMSG_DELETE_CHAR", "AD", &WorldSession::HandleDeleteCharacter },
     { "SMSG_DELETE_CHAR_ERROR", "ADE", &WorldSession::HandleServerSide },
     { "CMSG_SELECT_CHAR", "AS", &WorldSession::HandleSelectChar }
 };
