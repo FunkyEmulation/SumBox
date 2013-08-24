@@ -121,10 +121,10 @@ HEADERS += \
     game/scripting/lua/lapi.h \
     game/world/world.h \
     ../shared/queues/worldqueue.h \
-    game/world/objects/Character.h \
     game/Accounts/AccountMgr.h \
     game/Entities/Character/Character.h \
     ../shared/servers/SocketHandler.h \
     game/Entities/Object/Object.h \
     game/Entities/Unit/Unit.h \
-    game/Entities/ObjectMgr.h
+    game/Entities/ObjectMgr.h \
+    ../shared/utils/singleton.h

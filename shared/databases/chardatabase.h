@@ -20,7 +20,7 @@ enum CharDatabaseQueries
     SELECT_ACCOUNT_CHARACTERS,
     CHECK_CHAR_EXISTS,
 
-    INSERT_NEW_CHAR,
+    INSERT_CHAR,
     DELETE_CHAR
 
 };
