@@ -9,17 +9,42 @@
 #include "game/server/worldsession.h"
 #include "game/Entities/Unit/Unit.h"
 
+struct sCharacterCreateInfos
+{
+    sCharacterCreateInfos(QString name, quint8 race, quint8 gender, quint16 gfxId, quint32 color1, quint32 color2, quint32 color3) :
+        name(name), race(race), gender(gender), gfxId(gfxId), color1(color1), color2(color2), color3(color3) {}
+
+    QString name;
+    quint8 race;
+    quint8 gender;
+    quint16 gfxId;
+    quint32 color1;
+    quint32 color2;
+    quint32 color3;
+};
+
 class Character : public Unit
 {
 public:
-    Character();
+    Character(WorldSession * session);
     ~Character();
 
-    bool Create();
+    WorldSession* GetSession() { return m_session; }
+
+    bool Create(quint32 guid, sCharacterCreateInfos characterCreateInfos);
     bool LoadFromDB();
+    void SaveToDB(bool create = false);
 
 private:
     WorldSession* m_session;
+
+    QString m_name;
+    quint8 m_race;
+    quint8 m_gender;
+    quint16 m_gfxId;
+    quint32 m_color1;
+    quint32 m_color2;
+    quint32 m_color3;
 };
 
-#endif // WORLDSESSION_H
+#endif // CHARACTER_H
