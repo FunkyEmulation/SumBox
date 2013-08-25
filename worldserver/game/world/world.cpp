@@ -1,4 +1,5 @@
 #include "world.h"
+#include "game/Entities/ObjectMgr.h"
 
 template<> World*  Singleton<World>::m_instance = 0;
 
@@ -10,6 +11,11 @@ World::World()
 World::~World()
 {
     m_is_running = false;
+}
+
+void World::Initialize()
+{
+    ObjectMgr::Instance()->SetHighestGuids();
 }
 
 void World::AddSession(WorldSession *session)

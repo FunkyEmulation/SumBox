@@ -27,7 +27,6 @@ SOURCES += main.cpp \
     ../shared/databases/authdatabase.cpp \
     ../shared/logs/log.cpp \
     ../shared/opcodes/opcodes.cpp \
-    ../shared/packets/worldpacket.cpp \
     ../shared/databases/worlddatabase.cpp \
     ../shared/databases/chardatabase.cpp \
     game/chat/chat.cpp \

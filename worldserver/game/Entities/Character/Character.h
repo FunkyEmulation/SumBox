@@ -11,16 +11,16 @@
 
 struct sCharacterCreateInfos
 {
-    sCharacterCreateInfos(QString name, quint8 race, quint8 gender, quint16 gfxId, quint32 color1, quint32 color2, quint32 color3) :
+    sCharacterCreateInfos(QString name, quint8 race, quint8 gender, quint16 gfxId, qint32 color1, qint32 color2, qint32 color3) :
         name(name), race(race), gender(gender), gfxId(gfxId), color1(color1), color2(color2), color3(color3) {}
 
     QString name;
     quint8 race;
     quint8 gender;
     quint16 gfxId;
-    quint32 color1;
-    quint32 color2;
-    quint32 color3;
+    qint32 color1;
+    qint32 color2;
+    qint32 color3;
 };
 
 class Character : public Unit

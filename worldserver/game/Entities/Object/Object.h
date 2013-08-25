@@ -10,8 +10,8 @@
 class Object
 {
 public:
-    void SetGUID(quint32 guid) { m_guid = guid; }
-    quint32 GetGUID() const { return m_guid; }
+    void SetGuid(quint32 guid) { m_guid = guid; }
+    quint32 GetGuid() const { return m_guid; }
 
     QString GetName() const { return m_name; }
     int GetGender() const { return m_gender; }

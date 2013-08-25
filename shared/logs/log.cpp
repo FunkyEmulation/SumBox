@@ -41,7 +41,10 @@ void Log::WriteLog(QString logMessage, LogType logType)
         cout << logMessage.toLatin1().data() << endl;
 
     if(m_file && logType <= m_logTypeFile)
+    {
         m_file->write(logMessage.toLatin1() + "\n");
+        m_file->flush();
+    }
 }
 
 void Log::Write(LogType logType, QString message, ...)

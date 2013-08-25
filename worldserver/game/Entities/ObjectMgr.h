@@ -5,6 +5,12 @@
 #include "databases/database.h"
 #include "utils/singleton.h"
 
+enum GuidType
+{
+    GUIDTYPE_NONE      = 0,
+    GUIDTYPE_CHARACTER = 1
+};
+
 class Character;
 
 class ObjectMgr : public Singleton<ObjectMgr>
@@ -12,13 +18,12 @@ class ObjectMgr : public Singleton<ObjectMgr>
 public:
     ObjectMgr();
     ~ObjectMgr();
-/*
-    Character* GetCharacter(int id);
-    QList<Character*> LoadAccountCharacters(Account* const acc);
-    Character* CreateCharacter(int account, QString name, int breed, int gender, int gfxId, char* color1, char* color2, char* color3);
-*/
+
+    void SetHighestGuids();
+    quint32 GenerateGuid(GuidType type);
+
 private:
-    QMap<int, Character*> m_characters;
+    quint32 m_highCharacterGuid;
 };
 
 #endif // OBJECTFACTORY_H
