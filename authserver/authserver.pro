@@ -27,7 +27,6 @@ SOURCES += main.cpp \
     ../shared/logs/log.cpp \
     ../shared/configuration/configuration.cpp \
     ../shared/configuration/configmgr.cpp \
-    ../shared/packets/worldpacket.cpp \
     ../shared/databases/worlddatabase.cpp \
     ../shared/databases/chardatabase.cpp \
     ../shared/queues/worldqueue.cpp \
