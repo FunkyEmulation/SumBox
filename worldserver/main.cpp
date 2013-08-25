@@ -60,6 +60,7 @@ int main(int argc, char *argv[])
         return close();
 
     LuaEngine::Instance()->StartEngine();
+    World::Instance()->Initialize();
 
     if(!WorldServer::Instance()->Start(QHostAddress::LocalHost, quint16(ConfigMgr::World()->GetInt("WorldServerPort"))))
     {
