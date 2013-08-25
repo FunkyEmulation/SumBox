@@ -1,6 +1,7 @@
 #include "../server/worldsession.h"
 #include "utils/util.h"
 #include "game/Entities/Character/Character.h"
+#include "game/Entities/ObjectMgr.h"
 
 void WorldSession::HandleCharactersList(QString& /*packet*/)
 {
@@ -20,6 +21,7 @@ void WorldSession::SendCharacterList()
 
     QSqlQuery queryResult = Database::Char()->PQuery(SELECT_ACCOUNT_CHARACTERS, GetAccountInfos().id);
     QSqlRecord rows = queryResult.record();
+    m_charsList.clear();
 
     WorldPacket data(SMSG_CHARACTER_LIST);
     data << GetAccountInfos().subscriptionTime;
@@ -122,11 +124,10 @@ void WorldSession::HandleCreateCharacter(QString& packet)
     // TODO: Checker la validité de la race
     quint16 gfxId = datas[1].toUInt() + datas[2].toUInt();
 
-    sCharacterCreateInfos charCreateInfos(pseudo, toByte(datas[1]), toByte(datas[2]), gfxId, datas.at(3).toUInt(), datas.at(4).toUInt(), datas.at(5).toUInt());
+    sCharacterCreateInfos charCreateInfos(pseudo, (quint8)datas[1].toUInt(), (quint8)datas[2].toUInt(), gfxId, datas.at(3).toInt(), datas.at(4).toInt(), datas.at(5).toInt());
     Character* newChar = new Character(this);
 
-    quint32 guid = 0; // TODO : Generate GUID
-    if(newChar->Create(guid, charCreateInfos))
+    if(newChar->Create(ObjectMgr::Instance()->GenerateGuid(GUIDTYPE_CHARACTER), charCreateInfos))
     {
         newChar->SaveToDB(true);
 

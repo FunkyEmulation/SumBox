@@ -19,7 +19,7 @@ public:
         return m_socket->peerAddress().toString();
     }
 
-    void SendPacket(WorldPacket data);
+    void SendPacket(WorldPacket& data);
     virtual void ProcessPacket(QString packet) = 0;
 
 public slots:

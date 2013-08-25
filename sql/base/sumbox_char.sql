@@ -26,19 +26,19 @@ SET time_zone = "+00:00";
 -- Structure de la table `character`
 --
 
-CREATE TABLE IF NOT EXISTS `character` (
-  `guid` int(10) unsigned NOT NULL AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS `characters` (
+  `guid` int(10) unsigned NOT NULL,
   `account` int(10) unsigned NOT NULL,
   `name` varchar(15) COLLATE utf8_unicode_ci NOT NULL,
   `race` tinyint(3) unsigned NOT NULL,
   `gender` tinyint(3) unsigned NOT NULL,
-  `level` smallint(5) unsigned NOT NULL,
+  `level` smallint(5) unsigned NOT NULL DEFAULT '1',
   `gfx_id` smallint(5) unsigned NOT NULL,
   `color_1` int(11) NOT NULL,
   `color_2` int(11) NOT NULL,
   `color_3` int(11) NOT NULL,
   PRIMARY KEY (`guid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
