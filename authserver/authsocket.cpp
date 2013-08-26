@@ -54,7 +54,7 @@ void AuthSocket::ProcessPacket(QString packet)
             if(!packet.contains("#1"))
             {
                 m_state = OnCheckingVersion;
-                WorldPacket data(SMSG_LOGIN_ERROR);
+                WorldPacket data(SMSG_ACCOUNT_LOGIN_ERROR);
                 SendPacket(data);
                 return;
             }
@@ -75,17 +75,13 @@ void AuthSocket::ProcessPacket(QString packet)
         switch(packet.at(1).toLatin1())
         {
             case 'f':
-                QueueManager();
-            break;
+                return QueueManager();
             case 'x':
-                SendPersos();
-            break;
+                return SendPersos();
             case 'X':
-                SelectServer(packet.mid(2).toUInt());
-            break;
+                return SelectServer(packet.mid(2).toUInt());
             case 'F':
-                SearchFriend(packet.mid(2));
-            break;
+                return SearchFriend(packet.mid(2));
             default:
                 Log::Write(LOG_TYPE_DEBUG, "Unhandled header packet : %s", packet.left(2).toLatin1().data());
             break;
@@ -110,8 +106,8 @@ void AuthSocket::SendInitPacket()
     QSqlQuery req = Database::Auth()->PQuery(AUTH_SELECT_IP_BANNED, m_socket->peerAddress().toString().toLatin1().data());
     if(req.first())
     {
-        WorldPacket ban(SMSG_ACCOUNT_BANNED);
-        SendPacket(ban);
+        WorldPacket data(SMSG_ACCOUNT_BANNED);
+        SendPacket(data);
         return;
     }
 
@@ -123,7 +119,7 @@ void AuthSocket::SendInitPacket()
 
 void AuthSocket::SendPersos()
 {
-    WorldPacket persos(SMSG_GIVE_PERSOS);
+    WorldPacket persos(SMSG_ACCOUNT_REALM_CHAR);
     persos << QString::number(((ulong)m_infos["subscription_time"].toInt()) * 1000).toLatin1().data();
 
     QSqlQuery req = Database::Auth()->PQuery(AUTH_SELECT_ACCOUNT_CHARACTERS, m_infos["account_id"].toInt());
@@ -161,7 +157,7 @@ void AuthSocket::CheckVersion(QString version)
     if(version != acceptedClientVersion) // Mauvaise version
     {
         m_state = OnCheckingVersion;
-        WorldPacket data(SMSG_BAD_VERSION);
+        WorldPacket data(SMSG_ACCOUNT_BAD_CLIENT_VERSION);
         data << acceptedClientVersion;
         SendPacket(data);
         return;
@@ -178,61 +174,56 @@ void AuthSocket::CheckAccount()
 
     QSqlQuery req = Database::Auth()->PQuery(AUTH_SELECT_ACCOUNT, account.toLatin1().data());
 
-    if(!req.first())
+    if (req.first())
     {
-        m_state = OnCheckingVersion;
-        WorldPacket data(SMSG_LOGIN_ERROR);
-        SendPacket(data);
-        return;
-    }
+        for (quint8 i = 0; i < req.record().count(); ++i)
+            m_infos.insert(req.record().fieldName(i), req.value(i));
 
-    for(quint8 i = 0; i < req.record().count(); ++i)
-        m_infos.insert(req.record().fieldName(i), req.value(i));
+        if (m_infos["subscription_time"].toInt() < 0)
+            m_infos["subscription_time"] = QVariant(0);
 
-    if(m_infos["subscription_time"].toInt() < 0)
-        m_infos["subscription_time"] = QVariant(0);
-
-    // Mot de passe correct
-    if(CryptPassword(m_infos["hash_password"].toString(), m_hashKey) == hashPass)
-    {
-        if(m_infos["banned"] == "1")
+        // Mot de passe correct
+        if (CryptPassword(m_infos["hash_password"].toString(), m_hashKey) == hashPass)
         {
-            m_state = OnCheckingVersion;
-            WorldPacket data(SMSG_ACCOUNT_BANNED);
-            SendPacket(data);
+            if (m_infos["banned"] == "1")
+            {
+                m_state = OnCheckingVersion;
+
+                WorldPacket data(SMSG_ACCOUNT_BANNED);
+                SendPacket(data);
+                return;
+            }
+            else if (m_infos["online"] == "1")
+            {
+                m_state = OnCheckingVersion;
+
+                WorldPacket data(SMSG_ACCOUNT_ALREADY_CONNECTED);
+                SendPacket(data);
+                return;
+            }
+
+            // Ids OK, non banni, non logged
+            Database::Auth()->PQuery(AUTH_UPDATE_ACCOUNT_STATE, 1, m_infos["account_id"].toUInt());
+
+            SendInformations();
+            m_state = Logged; // Authentification terminée
             return;
         }
-
-        if(m_infos["online"] == "1")
-        {
-            m_state = OnCheckingVersion;
-            WorldPacket data(SMSG_ALREADY_LOGGED);
-            SendPacket(data);
-            return;
-        }
-
-        // Ids OK, non banni, non logged
-        Database::Auth()->PQuery(AUTH_UPDATE_ACCOUNT_STATE, 1, m_infos["account_id"].toUInt());
-    }
-    else
-    {
-        m_state = OnCheckingVersion;
-        WorldPacket data(SMSG_LOGIN_ERROR);
-        SendPacket(data);
-        return;
     }
 
-    SendInformations();
-    m_state = Logged; // Authentification terminée
+    m_state = OnCheckingVersion;
+
+    WorldPacket data(SMSG_ACCOUNT_LOGIN_ERROR);
+    SendPacket(data);
 }
 
 void AuthSocket::SendInformations()
 {
-    WorldPacket dataPseudo(SMSG_GIVE_PSEUDO);
+    WorldPacket dataPseudo(SMSG_ACCOUNT_PSEUDO);
     dataPseudo << m_infos["pseudo"].toString();
     SendPacket(dataPseudo);
 
-    WorldPacket dataCommunauty(SMSG_GIVE_COMMUNAUTY);
+    WorldPacket dataCommunauty(SMSG_COMMUNITY);
     dataCommunauty << "0"; // 0 = Fr
     SendPacket(dataCommunauty);
 
@@ -250,15 +241,15 @@ void AuthSocket::SendInformations()
     }
     server = server.left(server.size() - 1);
 
-    WorldPacket dataServers(SMSG_GIVE_SERVERS);
+    WorldPacket dataServers(SMSG_REALMS_LIST);
     dataServers << server;
     SendPacket(dataServers);
 
-    WorldPacket dataGmLevel(SMSG_GIVE_GMLEVEL);
+    WorldPacket dataGmLevel(SMSG_ACCOUNT_GMLEVEL);
     dataGmLevel << m_infos["gm_level"].toString();
     SendPacket(dataGmLevel);
 
-    WorldPacket dataQuestion(SMSG_GIVE_QUESTION);
+    WorldPacket dataQuestion(SMSG_ACCOUNT_SECRET_QUESTION);
     dataQuestion << m_infos["secret_question"].toString();
     SendPacket(dataQuestion);
 }
@@ -280,7 +271,7 @@ void AuthSocket::SelectServer(uint id)
     qDebug() << key;
     Database::Auth()->PQuery(AUTH_UPDATE_ACCOUNT_SESSION_KEY, key.toLatin1().data(), m_infos["account_id"].toUInt());
 
-    WorldPacket packet(SMSG_SERVER_INFOS);
+    WorldPacket packet(SMSG_REALM_INFOS);
     packet << infos;
     SendPacket(packet);
 }

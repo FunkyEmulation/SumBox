@@ -66,13 +66,13 @@ SOURCES += main.cpp \
     game/world/world.cpp \
     ../shared/queues/worldqueue.cpp \
     game/handlers/characterhandler.cpp \
-    game/handlers/acounthandler.cpp \
     ../shared/utils/util.cpp \
     game/handlers/QueueHandler.cpp \
     game/Accounts/AccountMgr.cpp \
     game/Entities/Character/Character.cpp \
     ../shared/servers/SocketHandler.cpp \
-    game/Entities/ObjectMgr.cpp
+    game/Entities/ObjectMgr.cpp \
+    game/handlers/AccountHandler.cpp
 
 HEADERS += \
     worldserver.h \
