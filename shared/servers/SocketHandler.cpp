@@ -33,9 +33,9 @@ void SocketHandler::OnClose()
     m_socket->deleteLater();
 }
 
-void SocketHandler::SendPacket(WorldPacket& data)
+void SocketHandler::SendPacket(const WorldPacket& data) const
 {
-    m_socket->write(data.GetPacket() + (char)0x00);
+    m_socket->write(data.GetPacket().toLatin1() + (char)0x00);
     Log::Write(LOG_TYPE_DEBUG, "Send packet %s ( Header : %s )", GetOpcodeName(data.GetOpcode()).toLatin1().data(), GetOpcodeHeader(data.GetOpcode()).toLatin1().data());
     if(data.GetPacket().length() > 0)
         Log::Write(LOG_TYPE_DEBUG, "Packet data : %s", QString(data.GetPacket()).toLatin1().data());

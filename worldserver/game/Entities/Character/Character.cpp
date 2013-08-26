@@ -37,7 +37,7 @@ bool Character::Create(quint32 guid, sCharacterCreateInfos characterCreateInfos)
 
 bool Character::LoadFromDB()
 {
-
+    return true;
 }
 
 void Character::SaveToDB(bool create)
