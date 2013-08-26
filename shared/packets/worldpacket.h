@@ -13,14 +13,13 @@ public:
         *this << GetOpcodeHeader(m_opcode);
     }
 
-    qint8 GetOpcode()
+    qint8 GetOpcode() const
     {
         return m_opcode;
     }
 
-    QByteArray& GetPacket()
+    const QString& GetPacket() const
     {
-        m_stream.flush();
         return m_buffer;
     }
 
@@ -33,7 +32,7 @@ public:
 
 private:
     quint8 m_opcode;
-    QByteArray m_buffer;
+    QString m_buffer;
     QTextStream m_stream;
 };
 

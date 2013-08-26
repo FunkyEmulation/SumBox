@@ -141,7 +141,7 @@ void WorldSession::HandleCreateCharacter(QString& packet)
     delete newChar;
 }
 
-void WorldSession::HandleDeleteCharacter(QString &packet)
+void WorldSession::HandleDeleteCharacter(QString& packet)
 {
     QStringList datas = packet.mid(2).split("|");
     if(datas.isEmpty())
@@ -165,7 +165,7 @@ void WorldSession::HandleDeleteCharacter(QString &packet)
     SendPacket(data);
 }
 
-void WorldSession::HandleSelectChar(QString &packet)
+void WorldSession::HandleSelectChar(QString& /*packet*/)
 {
 
 }
