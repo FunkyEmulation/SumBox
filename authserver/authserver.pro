@@ -38,7 +38,8 @@ SOURCES += main.cpp \
     ../worldserver/game/Entities/ObjectMgr.cpp \
     ../worldserver/game/handlers/characterhandler.cpp \
     ../worldserver/game/Entities/Character/Character.cpp \
-    ../worldserver/game/handlers/AccountHandler.cpp
+    ../worldserver/game/handlers/AccountHandler.cpp \
+    ../worldserver/game/handlers/GameHandler.cpp
 
 HEADERS += \
     ../shared/define.h \

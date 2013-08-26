@@ -16,6 +16,8 @@ WorldSession::WorldSession(QTcpSocket *socket) : SocketHandler(socket)
     m_accountInfos.subscriptionTime = 0;
     m_charsList.clear();
 
+    SetCharacter(NULL);
+
     connect(m_socket, SIGNAL(disconnected()), this, SLOT(OnClose()));
 
     WorldPacket data(SMSG_HELLO_GAME_SERVER);
@@ -24,7 +26,10 @@ WorldSession::WorldSession(QTcpSocket *socket) : SocketHandler(socket)
     Log::Write(LOG_TYPE_NORMAL, "New incoming connection from %s", m_socket->peerAddress().toString().toLatin1().data());
 }
 
-WorldSession::~WorldSession() {}
+WorldSession::~WorldSession()
+{
+    delete m_character;
+}
 
 void WorldSession::ProcessPacket(QString packet)
 {

@@ -17,7 +17,6 @@ Character::Character(WorldSession* session) : Unit()
 
 Character::~Character()
 {
-
 }
 
 bool Character::Create(quint32 guid, sCharacterCreateInfos characterCreateInfos)
@@ -35,8 +34,29 @@ bool Character::Create(quint32 guid, sCharacterCreateInfos characterCreateInfos)
     return true;
 }
 
-bool Character::LoadFromDB()
+bool Character::LoadFromDB(quint32 guid)
 {
+    QSqlQuery result = Database::Char()->PQuery(SELECT_CHARACTER, guid, GetSession()->GetAccountInfos().id);
+
+    if (!result.first())
+    {
+        // Log -> character not found or accountId != db account id
+        return false;
+    }
+
+    QSqlRecord rows = result.record();
+
+    m_guid = guid;
+    m_name = result.value(rows.indexOf("name")).toString();
+    m_race = (quint8)result.value(rows.indexOf("race")).toUInt();
+    m_gender = (quint8)result.value(rows.indexOf("gender")).toUInt();
+    m_gfxId = (quint16)result.value(rows.indexOf("gfx_id")).toUInt();
+    m_color1 = result.value(rows.indexOf("color_1")).toInt();
+    m_color2 = result.value(rows.indexOf("color_2")).toInt();
+    m_color3 = result.value(rows.indexOf("color_3")).toInt();
+
+    GetSession()->SetCharacter(this);
+
     return true;
 }
 

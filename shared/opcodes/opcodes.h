@@ -13,7 +13,6 @@ enum Opcodes
     CMSG_CHAR_CREATE,
     CMSG_CHAR_DELETE,
     CMSG_CHAR_LIST,
-    CMSG_CHAR_SELECT,
     CMSG_GIFTS_LIST,
     CMSG_SESSION_KEY,
     CMSG_TICKET,
@@ -44,6 +43,8 @@ enum Opcodes
 
     // Client and server messages (MSG)
     MSG_CHAR_RANDOM_NAME,
+    MSG_CHAR_SELECT,
+    MSG_GAME_CREATE,
     MSG_QUEUE_POSITION,
     MSG_REGIONAL_VERSION,
 
