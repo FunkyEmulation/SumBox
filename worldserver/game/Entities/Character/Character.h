@@ -32,7 +32,7 @@ public:
     WorldSession* GetSession() { return m_session; }
 
     bool Create(quint32 guid, sCharacterCreateInfos characterCreateInfos);
-    bool LoadFromDB();
+    bool LoadFromDB(quint32 guid);
     void SaveToDB(bool create = false);
 
 private:

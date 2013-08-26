@@ -11,26 +11,26 @@ void WorldSession::HandleCharList(QString& /*packet*/)
 
 void WorldSession::SendCharacterList()
 {
-    QSqlQuery queryResult = Database::Char()->PQuery(SELECT_ACCOUNT_CHARACTERS, GetAccountInfos().id);
-    QSqlRecord rows = queryResult.record();
+    QSqlQuery result = Database::Char()->PQuery(SELECT_ACCOUNT_CHARACTERS, GetAccountInfos().id);
+    QSqlRecord rows = result.record();
     m_charsList.clear();
 
     WorldPacket data(SMSG_CHAR_LIST);
     data << GetAccountInfos().subscriptionTime;
-    data << "|" << queryResult.size();
+    data << "|" << result.size();
 
-    while(queryResult.next())
+    while(result.next())
     {
-        qint32 guid = queryResult.value(rows.indexOf("guid")).toInt();
+        qint32 guid = result.value(rows.indexOf("guid")).toInt();
 
         data << "|";
         data << guid << ";";
-        data << queryResult.value(rows.indexOf("name")).toString() << ";";
-        data << queryResult.value(rows.indexOf("level")).toInt() << ";";
-        data << queryResult.value(rows.indexOf("gfx_id")).toInt() << ";";
-        data << queryResult.value(rows.indexOf("color_1")).toInt() << ";";
-        data << queryResult.value(rows.indexOf("color_2")).toInt() << ";";
-        data << queryResult.value(rows.indexOf("color_3")).toInt() << ";";
+        data << result.value(rows.indexOf("name")).toString() << ";";
+        data << result.value(rows.indexOf("level")).toInt() << ";";
+        data << result.value(rows.indexOf("gfx_id")).toInt() << ";";
+        data << result.value(rows.indexOf("color_1")).toInt() << ";";
+        data << result.value(rows.indexOf("color_2")).toInt() << ";";
+        data << result.value(rows.indexOf("color_3")).toInt() << ";";
 
         data << ";"; // Accessories
         data << "0;"; // Merchant ?
@@ -117,7 +117,7 @@ void WorldSession::HandleCharCreate(QString& packet)
     quint16 gfxId = datas[1].toUInt() + datas[2].toUInt();
 
     sCharacterCreateInfos charCreateInfos(pseudo, (quint8)datas[1].toUInt(), (quint8)datas[2].toUInt(), gfxId, datas.at(3).toInt(), datas.at(4).toInt(), datas.at(5).toInt());
-    Character* newChar = new Character(this);
+    QScopedPointer<Character> newChar(new Character(this));
 
     if(newChar->Create(ObjectMgr::Instance()->GenerateGuid(GUIDTYPE_CHARACTER), charCreateInfos))
     {
@@ -129,8 +129,6 @@ void WorldSession::HandleCharCreate(QString& packet)
     }
     else
         SendPacket(data);
-
-    delete newChar;
 }
 
 void WorldSession::HandleCharDelete(QString& packet)
@@ -158,7 +156,28 @@ void WorldSession::HandleCharDelete(QString& packet)
     SendPacket(data);
 }
 
-void WorldSession::HandleCharSelect(QString& /*packet*/)
+void WorldSession::HandleCharSelect(QString& packet)
 {
+    quint32 guid = packet.mid(2).toUInt();
 
+    Character* character = new Character(this);
+    WorldPacket data(MSG_CHAR_SELECT);
+
+    if (character->LoadFromDB(guid))
+    {
+        data << "||" << character->GetGuid();
+        data << "|" << character->GetName();
+        data << "|" << character->GetLevel();
+        data << "|" << -1; // Guild
+        data << "|" << character->GetGender();
+        data << "|" << character->GetGfxId();
+        data << "|" << character->GetColor1();
+        data << "|" << character->GetColor2();
+        data << "|" << character->GetColor3();
+        data << "|"; // Items
+    }
+    else
+        data << "E|";
+
+    SendPacket(data);
 }

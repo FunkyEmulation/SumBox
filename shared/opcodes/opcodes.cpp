@@ -9,7 +9,6 @@ OpcodeStruct opcodeTable[NUM_MSG_TYPES] =
     { "CMSG_CHAR_CREATE",                           "AA",       &WorldSession::HandleCharCreate },
     { "CMSG_CHAR_DELETE",                           "AD",       &WorldSession::HandleCharDelete },
     { "CMSG_CHAR_LIST",                             "AL",       &WorldSession::HandleCharList },
-    { "CMSG_CHAR_SELECT",                           "AS",       &WorldSession::HandleCharSelect },
     { "CMSG_GIFTS_LIST",                            "Ag",       &WorldSession::HandleGiftsList },
     { "CMSG_SESSION_KEY",                           "Ai",       &WorldSession::HandleSessionKey },
     { "CMSG_TICKET",                                "AT",       &WorldSession::HandleTicket },
@@ -40,6 +39,8 @@ OpcodeStruct opcodeTable[NUM_MSG_TYPES] =
 
     // Client and server messages (MSG)
     { "MSG_CHAR_RANDOM_NAME",                       "AP",       &WorldSession::HandleCharRandomPseudo },
+    { "MSG_CHAR_SELECT",                            "AS",       &WorldSession::HandleCharSelect },
+    { "MSG_GAME_CREATE",                           "GC",       &WorldSession::HandleGameCreate },
     { "MSG_QUEUE_POSITION",                         "Af",       &WorldSession::HandleQueuePosition },
     { "MSG_REGIONAL_VERSION",                       "AV",       &WorldSession::HandleRegionalVersion },
 };
