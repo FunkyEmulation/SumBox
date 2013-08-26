@@ -8,6 +8,7 @@
 #include "queues/worldqueue.h"
 #include "define.h"
 #include "servers/SocketHandler.h"
+#include "game/Entities/Character/Character.h"
 
 struct sAccountInfos
 {
@@ -22,6 +23,8 @@ struct sAccountInfos
 
 typedef QList<qint32> CharactersList;
 
+class Character;
+
 class WorldSession : public SocketHandler
 {
     Q_OBJECT
@@ -35,6 +38,9 @@ public:
     bool InCharsList(qint32 guid) { return m_charsList.contains(guid); }
     quint32 GetCharsCount() { return m_charsList.count(); }
 
+    void SetCharacter(Character* character) { m_character = character; }
+    Character* GetCharacter() const { return m_character; }
+
     virtual void ProcessPacket(QString packet);
 
     // Default handlers
@@ -44,15 +50,16 @@ public:
     // CMSG Handlers
     void HandleCharCreate(QString& packet);
     void HandleCharDelete(QString& packet);
-    void HandleCharSelect(QString& packet);
     void HandleCharList(QString& packet);
     void SendCharacterList();
-    void HandleCharRandomPseudo(QString& packet);
+    void HandleGameCreate(QString& packet);
     void HandleGiftsList(QString& packet);
     void HandleSessionKey(QString& packet);
     void HandleTicket(QString& packet);
 
     // MSG Handlers
+    void HandleCharRandomPseudo(QString& packet);
+    void HandleCharSelect(QString& packet);
     void HandleQueuePosition(QString& packet);
     void HandleRegionalVersion(QString& packet);
 
@@ -63,10 +70,9 @@ private:
     ClientState m_state;
     QString m_sessionKey;
 
-	// Account infos
 	sAccountInfos m_accountInfos;
     CharactersList m_charsList;
-	
+    Character* m_character;
 };
 
 #endif // WORLDSESSION_H

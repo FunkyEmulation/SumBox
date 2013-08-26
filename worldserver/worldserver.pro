@@ -72,7 +72,8 @@ SOURCES += main.cpp \
     game/Entities/Character/Character.cpp \
     ../shared/servers/SocketHandler.cpp \
     game/Entities/ObjectMgr.cpp \
-    game/handlers/AccountHandler.cpp
+    game/handlers/AccountHandler.cpp \
+    game/handlers/GameHandler.cpp
 
 HEADERS += \
     worldserver.h \

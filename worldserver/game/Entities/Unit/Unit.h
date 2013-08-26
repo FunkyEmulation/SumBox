@@ -11,7 +11,7 @@ class Unit : public Object
 {
 public:
     // Getters
-    int GetLvl() const { return m_level; }
+    int GetLevel() const { return m_level; }
 
 protected:
     int m_level;
