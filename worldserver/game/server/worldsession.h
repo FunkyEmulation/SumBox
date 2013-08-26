@@ -40,29 +40,28 @@ public:
     // Default handlers
     void HandleNULL(QString& /*packet*/) {}
     void HandleServerSide(QString& /*packet*/) {} // SMSG packets
-    void HandleBeforeAuth(QString& /*packet*/) {} // CMSG packets before client auth (WorldSession don't exist at this moment)
 
-    // Handlers
+    // CMSG Handlers
+    void HandleCharCreate(QString& packet);
+    void HandleCharDelete(QString& packet);
+    void HandleCharSelect(QString& packet);
+    void HandleCharList(QString& packet);
+    void SendCharacterList();
+    void HandleCharRandomPseudo(QString& packet);
+    void HandleGiftsList(QString& packet);
+    void HandleSessionKey(QString& packet);
+    void HandleTicket(QString& packet);
+
+    // MSG Handlers
     void HandleQueuePosition(QString& packet);
-    void HandleTicketResponse(QString& packet);     // Vérifie la clé de connection et initialise les détails compte :
-    void HandleRegionalVersion(QString& packet);    // ?
-    void HandleListGifts(QString& packet);          // Gère la liste des cadeaux du compte. A faire
-    void HandleKey(QString& packet);                // Stocke la clé de cryptage renseignée par le client
-    void HandleCharactersList(QString& packet);     // Met en file d'attente :
-    void HandleSendCharacterList(QString& packet);  // Gère la liste des personnages du serveur actuel
-    void SendCharacterList(); // Envoit la liste des personnages du compte
-    void HandleRandomPseudo(QString& packet);       // Génère un pseudo aléatoire
-    void HandleCreateCharacter(QString& packet);    // Crée un nouveau perso
-    void HandleDeleteCharacter(QString& packet); // Supprime un personnage
-    void HandleSelectChar(QString& packet); // Sélection d'un personnage pour entrer en jeux
-
+    void HandleRegionalVersion(QString& packet);
 
 public slots:
     void OnClose();
 
 private:
     ClientState m_state;
-    QString m_ticket; // Avant connection
+    QString m_sessionKey;
 
 	// Account infos
 	sAccountInfos m_accountInfos;
