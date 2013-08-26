@@ -3,27 +3,19 @@
 #include "game/Entities/Character/Character.h"
 #include "game/Entities/ObjectMgr.h"
 
-void WorldSession::HandleCharactersList(QString& /*packet*/)
+void WorldSession::HandleCharList(QString& /*packet*/)
 {
     m_state = OnQueue;
     WorldQueue::Instance()->AddClient(this);
 }
 
-void WorldSession::HandleSendCharacterList(QString& /*packet*/)
-{
-    SendCharacterList();
-}
-
 void WorldSession::SendCharacterList()
 {
-    // Définir une nomanclature pour les logs.
-    Log::Write(LOG_TYPE_DEBUG, "SMSG_CHARACTER_LIST");
-
     QSqlQuery queryResult = Database::Char()->PQuery(SELECT_ACCOUNT_CHARACTERS, GetAccountInfos().id);
     QSqlRecord rows = queryResult.record();
     m_charsList.clear();
 
-    WorldPacket data(SMSG_CHARACTER_LIST);
+    WorldPacket data(SMSG_CHAR_LIST);
     data << GetAccountInfos().subscriptionTime;
     data << "|" << queryResult.size();
 
@@ -55,7 +47,7 @@ void WorldSession::SendCharacterList()
     SendPacket(data);
 }
 
-void WorldSession::HandleRandomPseudo(QString& /*packet*/)
+void WorldSession::HandleCharRandomPseudo(QString& /*packet*/)
 {
     int max = rand()%4 +4;
 
@@ -84,12 +76,12 @@ void WorldSession::HandleRandomPseudo(QString& /*packet*/)
 
     pseudo.prepend("|");
 
-    WorldPacket randomPseudo(CMSG_RANDOM_PSEUDO);
-    randomPseudo << pseudo;
-    SendPacket(randomPseudo);
+    WorldPacket data(MSG_CHAR_RANDOM_NAME);
+    data << pseudo;
+    SendPacket(data);
 }
 
-void WorldSession::HandleCreateCharacter(QString& packet)
+void WorldSession::HandleCharCreate(QString& packet)
 {
     QStringList datas = packet.mid(2).split("|");
     if(datas.size() < 6)
@@ -97,27 +89,27 @@ void WorldSession::HandleCreateCharacter(QString& packet)
 
     QString pseudo(datas.at(0));
 
-    WorldPacket error(SMSG_CREATE_CHAR_ERROR);
+    WorldPacket data(SMSG_CHAR_CREATE_ERROR);
     QSqlQuery req = Database::Char()->PQuery(CHECK_CHAR_EXISTS, pseudo.toLatin1().data());
 
     if(req.next() && req.value(req.record().indexOf("count")).toInt() >= 1)
     {
-        error << "a";
-        SendPacket(error);
+        data << "a";
+        SendPacket(data);
         return;
     }
 
     if(!IsValidName(pseudo))
     {
-        error << "n";
-        SendPacket(error);
+        data << "n";
+        SendPacket(data);
         return;
     }
 
     if(m_charsList.count() > 4)
     {
-        error << "f";
-        SendPacket(error);
+        data << "f";
+        SendPacket(data);
         return;
     }
 
@@ -131,17 +123,17 @@ void WorldSession::HandleCreateCharacter(QString& packet)
     {
         newChar->SaveToDB(true);
 
-        WorldPacket data(SMSG_CREATE_CHAR_OK);
+        WorldPacket data(SMSG_CHAR_CREATE);
         SendPacket(data);
         SendCharacterList();
     }
     else
-        SendPacket(error);
+        SendPacket(data);
 
     delete newChar;
 }
 
-void WorldSession::HandleDeleteCharacter(QString& packet)
+void WorldSession::HandleCharDelete(QString& packet)
 {
     QStringList datas = packet.mid(2).split("|");
     if(datas.isEmpty())
@@ -161,11 +153,12 @@ void WorldSession::HandleDeleteCharacter(QString& packet)
         //}
     }
 
-    WorldPacket data(SMSG_DELETE_CHAR_ERROR);
+    WorldPacket data(SMSG_CHAR_DELETE);
+    // Envoyer une donnée si suppression réussie ou pas?
     SendPacket(data);
 }
 
-void WorldSession::HandleSelectChar(QString& /*packet*/)
+void WorldSession::HandleCharSelect(QString& /*packet*/)
 {
 
 }

@@ -31,14 +31,14 @@ SOURCES += main.cpp \
     ../shared/databases/chardatabase.cpp \
     ../shared/queues/worldqueue.cpp \
     ../shared/queues/authqueue.cpp \
-    ../worldserver/game/handlers/acounthandler.cpp \
     ../shared/utils/util.cpp \
     ../worldserver/game/handlers/QueueHandler.cpp \
     ../worldserver/game/world/world.cpp \
     ../shared/servers/SocketHandler.cpp \
     ../worldserver/game/Entities/ObjectMgr.cpp \
     ../worldserver/game/handlers/characterhandler.cpp \
-    ../worldserver/game/Entities/Character/Character.cpp
+    ../worldserver/game/Entities/Character/Character.cpp \
+    ../worldserver/game/handlers/AccountHandler.cpp
 
 HEADERS += \
     ../shared/define.h \

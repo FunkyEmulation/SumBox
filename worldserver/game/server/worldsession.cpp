@@ -69,5 +69,4 @@ void WorldSession::SetAccountInfos(QSqlQuery queryResult)
         if (subscriptionTime > 0)
             m_accountInfos.subscriptionTime = subscriptionTime;
     }
-
 }
