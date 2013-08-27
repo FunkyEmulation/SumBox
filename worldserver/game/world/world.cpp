@@ -12,6 +12,8 @@ World::World()
 World::~World()
 {
     m_is_running = false;
+
+    MapMgr::Instance()->Delete();
 }
 
 bool World::Initialize()

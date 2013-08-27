@@ -3,10 +3,8 @@
 
 #include <QtCore>
 #include "databases/database.h"
-#include "game/Entities/Character/Character.h"
 #include "utils/singleton.h"
 
-// I don't know if we need all table fields
 struct sMapData
 {
     QString date;
@@ -23,7 +21,12 @@ struct sMapData
     quint8 groupmaxsize;
 };
 
-typedef QMap<quint16, sMapData> MapsList;
+#include "Map.h"
+
+class Map;
+
+typedef QMap<quint16, sMapData> MapsDataList;
+typedef QMap<quint16, Map*> MapsList;
 
 class MapMgr : public Singleton<MapMgr>
 {
@@ -33,7 +36,21 @@ public:
 
     bool LoadFromDB();
 
+    bool HasMapData(quint16 mapId)
+    {
+        return m_mapsDataList.contains(mapId);
+    }
+
+    bool IsMapLoaded(quint16 mapId)
+    {
+        return m_mapsList.contains(mapId);
+    }
+
+    Map* LoadMap(quint16 mapId);
+    void UnloadMap(quint16 mapId);
+
 private:
+    MapsDataList m_mapsDataList;
     MapsList m_mapsList;
 };
 
