@@ -21,13 +21,13 @@ void WorldSession::HandleGameCreate(QString& packet)
 
 void WorldSession::SendMapData()
 {
-    if(!m_character || (m_character && !m_character->GetMap()))
+    if(!GetCharacter() || (GetCharacter() && !GetCharacter()->GetMap()))
         return;
 
     WorldPacket data(SMSG_MAP_DATA);
-    data <<        m_character->GetMap()->GetData().id
-         << "|" << m_character->GetMap()->GetData().date
-         << "|" << m_character->GetMap()->GetData().key;
+    data << GetCharacter()->GetMap()->GetData().id;
+    data << "|" << GetCharacter()->GetMap()->GetData().date;
+    data << "|" << GetCharacter()->GetMap()->GetData().key;
     SendPacket(data);
 }
 
