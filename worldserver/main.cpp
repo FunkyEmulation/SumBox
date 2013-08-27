@@ -19,7 +19,10 @@ void stop(int /*s*/)
 {
     Log::Write(LOG_TYPE_NORMAL, "Stopping SumBox::Worldserver...");
     WorldServer::Instance()->Stop();
+    World::Delete();
+
     WorldServer::Instance()->Delete();
+    Log::Delete();
     QCoreApplication::exit();
 }
 

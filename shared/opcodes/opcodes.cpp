@@ -27,6 +27,7 @@ OpcodeStruct opcodeTable[NUM_MSG_TYPES] =
     { "SMSG_CHAR_CREATE",                           "AA|",      &WorldSession::HandleServerSide },
     { "SMSG_CHAR_CREATE_ERROR",                     "AAE",      &WorldSession::HandleServerSide },
     { "SMSG_CHAR_DELETE",                           "ADE",      &WorldSession::HandleServerSide },
+    { "SMSG_CHAR_STATS",                            "As",       &WorldSession::HandleServerSide },
     { "SMSG_GAME_CREATE",                           "GCK|",     &WorldSession::HandleServerSide },
     { "SMSG_GIFTS_LIST",                            "Ag1",      &WorldSession::HandleServerSide },
     { "SMSG_COMMUNITY",                             "Ac",       &WorldSession::HandleServerSide },

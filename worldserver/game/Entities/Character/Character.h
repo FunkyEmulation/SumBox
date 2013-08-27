@@ -37,6 +37,8 @@ public:
     bool LoadFromDB(quint32 guid);
     void SaveToDB(bool create = false);
 
+    void SendCharacterStats();
+
 private:
     WorldSession* m_session;
 
@@ -47,8 +49,6 @@ private:
     quint32 m_color1;
     quint32 m_color2;
     quint32 m_color3;
-    quint16 m_mapId;
-    quint16 m_cellId;
 };
 
 #endif // CHARACTER_H
