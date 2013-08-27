@@ -63,6 +63,8 @@ public:
     void HandleQueuePosition(QString& packet);
     void HandleRegionalVersion(QString& packet);
 
+    void SendMapData();
+
 public slots:
     void OnClose();
 

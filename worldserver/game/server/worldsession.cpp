@@ -75,3 +75,10 @@ void WorldSession::SetAccountInfos(QSqlQuery queryResult)
             m_accountInfos.subscriptionTime = subscriptionTime;
     }
 }
+
+void WorldSession::SendMapData()
+{
+    // TODO
+    WorldPacket data(SMSG_MAP_DATA);
+    SendPacket(data);
+}
