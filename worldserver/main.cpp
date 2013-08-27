@@ -60,7 +60,12 @@ int main(int argc, char *argv[])
         return close();
 
     LuaEngine::Instance()->StartEngine();
-    World::Instance()->Initialize();
+
+    if (!World::Instance()->Initialize())
+    {
+        Log::Write(LOG_TYPE_NORMAL, "World initialization failed. Exiting.");
+        return close();
+    }
 
     if(!WorldServer::Instance()->Start(QHostAddress::LocalHost, quint16(ConfigMgr::World()->GetInt("WorldServerPort"))))
     {

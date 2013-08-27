@@ -9,6 +9,7 @@ OpcodeStruct opcodeTable[NUM_MSG_TYPES] =
     { "CMSG_CHAR_CREATE",                           "AA",       &WorldSession::HandleCharCreate },
     { "CMSG_CHAR_DELETE",                           "AD",       &WorldSession::HandleCharDelete },
     { "CMSG_CHAR_LIST",                             "AL",       &WorldSession::HandleCharList },
+    { "CMSG_GAME_CREATE",                           "GC",       &WorldSession::HandleGameCreate },
     { "CMSG_GIFTS_LIST",                            "Ag",       &WorldSession::HandleGiftsList },
     { "CMSG_SESSION_KEY",                           "Ai",       &WorldSession::HandleSessionKey },
     { "CMSG_TICKET",                                "AT",       &WorldSession::HandleTicket },
@@ -26,10 +27,12 @@ OpcodeStruct opcodeTable[NUM_MSG_TYPES] =
     { "SMSG_CHAR_CREATE",                           "AA|",      &WorldSession::HandleServerSide },
     { "SMSG_CHAR_CREATE_ERROR",                     "AAE",      &WorldSession::HandleServerSide },
     { "SMSG_CHAR_DELETE",                           "ADE",      &WorldSession::HandleServerSide },
+    { "SMSG_GAME_CREATE",                           "GCK|",     &WorldSession::HandleServerSide },
     { "SMSG_GIFTS_LIST",                            "Ag1",      &WorldSession::HandleServerSide },
     { "SMSG_COMMUNITY",                             "Ac",       &WorldSession::HandleServerSide },
     { "SMSG_HELLO_CONNECTION_SERVER",               "HC",       &WorldSession::HandleServerSide },
     { "SMSG_HELLO_GAME_SERVER",                     "HG",       &WorldSession::HandleServerSide },
+    { "SMSG_MAP_DATA",                              "GDM|",     &WorldSession::HandleServerSide },
     { "SMSG_QUEUE_OUT_OF_BOUNDS",                   "M116",     &WorldSession::HandleServerSide },
     { "SMSG_REALM_INFOS",                           "AYK",      &WorldSession::HandleServerSide },
     { "SMSG_REALMS_LIST",                           "AH",       &WorldSession::HandleServerSide },
@@ -40,7 +43,6 @@ OpcodeStruct opcodeTable[NUM_MSG_TYPES] =
     // Client and server messages (MSG)
     { "MSG_CHAR_RANDOM_NAME",                       "AP",       &WorldSession::HandleCharRandomPseudo },
     { "MSG_CHAR_SELECT",                            "AS",       &WorldSession::HandleCharSelect },
-    { "MSG_GAME_CREATE",                           "GC",       &WorldSession::HandleGameCreate },
     { "MSG_QUEUE_POSITION",                         "Af",       &WorldSession::HandleQueuePosition },
     { "MSG_REGIONAL_VERSION",                       "AV",       &WorldSession::HandleRegionalVersion },
 };

@@ -1,5 +1,6 @@
 #include "world.h"
 #include "game/Entities/ObjectMgr.h"
+#include "game/Maps/MapMgr.h"
 
 template<> World*  Singleton<World>::m_instance = 0;
 
@@ -13,9 +14,14 @@ World::~World()
     m_is_running = false;
 }
 
-void World::Initialize()
+bool World::Initialize()
 {
     ObjectMgr::Instance()->SetHighestGuids();
+
+    if (!MapMgr::Instance()->LoadFromDB())
+        return false;
+
+    return true;
 }
 
 void World::AddSession(WorldSession *session)
