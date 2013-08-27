@@ -73,7 +73,8 @@ SOURCES += main.cpp \
     ../shared/servers/SocketHandler.cpp \
     game/Entities/ObjectMgr.cpp \
     game/handlers/AccountHandler.cpp \
-    game/handlers/GameHandler.cpp
+    game/handlers/GameHandler.cpp \
+    game/Maps/MapMgr.cpp
 
 HEADERS += \
     worldserver.h \
@@ -126,4 +127,5 @@ HEADERS += \
     game/Entities/Object/Object.h \
     game/Entities/Unit/Unit.h \
     game/Entities/ObjectMgr.h \
-    ../shared/utils/singleton.h
+    ../shared/utils/singleton.h \
+    game/Maps/MapMgr.h

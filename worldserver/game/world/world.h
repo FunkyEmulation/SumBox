@@ -17,7 +17,7 @@ public:
     World();
     ~World();
 
-    void Initialize();
+    bool Initialize();
     bool IsRunning() { return m_is_running; }
 
     void AddSession(WorldSession* session);

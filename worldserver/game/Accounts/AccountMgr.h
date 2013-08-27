@@ -20,4 +20,4 @@ private:
 
 };
 
-#endif // OBJECTFACTORY_H
+#endif // ACCOUNTMGR_H
