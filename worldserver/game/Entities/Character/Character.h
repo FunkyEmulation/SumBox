@@ -35,6 +35,8 @@ public:
     bool LoadFromDB(quint32 guid);
     void SaveToDB(bool create = false);
 
+    void SendCharacterStats();
+
 private:
     WorldSession* m_session;
 

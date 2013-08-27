@@ -74,7 +74,8 @@ SOURCES += main.cpp \
     game/Entities/ObjectMgr.cpp \
     game/handlers/AccountHandler.cpp \
     game/handlers/GameHandler.cpp \
-    game/Maps/MapMgr.cpp
+    game/Maps/MapMgr.cpp \
+    game/Maps/Map.cpp
 
 HEADERS += \
     worldserver.h \
@@ -128,4 +129,5 @@ HEADERS += \
     game/Entities/Unit/Unit.h \
     game/Entities/ObjectMgr.h \
     ../shared/utils/singleton.h \
-    game/Maps/MapMgr.h
+    game/Maps/MapMgr.h \
+    game/Maps/Map.h
