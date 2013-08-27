@@ -33,6 +33,12 @@ public:
 
     WorldSession* GetSession() { return m_session; }
 
+    quint8 GetRace() const { return m_race; }
+    quint8 GetGender() const { return m_gender; }
+    quint32 GetColor1() const { return m_color1; }
+    quint32 GetColor2() const { return m_color1; }
+    quint32 GetColor3() const { return m_color1; }
+
     bool Create(quint32 guid, sCharacterCreateInfos characterCreateInfos);
     bool LoadFromDB(quint32 guid);
     void SaveToDB(bool create = false);
@@ -42,10 +48,8 @@ public:
 private:
     WorldSession* m_session;
 
-    QString m_name;
     quint8 m_race;
     quint8 m_gender;
-    quint16 m_gfxId;
     quint32 m_color1;
     quint32 m_color2;
     quint32 m_color3;

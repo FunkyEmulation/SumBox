@@ -37,6 +37,8 @@ CREATE TABLE IF NOT EXISTS `characters` (
   `color_1` int(11) NOT NULL,
   `color_2` int(11) NOT NULL,
   `color_3` int(11) NOT NULL,
+  `map_id` int(10) unsigned NOT NULL,
+  `cell_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`guid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 

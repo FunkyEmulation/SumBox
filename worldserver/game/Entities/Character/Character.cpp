@@ -42,7 +42,7 @@ bool Character::LoadFromDB(quint32 guid)
 
     if (!result.first())
     {
-        // Log -> character not found or accountId != db account id
+        Log::Write(LOG_TYPE_NORMAL, "Character::LoadFromDB character with guid %u not found or wrong account");
         return false;
     }
 
