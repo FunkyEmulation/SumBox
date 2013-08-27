@@ -24,19 +24,7 @@ Map::~Map()
 
 void Map::Load(const sMapData& mapData)
 {
-    m_data.id           = mapData.id;
-    m_data.date         = mapData.date;
-    m_data.width        = mapData.width;
-    m_data.height       = mapData.height;
-    m_data.places       = mapData.places;
-    m_data.key          = mapData.key;
-    m_data.data         = mapData.data;
-    m_data.cells        = mapData.cells;
-    m_data.monsters     = mapData.monsters;
-    m_data.capabilities = mapData.capabilities;
-    m_data.pos          = mapData.pos;
-    m_data.numgroup     = mapData.numgroup;
-    m_data.groupmaxsize = mapData.groupmaxsize;
+    m_data = mapData;
 }
 
 void Map::Unload()
