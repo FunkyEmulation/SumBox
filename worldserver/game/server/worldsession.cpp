@@ -78,6 +78,9 @@ void WorldSession::SetAccountInfos(QSqlQuery queryResult)
 
 void WorldSession::SendMapData()
 {
+    if(!m_character)
+        return;
+
     // TODO
     WorldPacket data(SMSG_MAP_DATA);
     SendPacket(data);

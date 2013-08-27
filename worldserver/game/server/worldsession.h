@@ -9,6 +9,7 @@
 #include "define.h"
 #include "servers/SocketHandler.h"
 #include "game/Entities/Character/Character.h"
+#include "game/world/world.h"
 
 struct sAccountInfos
 {

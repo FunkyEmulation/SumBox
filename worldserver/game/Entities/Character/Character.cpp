@@ -30,6 +30,8 @@ bool Character::Create(quint32 guid, sCharacterCreateInfos characterCreateInfos)
     m_color1    = characterCreateInfos.color1;
     m_color2    = characterCreateInfos.color2;
     m_color3    = characterCreateInfos.color3;
+    m_mapId     = characterCreateInfos.mapId;
+    m_cellId    = characterCreateInfos.cellId;
 
     return true;
 }
@@ -54,6 +56,8 @@ bool Character::LoadFromDB(quint32 guid)
     m_color1 = result.value(rows.indexOf("color_1")).toInt();
     m_color2 = result.value(rows.indexOf("color_2")).toInt();
     m_color3 = result.value(rows.indexOf("color_3")).toInt();
+    m_mapId = result.value(rows.indexOf("map_id")).toUInt();
+    m_cellId = result.value(rows.indexOf("cell_id")).toUInt();
 
     GetSession()->SetCharacter(this);
 

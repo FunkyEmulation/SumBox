@@ -17,7 +17,8 @@ enum WorldDatabaseQueries
     /**
      * DATABASE_STATEMENT_SUMMARY
      */
-    SELECT_ALL_MAPS
+    SELECT_ALL_MAPS,
+    SELECT_RACE_START_INFOS
 };
 
 #endif

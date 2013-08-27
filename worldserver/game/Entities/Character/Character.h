@@ -11,8 +11,8 @@
 
 struct sCharacterCreateInfos
 {
-    sCharacterCreateInfos(QString name, quint8 race, quint8 gender, quint16 gfxId, qint32 color1, qint32 color2, qint32 color3) :
-        name(name), race(race), gender(gender), gfxId(gfxId), color1(color1), color2(color2), color3(color3) {}
+    sCharacterCreateInfos(QString name, quint8 race, quint8 gender, quint16 gfxId, qint32 color1, qint32 color2, qint32 color3, quint16 mapId, quint16 cellId) :
+        name(name), race(race), gender(gender), gfxId(gfxId), color1(color1), color2(color2), color3(color3), mapId(mapId), cellId(cellId) {}
 
     QString name;
     quint8 race;
@@ -21,6 +21,8 @@ struct sCharacterCreateInfos
     qint32 color1;
     qint32 color2;
     qint32 color3;
+    quint16 mapId;
+    quint16 cellId;
 };
 
 class Character : public Unit
@@ -45,6 +47,8 @@ private:
     quint32 m_color1;
     quint32 m_color2;
     quint32 m_color3;
+    quint16 m_mapId;
+    quint16 m_cellId;
 };
 
 #endif // CHARACTER_H

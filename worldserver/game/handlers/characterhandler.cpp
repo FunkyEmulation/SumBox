@@ -116,7 +116,8 @@ void WorldSession::HandleCharCreate(QString& packet)
     // TODO: Checker la validité de la race
     quint16 gfxId = (QString::number(datas[1].toUInt()) + QString::number(datas[2].toUInt())).toUInt();
 
-    sCharacterCreateInfos charCreateInfos(pseudo, (quint8)datas[1].toUInt(), (quint8)datas[2].toUInt(), gfxId, datas.at(3).toInt(), datas.at(4).toInt(), datas.at(5).toInt());
+    sRaceStartInfos startInfos = World::Instance()->GetRaceStartInfos(datas[1].toUInt());
+    sCharacterCreateInfos charCreateInfos(pseudo, (quint8)datas[1].toUInt(), (quint8)datas[2].toUInt(), gfxId, datas.at(3).toInt(), datas.at(4).toInt(), datas.at(5).toInt(), startInfos.map_id, startInfos.cell_id);
     QScopedPointer<Character> newChar(new Character(this));
 
     if(newChar->Create(ObjectMgr::Instance()->GenerateGuid(GUIDTYPE_CHARACTER), charCreateInfos))
