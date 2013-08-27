@@ -41,7 +41,8 @@ SOURCES += main.cpp \
     ../worldserver/game/handlers/AccountHandler.cpp \
     ../worldserver/game/handlers/GameHandler.cpp \
     ../worldserver/game/Maps/MapMgr.cpp \
-    ../worldserver/game/Maps/Map.cpp
+    ../worldserver/game/Maps/Map.cpp \
+    ../worldserver/game/handlers/MiscHandler.cpp
 
 HEADERS += \
     ../shared/define.h \
