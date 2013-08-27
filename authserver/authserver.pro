@@ -39,7 +39,9 @@ SOURCES += main.cpp \
     ../worldserver/game/handlers/characterhandler.cpp \
     ../worldserver/game/Entities/Character/Character.cpp \
     ../worldserver/game/handlers/AccountHandler.cpp \
-    ../worldserver/game/handlers/GameHandler.cpp
+    ../worldserver/game/handlers/GameHandler.cpp \
+    ../worldserver/game/Maps/MapMgr.cpp \
+    ../worldserver/game/Maps/Map.cpp
 
 HEADERS += \
     ../shared/define.h \
@@ -65,4 +67,6 @@ HEADERS += \
     ../worldserver/game/Entities/Object/Object.h \
     ../worldserver/game/Entities/ObjectMgr.h \
     ../worldserver/game/Entities/Unit/Unit.h \
-    ../worldserver/game/Entities/Character/Character.h
+    ../worldserver/game/Entities/Character/Character.h \
+    ../worldserver/game/Maps/MapMgr.h \
+    ../worldserver/game/Maps/Map.h

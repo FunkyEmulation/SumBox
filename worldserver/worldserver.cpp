@@ -24,7 +24,6 @@ bool WorldServer::Start(QHostAddress address, quint16 port)
 
 void WorldServer::Stop()
 {
-    Log::Delete();
     m_server->close();
 }
 

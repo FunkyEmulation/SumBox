@@ -1,19 +1,33 @@
 #include "MapMgr.h"
+#include "logs/log.h"
+#include "define.h"
 
 template<> MapMgr*  Singleton<MapMgr>::m_instance = 0;
 
 MapMgr::MapMgr()
 {
+    m_mapsDataList.clear();
     m_mapsList.clear();
+
+    Map* newMap = new Map();
+    m_mapsList.insert(1, newMap);
 }
 
 MapMgr::~MapMgr()
 {
+    m_mapsDataList.clear();
+
+    for (MapsList::Iterator itr = m_mapsList.begin(); itr != m_mapsList.end(); ++itr)
+    {
+        delete (*itr);
+        (*itr) = NULL;
+    }
     m_mapsList.clear();
 }
 
 bool MapMgr::LoadFromDB()
 {
+    Log::Write(LOG_TYPE_NORMAL, "MapMgr: loading maps...");
     QTime t;
     t.start();
 
@@ -41,9 +55,33 @@ bool MapMgr::LoadFromDB()
         mapData.numgroup       = (quint8)result.value(rows.indexOf("numgroup")).toUInt();
         mapData.groupmaxsize    = (quint8)result.value(rows.indexOf("groupmaxsize")).toUInt();
 
-        m_mapsList.insert(mapId, mapData);
+        m_mapsDataList.insert(mapId, mapData);
     }
 
-    Log::Write(LOG_TYPE_NORMAL, "MapMgr: loaded %u maps data in %s sec.", m_mapsList.count(), QString::number(t.elapsed() / IN_MILLISECONDS).toLatin1().data());
+    Log::Write(LOG_TYPE_NORMAL, "MapMgr: loaded %u maps data in %s sec.", m_mapsDataList.count(), QString::number(t.elapsed() / IN_MILLISECONDS).toLatin1().data());
     return true;
+}
+
+Map* MapMgr::LoadMap(quint16 mapId)
+{
+    if (!IsMapLoaded(mapId))
+    {
+        if (!HasMapData(mapId))
+        {
+            Log::Write(LOG_TYPE_NORMAL, "MapMgr: Map data not found for map %u !", mapId);
+            return NULL;
+        }
+
+        Map* map = new Map();
+        map->Load(m_mapsDataList.value(mapId));
+        m_mapsList.insert(mapId, map);
+    }
+
+    return m_mapsList.value(mapId);
+}
+
+void MapMgr::UnloadMap(quint16 mapId)
+{
+    if (IsMapLoaded(mapId))
+        delete m_mapsList.take(mapId);
 }
