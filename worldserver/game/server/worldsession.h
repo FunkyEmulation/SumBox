@@ -55,6 +55,7 @@ public:
     void SendCharacterList();
     void HandleGameCreate(QString& packet);
     void HandleGiftsList(QString& packet);
+    void HandleScreenInfo(QString& packet);
     void HandleSessionKey(QString& packet);
     void HandleTicket(QString& packet);
 

@@ -11,6 +11,7 @@ OpcodeStruct opcodeTable[NUM_MSG_TYPES] =
     { "CMSG_CHAR_LIST",                             "AL",       &WorldSession::HandleCharList },
     { "CMSG_GAME_CREATE",                           "GC",       &WorldSession::HandleGameCreate },
     { "CMSG_GIFTS_LIST",                            "Ag",       &WorldSession::HandleGiftsList },
+    { "CMSG_SCREEN_INFO",                           "Ir",       &WorldSession::HandleScreenInfo },
     { "CMSG_SESSION_KEY",                           "Ai",       &WorldSession::HandleSessionKey },
     { "CMSG_TICKET",                                "AT",       &WorldSession::HandleTicket },
 
