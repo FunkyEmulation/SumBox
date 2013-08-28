@@ -10,6 +10,7 @@
 #include "servers/SocketHandler.h"
 #include "game/Entities/Character/Character.h"
 #include "game/world/world.h"
+#include "game/Maps/MapMgr.h"
 
 struct sAccountInfos
 {
@@ -65,7 +66,7 @@ public:
     void HandleQueuePosition(QString& packet);
     void HandleRegionalVersion(QString& packet);
 
-    void SendMapData();
+    void SendMapData(const sMapData& mapData);
 
 public slots:
     void OnClose();

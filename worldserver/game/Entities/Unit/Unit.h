@@ -4,9 +4,7 @@
 #include "game/Entities/Object/Object.h"
 #include "game/Maps/Map.h"
 
-/*
- * Unité : monstres & joueurs
- */
+class Map;
 
 class Unit : public Object
 {
@@ -20,7 +18,6 @@ protected:
     int m_level;
     Map* m_map;
     quint16 m_cellId;
-
 };
 
 #endif // UNIT_H

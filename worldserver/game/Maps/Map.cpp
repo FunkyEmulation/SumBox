@@ -29,5 +29,10 @@ void Map::Load(const sMapData& mapData)
 
 void Map::Unload()
 {
+    m_objectList.clear();
+}
 
+void Map::AddToMap(Object* object)
+{
+    m_objectList.push_back(object);
 }

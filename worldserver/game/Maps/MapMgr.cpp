@@ -8,9 +8,6 @@ MapMgr::MapMgr()
 {
     m_mapsDataList.clear();
     m_mapsList.clear();
-
-    Map* newMap = new Map();
-    m_mapsList.insert(1, newMap);
 }
 
 MapMgr::~MapMgr()

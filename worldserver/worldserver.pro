@@ -76,7 +76,10 @@ SOURCES += main.cpp \
     game/handlers/GameHandler.cpp \
     game/Maps/MapMgr.cpp \
     game/Maps/Map.cpp \
-    game/handlers/MiscHandler.cpp
+    game/handlers/MiscHandler.cpp \
+    game/handlers/MapHandler.cpp \
+    game/Entities/Object/Object.cpp \
+    game/handlers/MovementHandler.cpp
 
 HEADERS += \
     worldserver.h \
