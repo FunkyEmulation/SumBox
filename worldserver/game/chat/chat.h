@@ -2,6 +2,7 @@
 #define CHAT_H
 
 #include <QtCore>
+#include "utils/singleton.h"
 #include "logs/log.h"
 
 class Chat;
@@ -19,45 +20,25 @@ struct ChatCommand
     QString name;
     quint8 security;
     bool allowConsole;
-    bool (Chat::*Handler)(QString args);
+    bool (Chat::*Handler)(QString& args);
     QString description;
 };
 
 typedef QMap<QString, ChatCommand> ChatCommandMap;
 
-class Chat
+class Chat : public Singleton<Chat>
 {
 public:
-    static Chat* Instance()
-    {
-        static QMutex mutex;
-        if(!m_instance)
-        {
-            mutex.lock();
-            m_instance = new Chat;
-            mutex.unlock();
-        }
-        return m_instance;
-    }
-
-    static void Close()
-    {
-        static QMutex mutex;
-        mutex.lock();
-        delete m_instance;
-        mutex.unlock();
-    }
+    Chat();
+    ~Chat();
 
     bool ParseCommand(QString command);
 
     // Commands handlers
-    bool HandleAccountCreateCommand(QString args);
+    bool HandleAccountCreateCommand(QString& args);
+    bool HandleHelloCommand(QString& args);
 
 private:
-    Chat();
-    ~Chat();
-
-    static Chat* m_instance;
     ChatCommandMap m_chatCommands;
 };
 

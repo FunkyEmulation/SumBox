@@ -8,7 +8,7 @@
 
 using namespace std;
 
-class CommandLine : QThread
+class CommandLine : public QThread
 {
     Q_OBJECT
 public:
@@ -16,12 +16,9 @@ public:
 
     virtual void run()
     {
-        printf("Sumbox>");
-
-        string input;
-        char args[256];
         while (World::Instance()->IsRunning())
         {
+            cout << "Sumbox>";
             fflush(stdout);
 
             char* command_str;
@@ -39,26 +36,20 @@ public:
                     }
 
                 if (!*command_str)
-                {
-                    printf("Sumbox>");
                     continue;
-                }
 
-
-                QString command = QString::fromStdString(input);
+                QString command = QString::fromStdString(command_str);
 
                 if (command.isEmpty())
-                {
-                    printf("Sumbox>");
                     continue;
-                }
 
                 fflush(stdout);
                 Chat::Instance()->ParseCommand(command);
             }
             else if (feof(stdin))
             {
-                World::Delete();
+                // Close WorldServer, etc.
+                qDebug() << "test";
             }
         }
     }
