@@ -8,5 +8,3 @@ void WorldSession::SendMapData(const sMapData& mapData)
     data << "|" << mapData.key;
     SendPacket(data);
 }
-
-// GDM|7411|0612131401|
