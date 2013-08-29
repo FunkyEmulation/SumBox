@@ -1,10 +1,11 @@
 #include "chat.h"
 
-Chat* Chat::m_instance = 0;
+template<> Chat*  Singleton<Chat>::m_instance = 0;
 
 static ChatCommand commandTable[] =
 {
     { "caccount",   SECURITY_ADMINISTRATOR, true, &Chat::HandleAccountCreateCommand, "Create a new account. Syntax : .caccount \"username\" \"password\"" },
+    { "hello",      SECURITY_ADMINISTRATOR, true, &Chat::HandleHelloCommand,         "Hello world (test command)." },
     { NULL,         0,                      false, NULL,                             NULL }
 };
 
@@ -39,10 +40,11 @@ bool Chat::ParseCommand(QString command)
         Log::Write(LOG_TYPE_NORMAL, "Command \"%s\" don't exist.", commandName.toLatin1().data());
     }
 
+    Log::Write(LOG_TYPE_NORMAL, "Type \".help\" to get full commands list.");
     return false;
 }
 
-bool Chat::HandleAccountCreateCommand(QString args)
+bool Chat::HandleAccountCreateCommand(QString& args)
 {
     QStringList list = args.split(" ");
 
@@ -58,4 +60,10 @@ bool Chat::HandleAccountCreateCommand(QString args)
         return false;
 
     // TODO : Add account in DB
+}
+
+bool Chat::HandleHelloCommand(QString& /*args*/)
+{
+    Log::Write(LOG_TYPE_NORMAL, "Hello World !");
+    return true;
 }
