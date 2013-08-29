@@ -25,7 +25,7 @@ OpcodeStruct opcodeTable[NUM_MSG_TYPES] =
     { "SMSG_ACCOUNT_REALM_CHAR",                    "AxK",      &WorldSession::HandleServerSide },
     { "SMSG_ACCOUNT_SECRET_QUESTION",               "AQ",       &WorldSession::HandleServerSide },
     { "SMSG_CHAR_LIST",                             "AL|",      &WorldSession::HandleServerSide },
-    { "SMSG_CHAR_CREATE",                           "AA",       &WorldSession::HandleServerSide },
+    { "SMSG_CHAR_CREATE",                           "AA|",      &WorldSession::HandleServerSide },
     { "SMSG_CHAR_CREATE_ERROR",                     "AAE",      &WorldSession::HandleServerSide },
     { "SMSG_CHAR_DELETE",                           "ADE",      &WorldSession::HandleServerSide },
     { "SMSG_CHAR_STATS",                            "As",       &WorldSession::HandleServerSide },
