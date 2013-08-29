@@ -11,7 +11,6 @@
 #include "logs/log.h"
 #include "configuration/configmgr.h"
 #include "game/chat/commandline.h"
-#include "game/scripting/luaengine.h"
 
 using namespace std;
 
@@ -61,8 +60,6 @@ int main(int argc, char *argv[])
 
     if (!Database::Instance()->OpenWorldDatabase())
         return close();
-
-    LuaEngine::Instance()->StartEngine();
 
     if (!World::Instance()->Initialize())
     {

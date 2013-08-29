@@ -69,7 +69,7 @@ void WorldSession::SetAccountInfos(QSqlQuery queryResult)
         m_accountInfos.secretQuestion   = queryResult.value(queryResult.record().indexOf("secret_question")).toString();
         m_accountInfos.secretAnswer     = queryResult.value(queryResult.record().indexOf("secret_answer")).toString();
 
-        qint32 subscriptionTime = queryResult.value(queryResult.record().indexOf("subscription")).toLongLong() * 1000;
+        qint64 subscriptionTime = (qint64)queryResult.value(queryResult.record().indexOf("subscription_time")).toLongLong() * 1000;
 
         if (subscriptionTime > 0)
             m_accountInfos.subscriptionTime = subscriptionTime;

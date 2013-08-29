@@ -35,6 +35,7 @@ OpcodeStruct opcodeTable[NUM_MSG_TYPES] =
     { "SMSG_HELLO_CONNECTION_SERVER",               "HC",       &WorldSession::HandleServerSide },
     { "SMSG_HELLO_GAME_SERVER",                     "HG",       &WorldSession::HandleServerSide },
     { "SMSG_MAP_DATA",                              "GDM|",     &WorldSession::HandleServerSide },
+    { "SMSG_OBJECT_MOVEMENT",                       "GM|",      &WorldSession::HandleServerSide },
     { "SMSG_QUEUE_OUT_OF_BOUNDS",                   "M116",     &WorldSession::HandleServerSide },
     { "SMSG_REALM_INFOS",                           "AYK",      &WorldSession::HandleServerSide },
     { "SMSG_REALMS_LIST",                           "AH",       &WorldSession::HandleServerSide },

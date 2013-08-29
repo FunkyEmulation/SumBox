@@ -103,18 +103,25 @@ void Character::SaveToDB(bool create)
 void Character::SendCharacterStats()
 {
     WorldPacket data(SMSG_CHAR_STATS);
-    GetSession()->SendPacket(data);
+
+    data << 0 << ","; // current XP
+    data << 0 << ","; // XP low
+    data << 0 << "|"; // XP high
+
+    data << 0 << "|"; // kamas
+    data << 0 << "|"; // bonus points
+    data << 0 << "|"; // spell bonus points
+
+    // todo
+    // fakeAli(=idAli si unFake) ~ idAli , 1(?), rangAli , ptsHonneur , 0(deshonnor?), showAli |
+
+    data << 0 << ","; // HP
+    data << 0 << "|"; // Max HP
+
+    data << 0 << ","; // Energy
+    data << 0 << "|"; // Max eneregy
 
     /*
-    As = Account Stats =
-
-    XP,xpLow(?),maxXp |
-    kamas |
-    ptsCaracts|
-    ptsSorts |
-    fakeAli(=idAli si unFake) ~ idAli , 1(?), rangAli , ptsHonneur , 0(deshonnor?), showAli |
-    vie , maxVie |
-    energie, maxEnergie |
     initiative |
     prospection |
      // 42 lignes de stats ; base        | equipement   | dons           | boost        //
@@ -163,4 +170,6 @@ void Character::SendCharacterStats()
                       resisAirPvpFixe,
                       resisAirPvp%
     */
+
+    GetSession()->SendPacket(data);
 }

@@ -16,19 +16,10 @@ void WorldSession::HandleGameCreate(QString& packet)
     // Then send character stats
     // Todo : check packet struct in client : this.aks.Account.onStats(sData.substr(2));
 
-    SendMapData();
-}
-
-void WorldSession::SendMapData()
-{
-    if(!GetCharacter() || (GetCharacter() && !GetCharacter()->GetMap()))
+    Map* map = character->GetMap();
+    if (!map)
         return;
 
-    WorldPacket data(SMSG_MAP_DATA);
-    data << GetCharacter()->GetMap()->GetData().id;
-    data << "|" << GetCharacter()->GetMap()->GetData().date;
-    data << "|" << GetCharacter()->GetMap()->GetData().key;
-    SendPacket(data);
+    SendMapData(map->GetData());
+    map->AddToMap(character);
 }
-
-// GDM|7411|0612131401|
