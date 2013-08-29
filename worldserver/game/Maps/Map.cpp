@@ -1,4 +1,5 @@
 #include "Map.h"
+#include "game/Entities/Character/Character.h"
 
 Map::Map()
 {
@@ -15,6 +16,8 @@ Map::Map()
     m_data.pos          = QString();
     m_data.numgroup     = 0;
     m_data.groupmaxsize = 0;
+
+    m_objectsList.clear();
 }
 
 Map::~Map()
@@ -29,5 +32,17 @@ void Map::Load(const sMapData& mapData)
 
 void Map::Unload()
 {
+    m_objectsList.clear();
+}
 
+void Map::AddToMap(Object* object)
+{
+    m_objectsList.push_back(object);
+}
+
+void Map::SendPacket(const WorldPacket &data)
+{
+    for (ObjectsList::ConstIterator itr = m_objectsList.begin(); itr != m_objectsList.end(); ++itr)
+        if ((*itr) && (*itr)->ToCharacter())
+            (*itr)->ToCharacter()->GetSession()->SendPacket(data);
 }

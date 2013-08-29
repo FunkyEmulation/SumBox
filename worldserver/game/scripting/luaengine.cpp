@@ -9,19 +9,27 @@ LuaEngine::LuaEngine()
 
 LuaEngine::~LuaEngine()
 {
-    lua_close(m_luaState);
+    StopEngine();
     m_luaState = NULL;
 }
 
-void LuaEngine::StartEngine()
+void LuaEngine::StartEngine(bool restart)
 {
+    if (restart)
+    {
+        Log::Write(LOG_TYPE_NORMAL, "LuaEngine:: Restarting Lua Engine...");
+
+        if (m_luaState)
+            StopEngine();
+    }
+
     Log::Write(LOG_TYPE_NORMAL, "Starting Lua Engine...");
+
     m_luaState = luaL_newstate();
     LoadLuaScripts();
     luaL_openlibs(m_luaState);
 
-    LuaScriptsList::ConstIterator itr;
-    for (itr = m_luaScripts.begin(); itr != m_luaScripts.end(); ++itr)
+    for (LuaScriptsList::ConstIterator itr = m_luaScripts.begin(); itr != m_luaScripts.end(); ++itr)
     {
         QString fileName = (*itr);
 
@@ -40,6 +48,12 @@ void LuaEngine::StartEngine()
             }
         }
     }
+}
+
+void LuaEngine::StopEngine()
+{
+    Log::Write(LOG_TYPE_NORMAL, "Stopping Lua Engine...");
+    lua_close(m_luaState);
 }
 
 void LuaEngine::LoadLuaScripts()

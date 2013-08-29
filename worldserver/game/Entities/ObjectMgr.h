@@ -1,5 +1,5 @@
-#ifndef OBJECTFACTORY_H
-#define OBJECTFACTORY_H
+#ifndef OBJECTMGR_H
+#define OBJECTMGR_H
 
 #include <QtCore>
 #include "databases/database.h"
@@ -26,4 +26,4 @@ private:
     quint32 m_highCharacterGuid;
 };
 
-#endif // OBJECTFACTORY_H
+#endif // OBJECTMGR_H

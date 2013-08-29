@@ -1,6 +1,7 @@
 #include "world.h"
 #include "game/Entities/ObjectMgr.h"
 #include "game/Maps/MapMgr.h"
+#include "game/scripting/ScriptMgr.h"
 
 template<> World*  Singleton<World>::m_instance = 0;
 
@@ -24,6 +25,8 @@ bool World::Initialize()
         return false;
 
     LoadRaceStartInfos();
+
+    ScriptMgr::Instance()->Initialize();
 
     return true;
 }

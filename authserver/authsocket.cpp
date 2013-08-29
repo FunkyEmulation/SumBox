@@ -119,16 +119,17 @@ void AuthSocket::SendInitPacket()
 
 void AuthSocket::SendPersos()
 {
-    WorldPacket persos(SMSG_ACCOUNT_REALM_CHAR);
-    persos << QString::number(((ulong)m_infos["subscription_time"].toInt()) * 1000).toLatin1().data();
+    WorldPacket data(SMSG_ACCOUNT_REALM_CHAR);
+    data << (qint64)(m_infos["subscription_time"].toInt()) * 1000;
 
-    QSqlQuery req = Database::Auth()->PQuery(AUTH_SELECT_ACCOUNT_CHARACTERS, m_infos["account_id"].toInt());
-    while(req.next())
+    QSqlQuery result = Database::Auth()->PQuery(AUTH_SELECT_ACCOUNT_CHARACTERS, m_infos["account_id"].toInt());
+    while(result.next())
     {
-        persos << "|" << req.value(req.record().indexOf("realm_id")).toString().toLatin1().data() << "," << req.value(req.record().indexOf("num_characters")).toString().toLatin1().data();
+        data << "|" << (quint8)result.value(result.record().indexOf("realm_id")).toUInt();
+        data << "," << (quint8)result.value(result.record().indexOf("num_characters")).toUInt();
     }
 
-    SendPacket(persos);
+    SendPacket(data);
 }
 
 void AuthSocket::QueueManager()
@@ -141,11 +142,11 @@ void AuthSocket::QueueManager()
     }
     else
     {
-        queuePosition << QString::number(AuthQueue::Instance()->GetClientPosition(this)).toLatin1().data() << "|"; // Position dans la file
-        queuePosition << QString::number(AuthQueue::Instance()->GetClientsCount()).toLatin1().data() << "|"; // Nombre d'abonnés dans la file
-        queuePosition << "0|"; // Nombre de non abonnés
-        queuePosition << (m_infos["subscription_time"].toInt() > 0 ? "1" : "0");
-        queuePosition << "1"; // Queue id
+        queuePosition << AuthQueue::Instance()->GetClientPosition(this) << "|"; // Position dans la file
+        queuePosition << AuthQueue::Instance()->GetClientsCount() << "|"; // Nombre d'abonnés dans la file
+        queuePosition << 0 << "|"; // Nombre de non abonnés
+        queuePosition << (quint8)(m_infos["subscription_time"].toInt() > 0 ? 1 : 0);
+        queuePosition << 1; // Queue id
     }
 
     SendPacket(queuePosition);
