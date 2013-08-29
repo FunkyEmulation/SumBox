@@ -20,7 +20,8 @@ public:
     LuaEngine();
     ~LuaEngine();
 
-    void StartEngine();
+    void StartEngine(bool restart = false);
+    void StopEngine();
     void LoadLuaScripts();
     void ReportState(lua_State* L);
 

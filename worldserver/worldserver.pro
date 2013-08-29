@@ -79,7 +79,10 @@ SOURCES += main.cpp \
     game/handlers/MiscHandler.cpp \
     game/handlers/MapHandler.cpp \
     game/Entities/Object/Object.cpp \
-    game/handlers/MovementHandler.cpp
+    game/handlers/MovementHandler.cpp \
+    game/scripting/ScriptMgr.cpp \
+    game/scripting/ScriptLoader.cpp \
+    Scripts/Examples/ScriptLoadTest.cpp
 
 HEADERS += \
     worldserver.h \
@@ -134,4 +137,6 @@ HEADERS += \
     game/Entities/ObjectMgr.h \
     ../shared/utils/singleton.h \
     game/Maps/MapMgr.h \
-    game/Maps/Map.h
+    game/Maps/Map.h \
+    game/scripting/ScriptMgr.h \
+    game/scripting/ScriptLoader.h
