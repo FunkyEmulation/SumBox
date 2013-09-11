@@ -5,14 +5,18 @@ Character::Character(WorldSession* session) : Unit()
 {
     m_session = session;
 
-    SetGuid(0);
-    m_name = QString();
     m_race = 0;
     m_gender = 0;
-    m_gfxId = 0;
     m_color1 = 0;
     m_color2 = 0;
     m_color3 = 0;
+    m_typeId = TYPEID_CHARACTER;
+
+    for (quint8 i = 0; i < TOTAL_CHARACTER_STATS; ++i)
+    {
+        sCharacterStats stats;
+        m_stats[(CharacterStats)i] = stats;
+    }
 }
 
 Character::~Character()
@@ -114,6 +118,7 @@ void Character::SendCharacterStats()
 
     // todo
     // fakeAli(=idAli si unFake) ~ idAli , 1(?), rangAli , ptsHonneur , 0(deshonnor?), showAli |
+    data << "0~0,0,0,0,0,0|";
 
     data << 0 << ","; // HP
     data << 0 << "|"; // Max HP
@@ -121,55 +126,12 @@ void Character::SendCharacterStats()
     data << 0 << ","; // Energy
     data << 0 << "|"; // Max eneregy
 
-    /*
-    initiative |
-    prospection |
-     // 42 lignes de stats ; base        | equipement   | dons           | boost        //
-                 basePA       , equipPA      , donsPA        , boostPa      |
-                 basePM       , equipPM      , donsPM        , boostPM      |
-                 force        , force        , force         , force        |
-                 vita         , vita         , vita          , vita         |
-                 sasa         , sasa         , sasa          , sasa         |
-                 eau          , eau          , eau           , eau          |
-                 air          , air          , air           , air          |
-                 feu          , feu          , feu           , feu          |
-                 eau          , eau          , eau           , eau          |
-                     portee       , portee       , portee        , portee       |
-                 invocs       , invocs       , invocs        , invocs       |
-                 bonusDeg     , bonusDeg     , bonusDeg      , bonusDeg     |
-                 bonDegPhys   , bonDegPhys   , bonDegPhys    , bonDegPhys   |
-                 bonMaitrises , bonMaitrises , bonMaitrises  , bonMaitrises |
-                 bonDmgs      , bonDmgs      , bonDmgs       , bonDmgs      |
-                 bonPieges    , bonPieges    , bonPieges     , bonPieges    |
-                 bonPrCentPieg, bonPrCentPieg, bonPrCentPieg , bonPrCentPieg|
-                 bonSoins     , bonSoins     , bonSoins      , bonSoins     |
-                 renvoiDmgs   , renvoiDmgs   , renvoiDmgs    , renvoiDmgs   |
-                 bonCoupCriti , bonCoupCriti , bonCoupCriti  , bonCoupCriti |
-                 bonEcheCriti , bonEcheCriti , bonEcheCriti  , bonEcheCriti |
-                 esquivePA    , esquivePA    , esquivePA     , esquivePA    |
-                 esquivePM    , esquivePM    , esquivePM     , esquivePM    |
+    data << 0 << "|"; // initiative
+    data << 0 << "|"; // Discernment
 
-                 resisNeutreFixe,
-                 resisNeutre%,
-                      resisNeutrePvpFixe,
-                      resisNeutrePvP%,
-                 resisTerreFixe,
-                 resisTerre%,
-                      resisTerrePvpFixe,
-                      resisTerrePvp%,
-                 resisFeuFixe,
-                 resisFeu%,
-                      resisFeuPvpFixe,
-                      resisFeuPvp%,
-                 resisEauFixe,
-                 resisEau%,
-                      resisEauPvpFixe,
-                      resisEauPvp%,
-                 resisAirFixe,
-                 resisAir%,
-                      resisAirPvpFixe,
-                      resisAirPvp%
-    */
+    // Character stats
+    for (quint8 i = 0; i < TOTAL_CHARACTER_STATS; ++i)
+        data << m_stats[(CharacterStats)i].ToPacketString();
 
     GetSession()->SendPacket(data);
 }

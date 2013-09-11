@@ -82,7 +82,8 @@ SOURCES += main.cpp \
     game/handlers/MovementHandler.cpp \
     game/scripting/ScriptMgr.cpp \
     game/scripting/ScriptLoader.cpp \
-    Scripts/Examples/ScriptLoadTest.cpp
+    Scripts/Examples/ScriptLoadTest.cpp \
+    game/Entities/Unit/Unit.cpp
 
 HEADERS += \
     worldserver.h \
@@ -139,4 +140,5 @@ HEADERS += \
     game/Maps/MapMgr.h \
     game/Maps/Map.h \
     game/scripting/ScriptMgr.h \
-    game/scripting/ScriptLoader.h
+    game/scripting/ScriptLoader.h \
+    game/Entities/Character/CharacterStats.h

@@ -8,6 +8,7 @@
 #include "define.h"
 #include "game/server/worldsession.h"
 #include "game/Entities/Unit/Unit.h"
+#include "CharacterStats.h"
 
 struct sCharacterCreateInfos
 {
@@ -53,6 +54,8 @@ private:
     quint32 m_color1;
     quint32 m_color2;
     quint32 m_color3;
+
+    QMap<CharacterStats, sCharacterStats> m_stats;
 };
 
 #endif // CHARACTER_H

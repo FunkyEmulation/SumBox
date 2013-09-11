@@ -12,8 +12,8 @@ using namespace std;
 enum LogType
 {
     LOG_TYPE_NORMAL = 0,
-    LOG_TYPE_DETAIL = 1,
-    LOG_TYPE_DEBUG  = 2
+    LOG_TYPE_DETAIL,
+    LOG_TYPE_DEBUG
 };
 
 class Log : public Singleton<Log>

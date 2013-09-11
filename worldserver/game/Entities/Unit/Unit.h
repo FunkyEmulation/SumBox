@@ -9,6 +9,9 @@ class Map;
 class Unit : public Object
 {
 public:
+    Unit();
+    ~Unit();
+
     // Getters
     int GetLevel() const      { return m_level; }
     Map* GetMap() const       { return m_map; }

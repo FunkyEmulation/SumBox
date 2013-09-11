@@ -80,7 +80,8 @@ SOURCES += main.cpp \
     ../worldserver/game/scripting/lua/lbaselib.c \
     ../worldserver/game/scripting/lua/lauxlib.c \
     ../worldserver/game/scripting/lua/lapi.c \
-    ../worldserver/Scripts/Examples/ScriptLoadTest.cpp
+    ../worldserver/Scripts/Examples/ScriptLoadTest.cpp \
+    ../worldserver/game/Entities/Unit/Unit.cpp
 
 HEADERS += \
     ../shared/define.h \
