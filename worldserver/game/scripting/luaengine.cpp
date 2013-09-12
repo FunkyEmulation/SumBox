@@ -1,4 +1,4 @@
-#include "luaengine.h"
+#include "LuaEngine.h"
 
 template<> LuaEngine*  Singleton<LuaEngine>::m_instance = 0;
 

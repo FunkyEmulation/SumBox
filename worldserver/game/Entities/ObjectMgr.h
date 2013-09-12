@@ -2,8 +2,8 @@
 #define OBJECTMGR_H
 
 #include <QtCore>
-#include "databases/database.h"
-#include "utils/singleton.h"
+#include "Databases/Database.h"
+#include "Utils/Singleton.h"
 
 enum GuidType
 {

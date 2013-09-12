@@ -2,7 +2,7 @@
 #define OBJECT_H
 
 #include <QtCore>
-#include "packets/worldpacket.h"
+#include "Packets/WorldPacket.h"
 
 enum TypeId
 {

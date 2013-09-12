@@ -1,8 +1,8 @@
 #ifndef UNIT_H
 #define UNIT_H
 
-#include "game/Entities/Object/Object.h"
-#include "game/Maps/Map.h"
+#include "Entities/Object/Object.h"
+#include "Maps/Map.h"
 
 class Map;
 

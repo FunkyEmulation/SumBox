@@ -4,10 +4,11 @@
 #include <QtCore>
 #include <QObject>
 #include <QtNetwork>
-#include "define.h"
-#include "databases/database.h"
-#include "queues/authqueue.h"
-#include "servers/SocketHandler.h"
+
+#include "Define.h"
+#include "Databases/Database.h"
+#include "Queues/AuthQueue.h"
+#include "Network/SocketHandler.h"
 
 class AuthSocket : public SocketHandler
 {

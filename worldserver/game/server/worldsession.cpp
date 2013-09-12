@@ -1,8 +1,8 @@
-#include "worldsession.h"
-#include "opcodes/opcodes.h"
-#include "logs/log.h"
-#include "configuration/configmgr.h"
-#include "game/world/world.h"
+#include "WorldSession.h"
+#include "Opcodes/Opcodes.h"
+#include "Logs/Log.h"
+#include "Configuration/ConfigMgr.h"
+#include "World/World.h"
 
 WorldSession::WorldSession(QTcpSocket *socket) : SocketHandler(socket)
 {

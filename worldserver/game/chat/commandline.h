@@ -3,8 +3,9 @@
 
 #include <QtCore>
 #include <iostream>
-#include "chat.h"
-#include "game/world/world.h"
+
+#include "Chat.h"
+#include "World/World.h"
 
 using namespace std;
 

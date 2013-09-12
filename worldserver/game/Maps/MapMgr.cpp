@@ -1,6 +1,6 @@
 #include "MapMgr.h"
-#include "logs/log.h"
-#include "define.h"
+#include "Logs/Log.h"
+#include "Define.h"
 
 template<> MapMgr*  Singleton<MapMgr>::m_instance = 0;
 

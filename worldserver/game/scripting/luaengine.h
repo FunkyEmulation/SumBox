@@ -2,15 +2,10 @@
 #define LUAENGINE_H
 
 #include <QtCore>
-#include "logs/log.h"
-#include "utils/singleton.h"
 
-extern "C"
-{
-    #include "lua/lua.h"
-    #include "lua/lualib.h"
-    #include "lua/lauxlib.h"
-}
+#include "Logs/Log.h"
+#include "Utils/Singleton.h"
+#include "lua/lua.hpp"
 
 typedef QList<QString> LuaScriptsList;
 

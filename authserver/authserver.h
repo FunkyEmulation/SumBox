@@ -3,9 +3,10 @@
 
 #include <QtCore>
 #include <QtNetwork>
-#include "authsocket.h"
-#include "../shared/logs/log.h"
-#include "utils/singleton.h"
+
+#include "AuthSocket.h"
+#include "Logs/Log.h"
+#include "Utils/Singleton.h"
 
 typedef QList<AuthSocket*> SocketList;
 

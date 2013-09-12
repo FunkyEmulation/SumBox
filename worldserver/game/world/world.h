@@ -2,10 +2,10 @@
 #define WORLD_H
 
 #include <QtCore>
-#include "worldserver.h"
-#include "logs/log.h"
-#include "configuration/configmgr.h"
-#include "utils/singleton.h"
+#include "WorldServer.h"
+#include "Logs/Log.h"
+#include "Configuration/ConfigMgr.h"
+#include "Utils/Singleton.h"
 
 class WorldSession;
 

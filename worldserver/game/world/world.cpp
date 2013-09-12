@@ -1,7 +1,7 @@
-#include "world.h"
-#include "game/Entities/ObjectMgr.h"
-#include "game/Maps/MapMgr.h"
-#include "game/scripting/ScriptMgr.h"
+#include "World.h"
+#include "Entities/ObjectMgr.h"
+#include "Maps/MapMgr.h"
+#include "Scripting/ScriptMgr.h"
 
 template<> World*  Singleton<World>::m_instance = 0;
 

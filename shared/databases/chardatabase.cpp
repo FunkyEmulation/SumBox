@@ -1,4 +1,4 @@
-#include "chardatabase.h"
+#include "CharDatabase.h"
 
 void CharDatabase::LoadQueries()
 {

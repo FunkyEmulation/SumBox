@@ -1,5 +1,5 @@
 #include "SocketHandler.h"
-#include "logs/log.h"
+#include "Logs/Log.h"
 
 SocketHandler::SocketHandler(QTcpSocket *socket)
 {

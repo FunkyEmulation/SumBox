@@ -1,5 +1,5 @@
-#include "configmgr.h"
-#include "logs/log.h"
+#include "ConfigMgr.h"
+#include "Logs/Log.h"
 
 template<> ConfigMgr*  Singleton<ConfigMgr>::m_instance = 0;
 

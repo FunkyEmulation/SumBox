@@ -4,9 +4,10 @@
 #include <QtCore>
 #include <QObject>
 #include <QtNetwork>
-#include "logs/log.h"
-#include "configuration/configmgr.h"
-#include "utils/singleton.h"
+
+#include "Logs/Log.h"
+#include "Configuration/ConfigMgr.h"
+#include "Utils/Singleton.h"
 
 class WorldSession;
 

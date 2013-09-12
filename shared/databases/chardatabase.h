@@ -2,7 +2,7 @@
 #define CHARDATABASE_H
 
 #include <QtCore>
-#include "mysqlconnection.h"
+#include "MysqlConnection.h"
 
 class CharDatabase : public MysqlConnection
 {

@@ -1,7 +1,7 @@
-#include "../server/worldsession.h"
-#include "utils/util.h"
-#include "game/Entities/Character/Character.h"
-#include "game/Entities/ObjectMgr.h"
+#include "Server/WorldSession.h"
+#include "Utils/Util.h"
+#include "Entities/Character/Character.h"
+#include "Entities/ObjectMgr.h"
 
 void WorldSession::HandleCharList(QString& /*packet*/)
 {

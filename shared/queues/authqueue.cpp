@@ -1,4 +1,4 @@
-#include "authqueue.h"
+#include "AuthQueue.h"
 
 template<> AuthQueue*  Singleton<AuthQueue>::m_instance = 0;
 

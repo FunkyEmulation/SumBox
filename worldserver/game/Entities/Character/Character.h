@@ -1,13 +1,10 @@
 #ifndef CHARACTER_H
 #define CHARACTER_H
 
-#include <QtCore>
-#include <QObject>
-#include <QtNetwork>
-#include "databases/database.h"
-#include "define.h"
-#include "game/server/worldsession.h"
-#include "game/Entities/Unit/Unit.h"
+#include "Databases/Database.h"
+#include "Define.h"
+#include "Server/WorldSession.h"
+#include "Entities/Unit/Unit.h"
 #include "CharacterStats.h"
 
 struct sCharacterCreateInfos

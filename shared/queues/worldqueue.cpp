@@ -1,5 +1,5 @@
-#include "worldqueue.h"
-#include "game/server/worldsession.h"
+#include "WorldQueue.h"
+#include "Server/WorldSession.h"
 
 template<> WorldQueue*  Singleton<WorldQueue>::m_instance = 0;
 

@@ -1,5 +1,5 @@
 #include "ScriptMgr.h"
-#include "luaengine.h"
+#include "LuaEngine.h"
 #include "ScriptLoader.h"
 
 template<class T>

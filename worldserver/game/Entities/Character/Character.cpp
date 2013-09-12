@@ -1,5 +1,5 @@
 #include "Character.h"
-#include "utils/util.h"
+#include "Utils/Util.h"
 
 Character::Character(WorldSession* session) : Unit()
 {

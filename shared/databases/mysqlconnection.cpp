@@ -1,5 +1,5 @@
-#include "mysqlconnection.h"
-#include "logs/log.h"
+#include "MysqlConnection.h"
+#include "Logs/Log.h"
 
 MysqlConnection::MysqlConnection(ConnectionInfo& connectionInfo)
 {

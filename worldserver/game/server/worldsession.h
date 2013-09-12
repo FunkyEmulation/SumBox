@@ -4,13 +4,14 @@
 #include <QtCore>
 #include <QObject>
 #include <QtNetwork>
-#include "databases/database.h"
-#include "queues/worldqueue.h"
-#include "define.h"
-#include "servers/SocketHandler.h"
-#include "game/Entities/Character/Character.h"
-#include "game/world/world.h"
-#include "game/Maps/MapMgr.h"
+
+#include "Databases/Database.h"
+#include "Queues/Worldqueue.h"
+#include "Define.h"
+#include "Network/SocketHandler.h"
+#include "Entities/Character/Character.h"
+#include "World/world.h"
+#include "Game/Maps/MapMgr.h"
 
 struct sAccountInfos
 {

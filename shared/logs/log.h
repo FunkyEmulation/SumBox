@@ -3,9 +3,9 @@
 
 #include <QtCore>
 #include <iostream>
-#include "log.h"
-#include "configuration/configmgr.h"
-#include "utils/singleton.h"
+#include "Log.h"
+#include "Configuration/Configmgr.h"
+#include "Utils/Singleton.h"
 
 using namespace std;
 

@@ -1,5 +1,5 @@
 #include "Object.h"
-#include "game/Entities/Character/Character.h"
+#include "Entities/Character/Character.h"
 
 Object::Object()
 {

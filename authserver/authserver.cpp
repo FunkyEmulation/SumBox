@@ -1,4 +1,4 @@
-#include "authserver.h"
+#include "AuthServer.h"
 
 template<> AuthServer*  Singleton<AuthServer>::m_instance = 0;
 

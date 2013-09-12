@@ -1,4 +1,4 @@
-#include "chat.h"
+#include "Chat.h"
 
 template<> Chat*  Singleton<Chat>::m_instance = 0;
 

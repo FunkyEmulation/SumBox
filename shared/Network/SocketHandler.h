@@ -3,8 +3,8 @@
 
 #include <QtNetwork>
 #include <QTcpSocket>
-#include "packets/worldpacket.h"
-#include "opcodes/opcodes.h"
+#include "Packets/WorldPacket.h"
+#include "Opcodes/Opcodes.h"
 
 class WorldPacket;
 
