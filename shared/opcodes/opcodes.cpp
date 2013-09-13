@@ -10,6 +10,7 @@ OpcodeStruct opcodeTable[NUM_MSG_TYPES] =
     { "CMSG_CHAR_DELETE",                           "AD",       &WorldSession::HandleCharDelete },
     { "CMSG_CHAR_LIST",                             "AL",       &WorldSession::HandleCharList },
     { "CMSG_GAME_CREATE",                           "GC",       &WorldSession::HandleGameCreate },
+    { "CMSG_GAME_INFORMATIONS",                     "GI",       &WorldSession::HandleGameInformations },
     { "CMSG_GIFTS_LIST",                            "Ag",       &WorldSession::HandleGiftsList },
     { "CMSG_SCREEN_INFO",                           "Ir",       &WorldSession::HandleScreenInfo },
     { "CMSG_SESSION_KEY",                           "Ai",       &WorldSession::HandleSessionKey },
@@ -35,6 +36,7 @@ OpcodeStruct opcodeTable[NUM_MSG_TYPES] =
     { "SMSG_HELLO_CONNECTION_SERVER",               "HC",       &WorldSession::HandleServerSide },
     { "SMSG_HELLO_GAME_SERVER",                     "HG",       &WorldSession::HandleServerSide },
     { "SMSG_MAP_DATA",                              "GDM|",     &WorldSession::HandleServerSide },
+    { "SMSG_MAP_LOADED",                            "GDK",      &WorldSession::HandleServerSide },
     { "SMSG_OBJECT_MOVEMENT",                       "GM|",      &WorldSession::HandleServerSide },
     { "SMSG_QUEUE_OUT_OF_BOUNDS",                   "M116",     &WorldSession::HandleServerSide },
     { "SMSG_REALM_INFOS",                           "AYK",      &WorldSession::HandleServerSide },
@@ -48,4 +50,6 @@ OpcodeStruct opcodeTable[NUM_MSG_TYPES] =
     { "MSG_CHAR_SELECT",                            "AS",       &WorldSession::HandleCharSelect },
     { "MSG_QUEUE_POSITION",                         "Af",       &WorldSession::HandleQueuePosition },
     { "MSG_REGIONAL_VERSION",                       "AV",       &WorldSession::HandleRegionalVersion },
+    { "MSG_SERVER_DATE",                            "BD",       &WorldSession::HandleServerDate },
+    { "MSG_SERVER_TIME",                            "BT",       &WorldSession::HandleServerTime },
 };

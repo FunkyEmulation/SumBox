@@ -83,7 +83,7 @@ void Object::BuildMovementUpdate(WorldPacket *data, const MovementUpdateType &mo
 
             *data << "0,0,"; // alignment ?
             *data << "0,"; // rank
-            *data << (GetLevel() + GetGuid()) << ";";
+            *data << (character->GetLevel() + character->GetGuid()) << ";";
             *data << character->GetColor1() << ";";
             *data << character->GetColor2() << ";";
             *data << character->GetColor3() << ";";

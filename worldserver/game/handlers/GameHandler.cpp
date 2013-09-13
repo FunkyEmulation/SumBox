@@ -22,3 +22,10 @@ void WorldSession::HandleGameCreate(QString& packet)
     SendMapData(map->GetData());
     map->AddToMap(character);
 }
+
+void WorldSession::HandleGameInformations(QString& /*packet*/)
+{
+    // TODO
+
+    SendPacket(WorldPacket(SMSG_MAP_LOADED));
+}

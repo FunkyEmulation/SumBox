@@ -56,6 +56,7 @@ public:
     void HandleCharList(QString& packet);
     void SendCharacterList();
     void HandleGameCreate(QString& packet);
+    void HandleGameInformations(QString& packet);
     void HandleGiftsList(QString& packet);
     void HandleScreenInfo(QString& packet);
     void HandleSessionKey(QString& packet);
@@ -66,6 +67,8 @@ public:
     void HandleCharSelect(QString& packet);
     void HandleQueuePosition(QString& packet);
     void HandleRegionalVersion(QString& packet);
+    void HandleServerDate(QString& packet);
+    void HandleServerTime(QString& packet);
 
     void SendMapData(const sMapData& mapData);
 
