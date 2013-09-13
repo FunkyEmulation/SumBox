@@ -6,32 +6,28 @@
 
 enum TypeId
 {
-    TYPEID_OBJECT = 0,
-    TYPEID_UNIT = 3,
-    TYPEID_CHARACTER = 2
+    TYPEID_OBJECT              = 0,
+    TYPEID_CHARACTER           = 1,
+    TYPEID_UNIT                = 2, // temp
+
+    TYPEID_MONSTER             = -1,
+    TYPEID_CREATURE            = -2,
+    TYPEID_MONSTER_GROUP       = -3,
+    TYPEID_NPC                 = -4, // ?
+    TYPEID_OFFLINE_CHARACTER   = -5,
+    TYPEID_TAX_COLLECTOR       = -6,
+    TYPEID_MUTANT              = -7,
+    TYPEID_CHARACTER_MUTANT    = -8, // ?
+    TYPEID_PARK_MOUNT          = -9,
+    TYPEID_PRISM               = -10
 };
 
 enum MovementUpdateType
 {
-    MOVEMENT_UPDATE_TYPE_NONE       = 0,
+    MOVEMENT_UPDATE_TYPE_NONE,
     MOVEMENT_UPDATE_TYPE_ADD,
     MOVEMENT_UPDATE_TYPE_UPDATE,
     MOVEMENT_UPDATE_TYPE_REMOVE
-};
-
-enum SpriteType
-{
-    SPRITE_TYPE_NONE                = 0,
-    SPRITE_TYPE_MONSTER             = -1,
-    SPRITE_TYPE_CREATURE            = -2,
-    SPRITE_TYPE_MONSTER_GROUP       = -3,
-    SPRITE_TYPE_NPC                 = -4, // ?
-    SPRITE_TYPE_OFFLINE_CHARACTER   = -5,
-    SPRITE_TYPE_TAX_COLLECTOR       = -6,
-    SPRITE_TYPE_MUTANT              = -7,
-    SPRITE_TYPE_CHARACTER_MUTANT    = -8, // ?
-    SPRITE_TYPE_PARK_MOUNT          = -9,
-    SPRITE_TYPE_PRISM               = -10
 };
 
 class Unit;
@@ -55,7 +51,6 @@ public:
     int GetGfxId() const { return m_gfxId; }
     int GetSize() const { return m_size; }
 
-    Unit* ToUnit() { if (GetTypeId() == TYPEID_UNIT || GetTypeId() == TYPEID_CHARACTER) return reinterpret_cast<Unit*>(this); else return NULL; }
     Character* ToCharacter() { if (GetTypeId() == TYPEID_CHARACTER) return reinterpret_cast<Character*>(this); else return NULL; }
 
     void BuildMovementUpdate(WorldPacket* data, const MovementUpdateType& movementUpdateType);
@@ -66,8 +61,10 @@ protected:
     quint32 m_guid;
     TypeId m_typeId;
     QString m_name;
-    int m_gfxId;
-    int m_size;
+    quint16 m_gfxId;
+    quint16 m_size;
+	
+	quint16 m_cellId;
 };
 
 #endif // OBJECT_H

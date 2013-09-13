@@ -3,11 +3,11 @@
 
 Object::Object()
 {
-    m_guid      = 0;
-    m_typeId    = TYPEID_OBJECT;
-    m_name      = QString();
-    m_gfxId     = 0;
-    m_size      = 0;
+    m_guid          = 0;
+    m_typeId        = TYPEID_OBJECT;
+    m_name          = QString();
+    m_gfxId         = 0;
+    m_size          = 100;
 }
 
 Object::~Object()
@@ -39,57 +39,80 @@ void Object::BuildMovementUpdate(WorldPacket *data, const MovementUpdateType &mo
         *data << GetGuid() << ";";
         *data << GetName() << ";";
 
-        //*data << GetRace() << ","; // (SpriteType == race ?) du coup ça doit etre dans la classe character ?
-        *data << -1 << ",";
+        Character* character = NULL; // faire différement car utilie de la mémoire
+        if (GetTypeId() == TYPEID_CHARACTER)
+        {
+            character = ToCharacter();
+            if (!character)
+                return;
+
+            *data << character->GetRace() << ",";
+        }
+        else
+            *data << GetTypeId() << ",";
 
         *data << 0 << "*" << 0 << ";"; // titreId * params
-
         *data << GetGfxId() << "^" << GetSize() << ";";
-        //data << GetGender() << ";";
 
-        SpriteType spriteType = SPRITE_TYPE_NONE;
-        switch (spriteType)
+        switch (GetTypeId())
         {
-        case SPRITE_TYPE_MONSTER:
-        case SPRITE_TYPE_CREATURE:
-            Character* character = this->ToCharacter();
+        case TYPEID_CHARACTER:
 
-            *data << character->GetLevel() << ";"; // powerlevel - quelle différence entre powerlevel et level ?
-            *data << character->GetColor1() << ";"; // en hexa
-            *data << character->GetColor2() << ";"; // en hexa
-            *data << character->GetColor3() << ";"; // en hexa
-            *data << 0 << ";"; // accessories
+            *data << character->GetGender() << ";";
 
-            // Si fight
+            /*
+            IF FIGHT
             {
+            *data << character->GetLevel() << ";";
+            *data << 0 << ";"; // var _loc51 = _loc10[9]; ??
+            *data << character->GetColor1() << ";";
+            *data << character->GetColor2() << ";";
+            *data << character->GetColor3() << ";";
+            *data << 0 << ";"; // accessories
             *data << 0 << ";"; // LP
             *data << 0 << ";"; // AP
             *data << 0 << ";"; // MP
+            *data << "0;0;0;0;0;0;0;"; // resistances
+            *data << 0; // team
 
-            // resistances (seulement si condition ?)
-            *data << 0 << ";"; // resistance 1
-            *data << 0 << ";"; // resistance 2
-            *data << 0 << ";"; // resistance 3
-            *data << 0 << ";"; // resistance 4
-            *data << 0 << ";"; // resistance 5
-            *data << 0 << ";"; // resistance 6
-            *data << 0 << ";"; // resistance 7
-
-            *data << 0 << ";"; // team
-
+            TODO MOUNT
+            _loc10[25] => mount
             }
+            ELSE
+            */
+
+            *data << "0,0,"; // alignment ?
+            *data << "0,"; // rank
+            *data << (GetLevel() + GetGuid()) << ";";
+            *data << character->GetColor1() << ";";
+            *data << character->GetColor2() << ";";
+            *data << character->GetColor3() << ";";
+            *data << 0 << ";"; // accessories
+            *data << 0 << ";"; // aura
+            *data << 0 << ";"; // emote
+            *data << 0 << ";"; // emoteTimer
+            *data << 0 << ";"; // guildName
+            *data << 0 << ";"; // emblem
+            *data << 0 << ";"; // restrictions
+
+            // TODO MOUNT
+            *data << 0 << ";";
+
             break;
 
-        /*case SPRITE_TYPE_MONSTER_GROUP: break;
-        case SPRITE_TYPE_NPC:
-            //*data << GetGender() << ";"; // gender
+        /*case TYPEID_MONSTER:
+        case TYPEID_CREATURE:
             break;
-        case SPRITE_TYPE_OFFLINE_CHARACTER: break;
-        case SPRITE_TYPE_TAX_COLLECTOR: break;
-        case SPRITE_TYPE_MUTANT: break;
-        case SPRITE_TYPE_CHARACTER_MUTANT: break;
-        case SPRITE_TYPE_PARK_MOUNT: break;
-        case SPRITE_TYPE_PRISM: break;*/
+
+        case TYPEID_MONSTER_GROUP: break;
+        case TYPEID_NPC:
+            break;
+        case TYPEID_OFFLINE_CHARACTER: break;
+        case TYPEID_TAX_COLLECTOR: break;
+        case TYPEID_MUTANT: break;
+        case TYPEID_CHARACTER_MUTANT: break;
+        case TYPEID_PARK_MOUNT: break;
+        case TYPEID_PRISM: break;*/
         }
     }
     else

@@ -64,7 +64,7 @@ QSqlQuery MysqlConnection::Query(QString sqlQuery)
         Log::Write(LOG_TYPE_NORMAL, "SQL error with %s", sqlQuery.toLatin1().data());
         Log::Write(LOG_TYPE_NORMAL, "[Error %u] %s", req.lastError().number(), req.lastError().text().toLatin1().data());
 
-        if (req.lastError().number() == 2013)
+        if (req.lastError().number() == 2013 || req.lastError().number() == 2003)
         {
             if (Reconnect())
                 Query(sqlQuery);
