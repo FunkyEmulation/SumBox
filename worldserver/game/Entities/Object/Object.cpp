@@ -8,6 +8,9 @@ Object::Object()
     m_name          = QString();
     m_gfxId         = 0;
     m_size          = 100;
+    m_mapId         = 0;
+    m_cellId        = 0;
+    m_orientation   = 1;
 }
 
 Object::~Object()
@@ -33,8 +36,8 @@ void Object::BuildMovementUpdate(WorldPacket *data, const MovementUpdateType &mo
 
     if (movementUpdateType != MOVEMENT_UPDATE_TYPE_REMOVE)
     {
-        *data << 0 << ";"; // cellID
-        *data << 0 << ";"; // orientation
+        *data << GetCellId() << ";"; // cellID
+        *data << GetOrientation() << ";"; // orientation
         *data << 0 << ";"; // mobgroupbonusvalues
         *data << GetGuid() << ";";
         *data << GetName() << ";";
@@ -84,19 +87,19 @@ void Object::BuildMovementUpdate(WorldPacket *data, const MovementUpdateType &mo
             *data << "0,0,"; // alignment ?
             *data << "0,"; // rank
             *data << (character->GetLevel() + character->GetGuid()) << ";";
-            *data << character->GetColor1() << ";";
-            *data << character->GetColor2() << ";";
-            *data << character->GetColor3() << ";";
+            *data << QString::number(character->GetColor1(), 16) << ";";
+            *data << QString::number(character->GetColor2(), 16) << ";";
+            *data << QString::number(character->GetColor3(), 16) << ";";
             *data << 0 << ";"; // accessories
             *data << 0 << ";"; // aura
             *data << 0 << ";"; // emote
             *data << 0 << ";"; // emoteTimer
-            *data << 0 << ";"; // guildName
-            *data << 0 << ";"; // emblem
+            *data << ";"; // guildName
+            *data << ";"; // emblem
             *data << 0 << ";"; // restrictions
 
             // TODO MOUNT
-            *data << 0 << ";";
+            *data << ";";
 
             break;
 

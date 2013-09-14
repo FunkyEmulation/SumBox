@@ -51,6 +51,14 @@ public:
     int GetGfxId() const { return m_gfxId; }
     int GetSize() const { return m_size; }
 
+    void SetMapId(quint16 mapId) { m_mapId = mapId; }
+    quint16 GetMapId() const { return m_mapId; }
+
+    void SetCellId(quint16 cellId) { m_cellId = cellId; }
+    quint16 GetCellId() const { return m_cellId; }
+
+    quint8 GetOrientation() { return m_orientation; }
+
     Character* ToCharacter() { if (GetTypeId() == TYPEID_CHARACTER) return reinterpret_cast<Character*>(this); else return NULL; }
 
     void BuildMovementUpdate(WorldPacket* data, const MovementUpdateType& movementUpdateType);
@@ -64,7 +72,9 @@ protected:
     quint16 m_gfxId;
     quint16 m_size;
 	
+    quint16 m_mapId;
 	quint16 m_cellId;
+    quint8 m_orientation;
 };
 
 #endif // OBJECT_H

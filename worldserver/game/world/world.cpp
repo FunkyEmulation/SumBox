@@ -13,6 +13,7 @@ World::World()
 World::~World()
 {
     m_is_running = false;
+    m_raceStartInfos.clear();
 
     MapMgr::Instance()->Delete();
 }
@@ -44,24 +45,21 @@ void World::RemoveSession(WorldSession* session)
 void World::LoadRaceStartInfos()
 {
     m_raceStartInfos.clear();
-    m_raceStartInfos.insert(0, sRaceStartInfos());
 
-    QSqlQuery startDatas = Database::World()->Query(SELECT_RACE_START_INFOS);
-    while(startDatas.next())
+    QSqlQuery result = Database::World()->Query(SELECT_RACE_START_INFOS);
+    while (result.next())
     {
-        sRaceStartInfos curRaceStartInfos;
-        curRaceStartInfos.race      = startDatas.value(startDatas.record().indexOf("race")).toUInt();
-        curRaceStartInfos.map_id    = startDatas.value(startDatas.record().indexOf("map_id")).toUInt();
-        curRaceStartInfos.cell_id   = startDatas.value(startDatas.record().indexOf("cell_id")).toUInt();
+        quint8 race = (quint8)result.value(result.record().indexOf("race")).toUInt();
 
-        m_raceStartInfos.insert(curRaceStartInfos.race, curRaceStartInfos);
+        sRaceStartInfos curRaceStartInfos;
+        curRaceStartInfos.mapId    = (quint16)result.value(result.record().indexOf("map_id")).toUInt();
+        curRaceStartInfos.cellId   = (quint16)result.value(result.record().indexOf("cell_id")).toUInt();
+
+        m_raceStartInfos.insert(race, curRaceStartInfos);
     }
 }
 
 sRaceStartInfos World::GetRaceStartInfos(quint8 race)
 {
-    if(m_raceStartInfos.contains(race))
-        return m_raceStartInfos.value(race);
-    else
-        return m_raceStartInfos.value(0);
+    return m_raceStartInfos.value(race);
 }

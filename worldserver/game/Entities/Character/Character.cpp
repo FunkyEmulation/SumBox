@@ -34,8 +34,9 @@ bool Character::Create(quint32 guid, sCharacterCreateInfos characterCreateInfos)
     m_color1    = characterCreateInfos.color1;
     m_color2    = characterCreateInfos.color2;
     m_color3    = characterCreateInfos.color3;
-    m_map       = MapMgr::Instance()->LoadMap(characterCreateInfos.mapId);
-    m_cellId    = characterCreateInfos.cellId;
+
+    SetMapId(characterCreateInfos.mapId);
+    SetCellId(characterCreateInfos.cellId);
 
     return true;
 }
@@ -56,12 +57,22 @@ bool Character::LoadFromDB(quint32 guid)
     m_name = result.value(rows.indexOf("name")).toString();
     m_race = (quint8)result.value(rows.indexOf("race")).toUInt();
     m_gender = (quint8)result.value(rows.indexOf("gender")).toUInt();
+    m_level = (quint16)result.value(rows.indexOf("level")).toUInt();
     m_gfxId = (quint16)result.value(rows.indexOf("gfx_id")).toUInt();
     m_color1 = result.value(rows.indexOf("color_1")).toInt();
     m_color2 = result.value(rows.indexOf("color_2")).toInt();
     m_color3 = result.value(rows.indexOf("color_3")).toInt();
-    m_map = MapMgr::Instance()->LoadMap(result.value(rows.indexOf("map_id")).toUInt());
-    m_cellId = result.value(rows.indexOf("cell_id")).toUInt();
+
+    SetMapId((quint16)result.value(rows.indexOf("map_id")).toUInt());
+    SetCellId((quint16)result.value(rows.indexOf("cell_id")).toUInt());
+
+    m_map = MapMgr::Instance()->LoadMap(GetMapId());
+
+    if (!m_map || !m_cellId)
+    {
+        // error
+        return false;
+    }
 
     /*
         this._curCarte = World.getCarte(map);
