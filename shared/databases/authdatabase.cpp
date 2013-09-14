@@ -1,4 +1,4 @@
-#include "authdatabase.h"
+#include "AuthDatabase.h"
 
 void AuthDatabase::LoadQueries()
 {

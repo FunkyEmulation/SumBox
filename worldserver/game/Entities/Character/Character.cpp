@@ -1,18 +1,22 @@
 #include "Character.h"
-#include "utils/util.h"
+#include "Utils/Util.h"
 
 Character::Character(WorldSession* session) : Unit()
 {
     m_session = session;
 
-    SetGuid(0);
-    m_name = QString();
     m_race = 0;
     m_gender = 0;
-    m_gfxId = 0;
     m_color1 = 0;
     m_color2 = 0;
     m_color3 = 0;
+    m_typeId = TYPEID_CHARACTER;
+
+    for (quint8 i = 0; i < TOTAL_CHARACTER_STATS; ++i)
+    {
+        sCharacterStats stats;
+        m_stats[(CharacterStats)i] = stats;
+    }
 }
 
 Character::~Character()
@@ -30,8 +34,9 @@ bool Character::Create(quint32 guid, sCharacterCreateInfos characterCreateInfos)
     m_color1    = characterCreateInfos.color1;
     m_color2    = characterCreateInfos.color2;
     m_color3    = characterCreateInfos.color3;
-    m_map       = MapMgr::Instance()->LoadMap(characterCreateInfos.mapId);
-    m_cellId    = characterCreateInfos.cellId;
+
+    SetMapId(characterCreateInfos.mapId);
+    SetCellId(characterCreateInfos.cellId);
 
     return true;
 }
@@ -52,12 +57,22 @@ bool Character::LoadFromDB(quint32 guid)
     m_name = result.value(rows.indexOf("name")).toString();
     m_race = (quint8)result.value(rows.indexOf("race")).toUInt();
     m_gender = (quint8)result.value(rows.indexOf("gender")).toUInt();
+    m_level = (quint16)result.value(rows.indexOf("level")).toUInt();
     m_gfxId = (quint16)result.value(rows.indexOf("gfx_id")).toUInt();
     m_color1 = result.value(rows.indexOf("color_1")).toInt();
     m_color2 = result.value(rows.indexOf("color_2")).toInt();
     m_color3 = result.value(rows.indexOf("color_3")).toInt();
-    m_map = MapMgr::Instance()->LoadMap(result.value(rows.indexOf("map_id")).toUInt());
-    m_cellId = result.value(rows.indexOf("cell_id")).toUInt();
+
+    SetMapId((quint16)result.value(rows.indexOf("map_id")).toUInt());
+    SetCellId((quint16)result.value(rows.indexOf("cell_id")).toUInt());
+
+    m_map = MapMgr::Instance()->LoadMap(GetMapId());
+
+    if (!m_map || !m_cellId)
+    {
+        // error
+        return false;
+    }
 
     /*
         this._curCarte = World.getCarte(map);
@@ -114,6 +129,7 @@ void Character::SendCharacterStats()
 
     // todo
     // fakeAli(=idAli si unFake) ~ idAli , 1(?), rangAli , ptsHonneur , 0(deshonnor?), showAli |
+    data << "0~0,0,0,0,0,0|";
 
     data << 0 << ","; // HP
     data << 0 << "|"; // Max HP
@@ -121,55 +137,12 @@ void Character::SendCharacterStats()
     data << 0 << ","; // Energy
     data << 0 << "|"; // Max eneregy
 
-    /*
-    initiative |
-    prospection |
-     // 42 lignes de stats ; base        | equipement   | dons           | boost        //
-                 basePA       , equipPA      , donsPA        , boostPa      |
-                 basePM       , equipPM      , donsPM        , boostPM      |
-                 force        , force        , force         , force        |
-                 vita         , vita         , vita          , vita         |
-                 sasa         , sasa         , sasa          , sasa         |
-                 eau          , eau          , eau           , eau          |
-                 air          , air          , air           , air          |
-                 feu          , feu          , feu           , feu          |
-                 eau          , eau          , eau           , eau          |
-                     portee       , portee       , portee        , portee       |
-                 invocs       , invocs       , invocs        , invocs       |
-                 bonusDeg     , bonusDeg     , bonusDeg      , bonusDeg     |
-                 bonDegPhys   , bonDegPhys   , bonDegPhys    , bonDegPhys   |
-                 bonMaitrises , bonMaitrises , bonMaitrises  , bonMaitrises |
-                 bonDmgs      , bonDmgs      , bonDmgs       , bonDmgs      |
-                 bonPieges    , bonPieges    , bonPieges     , bonPieges    |
-                 bonPrCentPieg, bonPrCentPieg, bonPrCentPieg , bonPrCentPieg|
-                 bonSoins     , bonSoins     , bonSoins      , bonSoins     |
-                 renvoiDmgs   , renvoiDmgs   , renvoiDmgs    , renvoiDmgs   |
-                 bonCoupCriti , bonCoupCriti , bonCoupCriti  , bonCoupCriti |
-                 bonEcheCriti , bonEcheCriti , bonEcheCriti  , bonEcheCriti |
-                 esquivePA    , esquivePA    , esquivePA     , esquivePA    |
-                 esquivePM    , esquivePM    , esquivePM     , esquivePM    |
+    data << 0 << "|"; // initiative
+    data << 0 << "|"; // Discernment
 
-                 resisNeutreFixe,
-                 resisNeutre%,
-                      resisNeutrePvpFixe,
-                      resisNeutrePvP%,
-                 resisTerreFixe,
-                 resisTerre%,
-                      resisTerrePvpFixe,
-                      resisTerrePvp%,
-                 resisFeuFixe,
-                 resisFeu%,
-                      resisFeuPvpFixe,
-                      resisFeuPvp%,
-                 resisEauFixe,
-                 resisEau%,
-                      resisEauPvpFixe,
-                      resisEauPvp%,
-                 resisAirFixe,
-                 resisAir%,
-                      resisAirPvpFixe,
-                      resisAirPvp%
-    */
+    // Character stats
+    for (quint8 i = 0; i < TOTAL_CHARACTER_STATS; ++i)
+        data << m_stats[(CharacterStats)i].ToPacketString();
 
     GetSession()->SendPacket(data);
 }

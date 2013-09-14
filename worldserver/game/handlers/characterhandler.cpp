@@ -1,7 +1,7 @@
-#include "../server/worldsession.h"
-#include "utils/util.h"
-#include "game/Entities/Character/Character.h"
-#include "game/Entities/ObjectMgr.h"
+#include "Server/WorldSession.h"
+#include "Utils/Util.h"
+#include "Entities/Character/Character.h"
+#include "Entities/ObjectMgr.h"
 
 void WorldSession::HandleCharList(QString& /*packet*/)
 {
@@ -117,7 +117,7 @@ void WorldSession::HandleCharCreate(QString& packet)
     quint16 gfxId = (QString::number(datas[1].toUInt()) + QString::number(datas[2].toUInt())).toUInt();
 
     sRaceStartInfos startInfos = World::Instance()->GetRaceStartInfos(datas[1].toUInt());
-    sCharacterCreateInfos charCreateInfos(pseudo, (quint8)datas[1].toUInt(), (quint8)datas[2].toUInt(), gfxId, datas.at(3).toInt(), datas.at(4).toInt(), datas.at(5).toInt(), startInfos.map_id, startInfos.cell_id);
+    sCharacterCreateInfos charCreateInfos(pseudo, (quint8)datas[1].toUInt(), (quint8)datas[2].toUInt(), gfxId, datas.at(3).toInt(), datas.at(4).toInt(), datas.at(5).toInt(), startInfos.mapId, startInfos.cellId);
     QScopedPointer<Character> newChar(new Character(this));
 
     if(newChar->Create(ObjectMgr::Instance()->GenerateGuid(GUIDTYPE_CHARACTER), charCreateInfos))
@@ -144,7 +144,7 @@ void WorldSession::HandleCharDelete(QString& packet)
     {
         //if(target->GetLvl() < 20 || (target->GetLvl() >= 20 && datas.count() >= 2 && datas.at(1) == m_account->GetAnswer()))
         //{
-            Database::Char()->PQuery(DELETE_CHAR, guid);
+            Database::Char()->PQuery(DELETE_CHARACTER, guid);
             Database::Auth()->PQuery(AUTH_UPDATE_ACCOUNT_CHARS, GetAccountInfos().id, ConfigMgr::Instance()->World()->GetInt("ServerId"), (m_charsList.count() - 1));
 
             SendCharacterList();

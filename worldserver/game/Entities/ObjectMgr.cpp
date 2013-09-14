@@ -1,5 +1,5 @@
 #include "ObjectMgr.h"
-#include "configuration/configmgr.h"
+#include "Configuration/ConfigMgr.h"
 
 template<> ObjectMgr*  Singleton<ObjectMgr>::m_instance = 0;
 

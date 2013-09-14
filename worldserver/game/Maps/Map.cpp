@@ -1,5 +1,5 @@
 #include "Map.h"
-#include "game/Entities/Character/Character.h"
+#include "Entities/Character/Character.h"
 
 Map::Map()
 {
@@ -38,6 +38,14 @@ void Map::Unload()
 void Map::AddToMap(Object* object)
 {
     m_objectsList.push_back(object);
+
+    // Don't know if we can add only player on map or not
+    Character* character = object->ToCharacter();
+    if (!character) return;
+
+    WorldPacket data(SMSG_OBJECT_MOVEMENT);
+    object->BuildMovementUpdate(&data, MOVEMENT_UPDATE_TYPE_ADD);
+    character->GetSession()->SendPacket(data);
 }
 
 void Map::SendPacket(const WorldPacket &data)

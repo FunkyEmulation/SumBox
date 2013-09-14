@@ -2,8 +2,8 @@
 #define CONFIGMGR_H
 
 #include <QtCore>
-#include "configuration.h"
-#include "utils/singleton.h"
+#include "Configuration.h"
+#include "Utils/Singleton.h"
 
 class ConfigMgr : public Singleton<ConfigMgr>
 {

@@ -1,5 +1,5 @@
-#include "database.h"
-#include "configuration/configmgr.h"
+#include "Database.h"
+#include "Configuration/ConfigMgr.h"
 
 template<> Database*  Singleton<Database>::m_instance = 0;
 

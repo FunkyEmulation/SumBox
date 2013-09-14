@@ -1,9 +1,9 @@
-#include "authsocket.h"
-#include "authserver.h"
-#include "utils/util.h"
-#include "opcodes/opcodes.h"
-#include "logs/log.h"
-#include "configuration/configmgr.h"
+#include "AuthSocket.h"
+#include "AuthServer.h"
+#include "Utils/Util.h"
+#include "Opcodes/Opcodes.h"
+#include "Logs/Log.h"
+#include "Configuration/ConfigMgr.h"
 
 AuthSocket::AuthSocket(QTcpSocket *socket) : SocketHandler(socket)
 {

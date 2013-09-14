@@ -2,9 +2,10 @@
 #define MAP_H
 
 #include <QtCore>
+
 #include "MapMgr.h"
-#include "game/Entities/Object/Object.h"
-#include "packets/worldpacket.h"
+#include "Entities/Object/Object.h"
+#include "Packets/WorldPacket.h"
 
 typedef QList<Object*> ObjectsList;
 

@@ -1,4 +1,4 @@
-#include "game/server/worldsession.h"
+#include "Server/WorldSession.h"
 
 void WorldSession::HandleTicket(QString& packet)
 {

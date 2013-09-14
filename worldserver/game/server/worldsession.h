@@ -4,13 +4,14 @@
 #include <QtCore>
 #include <QObject>
 #include <QtNetwork>
-#include "databases/database.h"
-#include "queues/worldqueue.h"
-#include "define.h"
-#include "servers/SocketHandler.h"
-#include "game/Entities/Character/Character.h"
-#include "game/world/world.h"
-#include "game/Maps/MapMgr.h"
+
+#include "Databases/Database.h"
+#include "Queues/Worldqueue.h"
+#include "Define.h"
+#include "Network/SocketHandler.h"
+#include "Entities/Character/Character.h"
+#include "World/world.h"
+#include "Game/Maps/MapMgr.h"
 
 struct sAccountInfos
 {
@@ -55,6 +56,7 @@ public:
     void HandleCharList(QString& packet);
     void SendCharacterList();
     void HandleGameCreate(QString& packet);
+    void HandleGameInformations(QString& packet);
     void HandleGiftsList(QString& packet);
     void HandleScreenInfo(QString& packet);
     void HandleSessionKey(QString& packet);
@@ -65,6 +67,8 @@ public:
     void HandleCharSelect(QString& packet);
     void HandleQueuePosition(QString& packet);
     void HandleRegionalVersion(QString& packet);
+    void HandleServerDate(QString& packet);
+    void HandleServerTime(QString& packet);
 
     void SendMapData(const sMapData& mapData);
 

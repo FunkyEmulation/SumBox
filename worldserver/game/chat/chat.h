@@ -2,8 +2,9 @@
 #define CHAT_H
 
 #include <QtCore>
-#include "utils/singleton.h"
-#include "logs/log.h"
+
+#include "Utils/Singleton.h"
+#include "Logs/Log.h"
 
 class Chat;
 
