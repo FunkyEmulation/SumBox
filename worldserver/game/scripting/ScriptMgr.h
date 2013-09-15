@@ -2,7 +2,7 @@
 #define SCRIPTMGR_H
 
 #include <QtCore>
-#include "utils/singleton.h"
+#include "Utils/Singleton.h"
 
 class ScriptObject
 {

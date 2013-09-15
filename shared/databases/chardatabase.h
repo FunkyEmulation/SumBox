@@ -2,7 +2,7 @@
 #define CHARDATABASE_H
 
 #include <QtCore>
-#include "mysqlconnection.h"
+#include "MysqlConnection.h"
 
 class CharDatabase : public MysqlConnection
 {
@@ -21,7 +21,7 @@ enum CharDatabaseQueries
     CHECK_CHAR_EXISTS,
 
     INSERT_CHARACTER,
-    DELETE_CHAR,
+    DELETE_CHARACTER,
     SELECT_CHARACTER_MAX_GUID,
     SELECT_CHARACTER
 };

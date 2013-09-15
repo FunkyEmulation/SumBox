@@ -1,6 +1,6 @@
 #include "MapMgr.h"
-#include "logs/log.h"
-#include "define.h"
+#include "Logs/Log.h"
+#include "Define.h"
 
 template<> MapMgr*  Singleton<MapMgr>::m_instance = 0;
 
@@ -40,12 +40,12 @@ bool MapMgr::LoadFromDB()
         quint16 mapId           = (quint16)result.value(rows.indexOf("id")).toUInt();
 
         mapData.id              = mapId;
-        mapData.date            = result.value(rows.indexOf("mapDate")).toString();
+        mapData.date            = result.value(rows.indexOf("map_date")).toString();
         mapData.width           = (quint8)result.value(rows.indexOf("width")).toUInt();
         mapData.height          = (quint8)result.value(rows.indexOf("height")).toUInt();
         mapData.places          = result.value(rows.indexOf("places")).toString();
-        mapData.key             = result.value(rows.indexOf("mapKey")).toString();
-        mapData.data            = result.value(rows.indexOf("mapData")).toString();
+        mapData.key             = result.value(rows.indexOf("map_key")).toString();
+        mapData.data            = result.value(rows.indexOf("map_data")).toString();
         mapData.cells           = result.value(rows.indexOf("cells")).toString();
         mapData.monsters        = result.value(rows.indexOf("monsters")).toString();
         mapData.capabilities    = (quint16)result.value(rows.indexOf("capabilities")).toUInt();

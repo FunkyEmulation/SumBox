@@ -1,10 +1,9 @@
 #ifndef ACCOUNTMGR_H
 #define ACCOUNTMGR_H
 
-#include <QtCore>
-#include "databases/database.h"
-#include "game/Entities/Character/Character.h"
-#include "utils/singleton.h"
+#include "Databases/Database.h"
+#include "Entities/Character/Character.h"
+#include "Utils/Singleton.h"
 
 class AccountMgr : public Singleton<AccountMgr>
 {

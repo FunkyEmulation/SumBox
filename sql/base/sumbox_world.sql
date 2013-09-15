@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS `race_start_infos` (
 -- Contenu de la table `breed_start_infos`
 --
 
-INSERT INTO `breed_start_infos` (`race`, `map_id`, `cell_id`) VALUES
+INSERT INTO `race_start_infos` (`race`, `map_id`, `cell_id`) VALUES
 (1, 7554, 255),
 (2, 7554, 255),
 (3, 7554, 255),

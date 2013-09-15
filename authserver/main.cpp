@@ -1,18 +1,12 @@
 #include <QCoreApplication>
-#include <QTime>
-
-#include <QFile>
-#include <iostream>
+#include <QtCore>
 #include <csignal>
-#include "define.h"
-#include "authserver.h"
 
-#include <QtSql>
-#include "databases/database.h"
-#include "logs/log.h"
-#include "configuration/configmgr.h"
-
-using namespace std;
+#include "Define.h"
+#include "AuthServer.h"
+#include "Databases/Database.h"
+#include "Logs/Log.h"
+#include "Configuration/ConfigMgr.h"
 
 void stop(int /*s*/)
 {

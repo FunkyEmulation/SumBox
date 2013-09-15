@@ -1,4 +1,4 @@
-#include "log.h"
+#include "Log.h"
 
 template<> Log*  Singleton<Log>::m_instance = 0;
 

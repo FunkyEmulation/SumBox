@@ -3,7 +3,7 @@
 
 #include <QtCore>
 #include <QTextStream>
-#include "opcodes/opcodes.h"
+#include "Opcodes/Opcodes.h"
 
 class WorldPacket
 {

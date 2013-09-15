@@ -2,7 +2,7 @@
 #define WORLDDATABASE_H
 
 #include <QtCore>
-#include "mysqlconnection.h"
+#include "MysqlConnection.h"
 
 class WorldDatabase : public MysqlConnection
 {

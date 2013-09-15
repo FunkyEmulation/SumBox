@@ -1,5 +1,5 @@
-#include "configuration.h"
-#include "logs/log.h"
+#include "Configuration.h"
+#include "Logs/Log.h"
 
 Configuration::Configuration()
 {

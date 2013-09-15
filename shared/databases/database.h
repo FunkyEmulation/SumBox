@@ -2,10 +2,10 @@
 #define DATABASE_H
 
 #include <QtCore>
-#include "authdatabase.h"
-#include "chardatabase.h"
-#include "worlddatabase.h"
-#include "utils/singleton.h"
+#include "AuthDatabase.h"
+#include "CharDatabase.h"
+#include "WorldDatabase.h"
+#include "Utils/Singleton.h"
 
 class Database : public Singleton<Database>
 {
