@@ -49,6 +49,7 @@ void WorldSession::SendCharacterList()
 
 void WorldSession::HandleCharRandomPseudo(QString& /*packet*/)
 {
+    srand(time(NULL));
     int max = rand()%4 +4;
 
     QString voyelles = "aeiouy";
@@ -76,6 +77,7 @@ void WorldSession::HandleCharRandomPseudo(QString& /*packet*/)
 
     pseudo.prepend("|");
 
+	// Todo vérifier si le nom existe déjà !
     WorldPacket data(MSG_CHAR_RANDOM_NAME);
     data << pseudo;
     SendPacket(data);

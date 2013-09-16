@@ -17,6 +17,7 @@ AuthSocket::AuthSocket(QTcpSocket *socket) : SocketHandler(socket)
 
 AuthSocket::~AuthSocket() {}
 
+// A mettre en virtual non ?
 void AuthSocket::OnClose()
 {
     if(!m_infos.isEmpty())
