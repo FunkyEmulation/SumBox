@@ -18,7 +18,7 @@ OpcodeStruct opcodeTable[NUM_MSG_TYPES] =
 
     // Server messages (SMSG)
     { "SMSG_ACCOUNT_ALREADY_CONNECTED",             "AlEc",     &WorldSession::HandleServerSide },
-    { "SMSG_ACCOUNT_BAD_CLIENT_VERSION",            "ALEv",     &WorldSession::HandleServerSide },
+    { "SMSG_ACCOUNT_BAD_CLIENT_VERSION",            "AlEv",     &WorldSession::HandleServerSide },
     { "SMSG_ACCOUNT_BANNED",                        "AlEb",     &WorldSession::HandleServerSide },
     { "SMSG_ACCOUNT_GMLEVEL",                       "AlK",      &WorldSession::HandleServerSide },
     { "SMSG_ACCOUNT_LOGIN_ERROR",                   "AlEf",     &WorldSession::HandleServerSide },
