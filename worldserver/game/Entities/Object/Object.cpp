@@ -49,13 +49,13 @@ void Object::BuildMovementUpdate(WorldPacket *data, const MovementUpdateType &mo
             if (!character)
                 return;
 
-            *data << character->GetRace() << ",";
+            *data << character->GetRace();
         }
         else
-            *data << GetTypeId() << ",";
+            *data << GetTypeId();
 
-        *data << 0 << "*" << 0 << ";"; // titreId * params
-        *data << GetGfxId() << "^" << GetSize() << ";";
+        // *data << "," << 0 << "*" << 0 << ";"; // titreId * params
+        *data << ";" << GetGfxId() << "^" << GetSize() << ";";
 
         switch (GetTypeId())
         {

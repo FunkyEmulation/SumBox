@@ -52,6 +52,7 @@ enum Opcodes
     // Client and server messages (MSG)
     MSG_CHAR_RANDOM_NAME,
     MSG_CHAR_SELECT,
+    MSG_GAME_ACTION,
     MSG_QUEUE_POSITION,
     MSG_REGIONAL_VERSION,
     MSG_SERVER_DATE,

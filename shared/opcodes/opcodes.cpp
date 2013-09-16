@@ -48,6 +48,7 @@ OpcodeStruct opcodeTable[NUM_MSG_TYPES] =
     // Client and server messages (MSG)
     { "MSG_CHAR_RANDOM_NAME",                       "AP",       &WorldSession::HandleCharRandomPseudo },
     { "MSG_CHAR_SELECT",                            "AS",       &WorldSession::HandleCharSelect },
+    { "MSG_GAME_ACTION",                            "GA",       &WorldSession::HandleGameAction },
     { "MSG_QUEUE_POSITION",                         "Af",       &WorldSession::HandleQueuePosition },
     { "MSG_REGIONAL_VERSION",                       "AV",       &WorldSession::HandleRegionalVersion },
     { "MSG_SERVER_DATE",                            "BD",       &WorldSession::HandleServerDate },

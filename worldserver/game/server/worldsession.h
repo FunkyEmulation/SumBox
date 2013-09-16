@@ -65,6 +65,7 @@ public:
     // MSG Handlers
     void HandleCharRandomPseudo(QString& packet);
     void HandleCharSelect(QString& packet);
+    void HandleGameAction(QString& packet);
     void HandleQueuePosition(QString& packet);
     void HandleRegionalVersion(QString& packet);
     void HandleServerDate(QString& packet);
