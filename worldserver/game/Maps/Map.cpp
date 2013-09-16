@@ -45,7 +45,8 @@ void Map::AddToMap(Object* object)
 
     WorldPacket data(SMSG_OBJECT_MOVEMENT);
     object->BuildMovementUpdate(&data, MOVEMENT_UPDATE_TYPE_ADD);
-    character->GetSession()->SendPacket(data);
+    //character->GetSession()->SendPacket(data);
+    SendPacket(data);
 }
 
 void Map::SendPacket(const WorldPacket &data)
