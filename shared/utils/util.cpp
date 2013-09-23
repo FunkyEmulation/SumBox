@@ -2,24 +2,19 @@
 #include <QRegExp>
 #include <QList>
 
-QString charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_";
-bool initialize = true;
+QString Utils::charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_";
+bool Utils::initializeRandom = true;
 
-bool IsValidName(QString name)
+bool Utils::IsValidName(QString name)
 {
-    bool valid = true;
-
-    if(!name.contains(QRegExp("^[a-zA-Z\-]{3,15}$")))
-        valid = false;
-
-    return valid;
+    return name.contains(QRegExp("^[a-zA-Z\-]{3,15}$"));
 }
 
-QString GenerateRandomString(quint8 length)
+QString Utils::GenerateRandomString(quint8 length)
 {
-    if (initialize)
+    if (initializeRandom)
     {
-        initialize = false;
+        initializeRandom = false;
         srand(time(NULL));
     }
 
@@ -30,7 +25,7 @@ QString GenerateRandomString(quint8 length)
     return result;
 }
 
-QString CryptPassword(QString password, QString hashKey)
+QString Utils::CryptPassword(QString password, QString hashKey)
 {
     QString crypted = "";
 
@@ -51,7 +46,23 @@ QString CryptPassword(QString password, QString hashKey)
     return crypted;
 }
 
-char* ToChar(QString string)
+char* Utils::ToChar(QString string)
 {
     return string.toLatin1().data();
+}
+
+quint16 Utils::GetCellId(QString cellString)
+{
+    quint16 number1 = (quint16)charset.indexOf(cellString.at(0)) * charset.length();
+    quint16 number2 = (quint16)charset.indexOf(cellString.at(1));
+
+    return number1 + number2;
+}
+
+QString Utils::GetCellString(quint16 cellId)
+{
+    quint16 charNumber2 = (quint16)cellId % charset.length();
+    quint16 charNumber1 = (quint16)(cellId - charNumber2) / charset.length();
+
+    return QString(charset.at(charNumber1)) + QString(charset.at(charNumber2));
 }
