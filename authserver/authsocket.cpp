@@ -113,7 +113,7 @@ void AuthSocket::SendInitPacket()
     }
 
     WorldPacket data(SMSG_HELLO_CONNECTION_SERVER);
-    m_hashKey = GenerateRandomString(32);
+    m_hashKey = Utils::GenerateRandomString(32);
     data << m_hashKey;
     SendPacket(data);
 }
@@ -185,7 +185,7 @@ void AuthSocket::CheckAccount()
             m_infos["subscription_time"] = QVariant(0);
 
         // Mot de passe correct
-        if (CryptPassword(m_infos["hash_password"].toString(), m_hashKey) == hashPass)
+        if (Utils::CryptPassword(m_infos["hash_password"].toString(), m_hashKey) == hashPass)
         {
             if (m_infos["banned"] == "1")
             {
@@ -265,7 +265,7 @@ void AuthSocket::SelectServer(uint id)
         return;
     }
 
-    QString key = GenerateRandomString(16);
+    QString key = Utils::GenerateRandomString(16);
     QString infos = req.value(req.record().indexOf("address")).toString() + ":";
     infos += req.value(req.record().indexOf("port")).toString() + ";";
     infos += key;

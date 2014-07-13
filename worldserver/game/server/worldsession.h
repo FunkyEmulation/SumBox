@@ -54,6 +54,8 @@ public:
     void HandleCharCreate(QString& packet);
     void HandleCharDelete(QString& packet);
     void HandleCharList(QString& packet);
+    void HandleChatMessage(QString& packet);
+    void HandleGameActionFinished(QString& packet);
     void SendCharacterList();
     void HandleGameCreate(QString& packet);
     void HandleGameInformations(QString& packet);

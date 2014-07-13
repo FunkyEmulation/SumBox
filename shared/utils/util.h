@@ -5,19 +5,20 @@
 #include <ctime>
 #include <QString>
 
-/*
- * Indique si le pseudo de personnage est valide
- */
-bool IsValidName(QString name);
-/*
- * Génère une chaine aléatoire de taille length et à partir des caractères de charset
- */
-QString GenerateRandomString(quint8 length);
-/*
- * Crypte un mot de passe servant à la comparaison lors de l'authentification
- */
-QString CryptPassword(QString password, QString hashKey);
+class Utils
+{
+public:
+    static bool IsValidName(QString name);
+    static QString GenerateRandomString(quint8 length);
+    static QString CryptPassword(QString password, QString hashKey);
+    static char* ToChar(QString string);
 
-char* ToChar(QString string);
+    static quint16 GetCellId(QString cellString);
+    static QString GetCellString(quint16 cellId);
+
+private:
+    static bool initializeRandom;
+    static QString charset;
+};
 
 #endif
