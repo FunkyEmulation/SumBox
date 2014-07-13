@@ -21,6 +21,7 @@ public:
     const sMapData& GetData() { return m_data; }
 
     void AddToMap(Object* object);
+    void MoveToCell(quint16 cellId);
     void SendPacket(const WorldPacket& data);
 
 private:

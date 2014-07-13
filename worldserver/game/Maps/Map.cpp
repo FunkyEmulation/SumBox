@@ -48,6 +48,14 @@ void Map::AddToMap(Object* object)
     SendPacket(data);
 }
 
+void Map::MoveToCell(quint16 cellId)
+{
+    // Weird packet...
+    WorldPacket data(SMSG_MAP_CELL_OBJECT);
+    data << "-" << cellId << ";0;0";
+    SendPacket(data);
+}
+
 void Map::SendPacket(const WorldPacket &data)
 {
     for (ObjectsList::ConstIterator itr = m_objectsList.begin(); itr != m_objectsList.end(); ++itr)

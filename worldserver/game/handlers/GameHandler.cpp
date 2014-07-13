@@ -50,7 +50,6 @@ void WorldSession::HandleGameAction(QString& packet)
 
         // No idea if it's correct !
         GetCharacter()->SetCellId(Utils::GetCellId(packet.mid(packet.length() - 2)));
-        qDebug() << "New cellId : " << GetCharacter()->GetCellId();
     } break;
     default:
         break;
@@ -62,6 +61,9 @@ void WorldSession::HandleGameActionFinished(QString& /*packet*/)
     //bool actionSuccess = packet.mid(2, 1) == "K";
     // quint8 actionId = packet.mid(3);
     // Todo : mettre en place le système d'actions
+
+    // Don't know if correct
+    GetCharacter()->GetMap()->MoveToCell(GetCharacter()->GetCellId());
 
     SendPacket(WorldPacket(SMSG_BASIC_NOTHING));
 }
