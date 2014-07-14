@@ -1,4 +1,5 @@
 #include "Server/WorldSession.h"
+#include "Utils/Util.h"
 
 void WorldSession::HandleGameCreate(QString& packet)
 {
@@ -36,18 +37,33 @@ void WorldSession::HandleGameInformations(QString& /*packet*/)
 void WorldSession::HandleGameAction(QString& packet)
 {
     quint16 actionId = (quint16)packet.mid(2, 3).toUShort();
+    WorldPacket data(MSG_GAME_ACTION);
 
     switch (actionId)
     {
     case 1:
     {
-        // SocketManager.GAME_SEND_GA_PACKET_TO_MAP(_perso.get_curCarte(), ""+GA._id, 1, _perso.get_GUID()+"", "a"+CryptManager.cellID_To_Code(_perso.get_curCell().getID())+path);
-        // String packet = "GA"+gameActionID+";"+actionID+";"+s1; if(!s2.equals(""))packet += ";"+s2;
-        WorldPacket data(MSG_GAME_ACTION);
-        data << "0;1;-1;acWdc-fcG";
+        data << "0;1;";
+        data << GetCharacter()->GetGuid() << ";";
+        data << "a" << Utils::GetCellString(GetCharacter()->GetCellId()) << packet.mid(5);
         SendPacket(data);
+
+        // No idea if it's correct !
+        GetCharacter()->SetCellId(Utils::GetCellId(packet.mid(packet.length() - 2)));
     } break;
     default:
         break;
     }
+}
+
+void WorldSession::HandleGameActionFinished(QString& /*packet*/)
+{
+    //bool actionSuccess = packet.mid(2, 1) == "K";
+    // quint8 actionId = packet.mid(3);
+    // Todo : mettre en place le système d'actions
+
+    // Don't know if correct
+    GetCharacter()->GetMap()->MoveToCell(GetCharacter()->GetCellId());
+
+    SendPacket(WorldPacket(SMSG_BASIC_NOTHING));
 }

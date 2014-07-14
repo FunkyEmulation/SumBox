@@ -86,7 +86,7 @@ void WorldSession::HandleCharRandomPseudo(QString& /*packet*/)
 void WorldSession::HandleCharCreate(QString& packet)
 {
     QStringList datas = packet.mid(2).split("|");
-    if(datas.size() < 6)
+    if (datas.size() < 6)
         return; // Ne devrait pas arriver sauf envoit manuel
 
     QString pseudo(datas.at(0));
@@ -94,21 +94,21 @@ void WorldSession::HandleCharCreate(QString& packet)
     WorldPacket data(SMSG_CHAR_CREATE_ERROR);
     QSqlQuery req = Database::Char()->PQuery(CHECK_CHAR_EXISTS, pseudo.toLatin1().data());
 
-    if(req.next() && req.value(req.record().indexOf("count")).toInt() >= 1)
+    if (req.next() && req.value(req.record().indexOf("count")).toInt() >= 1)
     {
         data << "a";
         SendPacket(data);
         return;
     }
 
-    if(!IsValidName(pseudo))
+    if (!Utils::IsValidName(pseudo))
     {
         data << "n";
         SendPacket(data);
         return;
     }
 
-    if(m_charsList.count() > 4)
+    if (m_charsList.count() > 4)
     {
         data << "f";
         SendPacket(data);

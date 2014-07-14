@@ -45,7 +45,14 @@ void Map::AddToMap(Object* object)
 
     WorldPacket data(SMSG_OBJECT_MOVEMENT);
     object->BuildMovementUpdate(&data, MOVEMENT_UPDATE_TYPE_ADD);
-    //character->GetSession()->SendPacket(data);
+    SendPacket(data);
+}
+
+void Map::MoveToCell(quint16 cellId)
+{
+    // Weird packet...
+    WorldPacket data(SMSG_MAP_CELL_OBJECT);
+    data << "-" << cellId << ";0;0";
     SendPacket(data);
 }
 

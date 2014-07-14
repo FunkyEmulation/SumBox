@@ -116,7 +116,7 @@ struct sCharacterCreateInfos
 class Character : public Unit
 {
 public:
-    Character(WorldSession * session);
+    Character(WorldSession* session);
     ~Character();
 
     WorldSession* GetSession() { return m_session; }
