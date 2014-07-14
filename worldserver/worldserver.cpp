@@ -1,5 +1,5 @@
-#include "worldserver.h"
-#include "game/world/world.h"
+#include "WorldServer.h"
+#include "Game/World/World.h"
 
 template<> WorldServer*  Singleton<WorldServer>::m_instance = 0;
 

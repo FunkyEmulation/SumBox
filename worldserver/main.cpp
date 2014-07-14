@@ -6,11 +6,11 @@
 #include <csignal>
 #include <QtSql>
 
-#include "define.h"
-#include "databases/database.h"
-#include "logs/log.h"
-#include "configuration/configmgr.h"
-#include "game/chat/commandline.h"
+#include "Define.h"
+#include "Databases/Database.h"
+#include "Logs/Log.h"
+#include "Configuration/ConfigMgr.h"
+#include "Game/Chat/CommandLine.h"
 
 using namespace std;
 

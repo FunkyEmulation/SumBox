@@ -4,9 +4,9 @@
 #include <QtCore>
 #include <QObject>
 #include <QtNetwork>
-#include "logs/log.h"
-#include "game/server/worldsession.h"
-#include "utils/singleton.h"
+#include "Logs/Log.h"
+#include "Game/Server/WorldSession.h"
+#include "Utils/Singleton.h"
 
 class WorldServer : public Singleton<WorldServer>
 {

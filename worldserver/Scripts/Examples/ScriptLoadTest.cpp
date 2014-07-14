@@ -1,5 +1,5 @@
-#include "game/scripting/ScriptMgr.h"
-#include "logs/log.h"
+#include "Game/Scripting/ScriptMgr.h"
+#include "Logs/Log.h"
 
 class ScriptLoadTestScript : ServerScript
 {

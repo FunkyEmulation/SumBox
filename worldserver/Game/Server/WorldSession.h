@@ -6,11 +6,11 @@
 #include <QtNetwork>
 
 #include "Databases/Database.h"
-#include "Queues/Worldqueue.h"
+#include "Queues/WorldQueue.h"
 #include "Define.h"
 #include "Network/SocketHandler.h"
 #include "Entities/Character/Character.h"
-#include "World/world.h"
+#include "World/World.h"
 #include "Game/Maps/MapMgr.h"
 
 struct sAccountInfos
